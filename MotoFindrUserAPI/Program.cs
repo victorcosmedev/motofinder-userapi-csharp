@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MotoFindrUserAPI.Infrastructure.AppData;
 
 var builder = WebApplication.CreateBuilder(args);
 
