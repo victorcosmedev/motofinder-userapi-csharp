@@ -6,7 +6,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class MotoController
+    public class MotoController : ControllerBase
     {
         private readonly IMotoApplicationService _motoService;
 
