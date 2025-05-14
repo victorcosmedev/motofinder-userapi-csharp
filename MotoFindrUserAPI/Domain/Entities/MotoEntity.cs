@@ -17,7 +17,6 @@ namespace MotoFindrUserAPI.Domain.Entities
         [Required]
         [MaxLength(7)]
         public string Placa { get; set; } = string.Empty;
-        [Required]
         public int? MotoqueiroId { get; set; }
         public MotoqueiroEntity? Motoqueiro { get; set; }
     }
