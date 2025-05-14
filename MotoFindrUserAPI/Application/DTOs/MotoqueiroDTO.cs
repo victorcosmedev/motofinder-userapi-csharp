@@ -7,7 +7,7 @@
         public string Cpf { get; set; } = string.Empty;
         public string Endereco { get; set; } = string.Empty;
         public DateTime DataNascimento { get; set; }
-        public int MotoId { get; set; }
+        public int? MotoId { get; set; }
     }
 
 }

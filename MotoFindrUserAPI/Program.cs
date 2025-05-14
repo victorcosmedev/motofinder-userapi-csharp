@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Application.Services;
+using MotoFindrUserAPI.Configurations;
 using MotoFindrUserAPI.Domain.Interfaces;
 using MotoFindrUserAPI.Infrastructure.AppData;
 using MotoFindrUserAPI.Infrastructure.Repositories;
@@ -22,6 +23,8 @@ builder.Services.AddTransient<IMotoApplicationService, MotoApplicationService>()
 builder.Services.AddTransient<IMotoqueiroApplicationService, MotoqueiroApplicationService>();
 builder.Services.AddTransient<IMotoRepository, MotoRepository>();
 builder.Services.AddTransient<IMotoqueiroRepository, MotoqueiroRepository>();
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+
 
 
 
