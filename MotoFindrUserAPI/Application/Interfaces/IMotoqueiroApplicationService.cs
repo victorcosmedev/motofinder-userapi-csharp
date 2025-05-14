@@ -1,13 +1,13 @@
-﻿using MotoFindrUserAPI.Domain.Entities;
+﻿using MotoFindrUserAPI.Application.DTOs;
 
 namespace MotoFindrUserAPI.Application.Interfaces
 {
     public interface IMotoqueiroApplicationService
     {
-        Task<MotoqueiroEntity?> ObterPorIdAsync(int id);
-        Task<MotoqueiroEntity?> ObterPorCpfAsync(string cpf);
-        Task<MotoqueiroEntity> CriarAsync(MotoqueiroEntity motoqueiro);
-        Task<bool> AtualizarAsync(int id, MotoqueiroEntity motoqueiro);
+        Task<MotoqueiroDTO?> ObterPorIdAsync(int id);
+        Task<MotoqueiroDTO?> ObterPorCpfAsync(string cpf);
+        Task<MotoqueiroDTO> CriarAsync(MotoqueiroDTO motoqueiro);
+        Task<bool> AtualizarAsync(int id, MotoqueiroDTO motoqueiro);
         Task<bool> RemoverAsync(int id);
     }
 }
