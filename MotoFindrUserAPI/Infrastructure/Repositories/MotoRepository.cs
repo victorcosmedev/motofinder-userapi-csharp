@@ -32,6 +32,7 @@ namespace MotoFindrUserAPI.Infrastructure.Repositories
 
         public async Task<MotoEntity?> BuscarPorChassiAsync(string chassi)
         {
+            chassi = chassi.ToUpper();
             var moto = await _context.Moto
                 .FirstOrDefaultAsync(m =>  m.Chassi == chassi);
             return moto;
@@ -45,6 +46,7 @@ namespace MotoFindrUserAPI.Infrastructure.Repositories
 
         public async Task<MotoEntity?> BuscarPorPlacaAsync(string placa)
         {
+            placa = placa.ToUpper();
             var moto = await _context.Moto
                 .FirstOrDefaultAsync(m => m.Placa == placa);
             return moto;
