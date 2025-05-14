@@ -21,8 +21,8 @@ namespace MotoFindrUserAPI.Infrastructure.Repositories
 
             motoExistente.Modelo = moto.Modelo;
             motoExistente.AnoDeFabricacao = moto.AnoDeFabricacao;
-            motoExistente.Chassi = moto.Chassi;
-            motoExistente.Placa = moto.Placa;
+            motoExistente.Chassi = moto.Chassi.ToUpper();
+            motoExistente.Placa = moto.Placa.ToUpper();
             motoExistente.MotoqueiroId = moto.MotoqueiroId;
             motoExistente.Motoqueiro = motoExistente.Motoqueiro;
 
@@ -64,6 +64,8 @@ namespace MotoFindrUserAPI.Infrastructure.Repositories
 
         public async Task<MotoEntity> SalvarAsync(MotoEntity moto)
         {
+            moto.Placa = moto.Placa.ToUpper();
+            moto.Chassi = moto.Chassi.ToUpper();
             await _context.Moto.AddAsync(moto);
             await _context.SaveChangesAsync();  
             return moto;

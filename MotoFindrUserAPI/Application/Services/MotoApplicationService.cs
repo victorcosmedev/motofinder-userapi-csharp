@@ -1,4 +1,6 @@
-﻿using MotoFindrUserAPI.Application.Interfaces;
+﻿using AutoMapper;
+using MotoFindrUserAPI.Application.DTOs;
+using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Domain.Entities;
 using MotoFindrUserAPI.Domain.Interfaces;
 
@@ -8,54 +10,75 @@ namespace MotoFindrUserAPI.Application.Services
     {
         private readonly IMotoRepository _motoRepository;
         private readonly IMotoqueiroRepository _motoqueiroRepository;
+        private readonly IMapper _mapper;
 
-        public MotoApplicationService(IMotoRepository motoRepository, IMotoqueiroRepository motoqueiroRepository)
+        public MotoApplicationService(IMotoRepository motoRepository, IMotoqueiroRepository motoqueiroRepository, IMapper mapper)
         {
             _motoRepository = motoRepository;
             _motoqueiroRepository = motoqueiroRepository;
+            _mapper = mapper;
         }
 
-        public async Task<MotoEntity?> ObterPorIdAsync(int id)
+        public async Task<MotoDTO?> ObterPorIdAsync(int id)
         {
-            return await _motoRepository.BuscarPorIdAsync(id);
+            var entity = await _motoRepository.BuscarPorIdAsync(id);
+            return _mapper.Map<MotoDTO>(entity);
         }
 
-        public async Task<MotoEntity?> ObterPorPlacaAsync(string placa)
+        public async Task<MotoDTO?> ObterPorPlacaAsync(string placa)
         {
-            return await _motoRepository.BuscarPorPlacaAsync(placa);
+            var entity = await _motoRepository.BuscarPorPlacaAsync(placa);
+            return _mapper.Map<MotoDTO>(entity);
         }
 
-        public async Task<MotoEntity?> ObterPorChassiAsync(string chassi)
+        public async Task<MotoDTO?> ObterPorChassiAsync(string chassi)
         {
-            return await _motoRepository.BuscarPorChassiAsync(chassi);
+            var entity = await _motoRepository.BuscarPorChassiAsync(chassi);
+            return _mapper.Map<MotoDTO>(entity);
         }
 
-        public async Task<MotoEntity> CriarAsync(MotoEntity moto)
+        public async Task<MotoDTO> CriarAsync(MotoDTO moto)
         {
+            MotoqueiroEntity? motoqueiro = null;
             if (moto.MotoqueiroId.HasValue)
             {
-                var motoqueiro = await _motoqueiroRepository.BuscarPorIdAsync(moto.MotoqueiroId.Value);
-                if (motoqueiro == null)
-                    throw new Exception("Motoqueiro não encontrado.");
-
-                if (motoqueiro.Moto != null && motoqueiro.Moto.Id != moto.Id)
-                    throw new Exception("Este motoqueiro já possui uma moto cadastrada.");
+                motoqueiro = await AtribuirEValidarMotoqueiroAsync(moto.MotoqueiroId.Value);
             }
-            moto.Placa = moto.Placa.ToUpper();
-            moto.Chassi = moto.Chassi.ToUpper();
-            return await _motoRepository.SalvarAsync(moto);
+
+            var entity = _mapper.Map<MotoEntity>(moto);
+            entity.Motoqueiro = motoqueiro;
+            entity = await _motoRepository.SalvarAsync(entity);
+
+            return _mapper.Map<MotoDTO>(entity);
         }
 
-        public async Task<bool> AtualizarAsync(int id, MotoEntity moto)
+        public async Task<bool> AtualizarAsync(int id, MotoDTO moto)
         {
-            moto.Placa = moto.Placa.ToUpper();
-            moto.Chassi = moto.Chassi.ToUpper();
-            return await _motoRepository.AtualizarAsync(id, moto);
+            MotoqueiroEntity? motoqueiro = null;
+            if (moto.MotoqueiroId.HasValue)
+            {
+                motoqueiro = await AtribuirEValidarMotoqueiroAsync(moto.MotoqueiroId.Value);
+            }
+            var entity = _mapper.Map<MotoEntity>(moto);
+            entity.Motoqueiro = motoqueiro;
+
+            return await _motoRepository.AtualizarAsync(id, entity);
         }
 
         public async Task<bool> RemoverAsync(int id)
         {
             return await _motoRepository.DeletarAsync(id);
+        }
+
+        private async Task<MotoqueiroEntity> AtribuirEValidarMotoqueiroAsync(int id)
+        {
+            var motoqueiro = await _motoqueiroRepository.BuscarPorIdAsync(id);
+            if (motoqueiro == null)
+                throw new Exception("Motoqueiro não encontrado.");
+
+            if (motoqueiro.Moto != null && motoqueiro.Moto.Id != id)
+                throw new Exception("Este motoqueiro já possui uma moto cadastrada.");
+            return motoqueiro;
         }
     }
 }
