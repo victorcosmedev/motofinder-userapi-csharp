@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using MotoFindrUserAPI.Application.Interfaces;
+using MotoFindrUserAPI.Application.Services;
 using MotoFindrUserAPI.Infrastructure.AppData;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,9 +12,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connectionString = "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle.fiap.com.br)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SID=ORCL)));User Id=<USER_ID>;Password=<SENHA>;";
+var connectionString = "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle.fiap.com.br)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SID=ORCL)));User Id=rm558856;Password=fiap2025;";
 builder.Services.AddDbContext<ApplicationContext>(options =>
     options.UseOracle(connectionString));
+
+builder.Services.AddTransient<IMotoApplicationService, MotoApplicationService>();
+builder.Services.AddTransient<IMotoqueiroApplicationService, MotoqueiroApplicationService>();
+
+
 
 
 var app = builder.Build();
