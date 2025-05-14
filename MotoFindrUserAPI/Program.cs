@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Application.Services;
+using MotoFindrUserAPI.Domain.Interfaces;
 using MotoFindrUserAPI.Infrastructure.AppData;
+using MotoFindrUserAPI.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +20,8 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 
 builder.Services.AddTransient<IMotoApplicationService, MotoApplicationService>();
 builder.Services.AddTransient<IMotoqueiroApplicationService, MotoqueiroApplicationService>();
-
+builder.Services.AddTransient<IMotoRepository, MotoRepository>();
+builder.Services.AddTransient<IMotoqueiroRepository, MotoqueiroRepository>();
 
 
 
