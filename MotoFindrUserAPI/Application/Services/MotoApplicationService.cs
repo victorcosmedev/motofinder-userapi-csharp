@@ -41,12 +41,15 @@ namespace MotoFindrUserAPI.Application.Services
                 if (motoqueiro.Moto != null && motoqueiro.Moto.Id != moto.Id)
                     throw new Exception("Este motoqueiro já possui uma moto cadastrada.");
             }
-
+            moto.Placa = moto.Placa.ToUpper();
+            moto.Chassi = moto.Chassi.ToUpper();
             return await _motoRepository.SalvarAsync(moto);
         }
 
         public async Task<bool> AtualizarAsync(int id, MotoEntity moto)
         {
+            moto.Placa = moto.Placa.ToUpper();
+            moto.Chassi = moto.Chassi.ToUpper();
             return await _motoRepository.AtualizarAsync(id, moto);
         }
 
