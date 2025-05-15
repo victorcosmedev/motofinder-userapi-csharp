@@ -80,5 +80,11 @@ namespace MotoFindrUserAPI.Application.Services
                 throw new Exception("Este motoqueiro já possui uma moto cadastrada.");
             return motoqueiro;
         }
+
+        public async Task<IEnumerable<MotoDTO?>> ObterTodos()
+        {
+            var entities = await _motoRepository.BuscarTodos();
+            return entities.Select(x => _mapper.Map<MotoDTO>(x));
+        }
     }
 }

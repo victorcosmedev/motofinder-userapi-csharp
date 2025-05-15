@@ -28,8 +28,8 @@ namespace MotoFindrUserAPI.Infrastructure.Repositories
             motoqueiroExistente.Nome = motoqueiro.Nome;
             motoqueiroExistente.Cpf = motoqueiro.Cpf;
             motoqueiroExistente.Endereco = motoqueiro.Endereco;
-            motoqueiroExistente.DataNascimento = motoqueiroExistente.DataNascimento;
-            motoqueiroExistente.Moto = motoqueiroExistente.Moto;
+            motoqueiroExistente.DataNascimento = motoqueiro.DataNascimento;
+            motoqueiroExistente.MotoId = motoqueiro.MotoId;
             await _context.SaveChangesAsync();
             return true;
         }
@@ -42,7 +42,8 @@ namespace MotoFindrUserAPI.Infrastructure.Repositories
 
         public async Task<MotoqueiroEntity?> BuscarPorIdAsync(int id)
         {
-            return await _context.Motoqueiro.FindAsync(id);
+            return await _context.Motoqueiro
+                .FirstOrDefaultAsync(m => m.Id == id);
         }
 
         public async Task<bool> DeletarAsync(int id)
@@ -54,6 +55,12 @@ namespace MotoFindrUserAPI.Infrastructure.Repositories
              _context.Motoqueiro.Remove(motoqueiro!);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<IEnumerable<MotoqueiroEntity?>> BuscarTodos()
+        {
+            var motoqueiros = await _context.Motoqueiro.ToListAsync();
+            return motoqueiros;
         }
     }
 }

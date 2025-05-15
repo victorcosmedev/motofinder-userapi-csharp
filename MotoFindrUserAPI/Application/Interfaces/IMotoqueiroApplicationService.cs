@@ -6,6 +6,7 @@ namespace MotoFindrUserAPI.Application.Interfaces
     {
         Task<MotoqueiroDTO?> ObterPorIdAsync(int id);
         Task<MotoqueiroDTO?> ObterPorCpfAsync(string cpf);
+        Task<IEnumerable<MotoqueiroDTO?>> ObterTodos();
         Task<MotoqueiroDTO> CriarAsync(MotoqueiroDTO motoqueiro);
         Task<bool> AtualizarAsync(int id, MotoqueiroDTO motoqueiro);
         Task<bool> RemoverAsync(int id);

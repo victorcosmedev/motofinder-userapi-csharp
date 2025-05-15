@@ -40,7 +40,8 @@ namespace MotoFindrUserAPI.Infrastructure.Repositories
 
         public async Task<MotoEntity?> BuscarPorIdAsync(int id)
         {
-            var moto = await _context.Moto.FindAsync(id);
+            var moto = await _context.Moto
+                .FirstOrDefaultAsync(m => m.Id == id);
             return moto;
         }
 
@@ -50,6 +51,12 @@ namespace MotoFindrUserAPI.Infrastructure.Repositories
             var moto = await _context.Moto
                 .FirstOrDefaultAsync(m => m.Placa == placa);
             return moto;
+        }
+
+        public async Task<IEnumerable<MotoEntity?>> BuscarTodos()
+        {
+            var motos = await _context.Moto.ToListAsync();
+            return motos;
         }
 
         public async Task<bool> DeletarAsync(int id)

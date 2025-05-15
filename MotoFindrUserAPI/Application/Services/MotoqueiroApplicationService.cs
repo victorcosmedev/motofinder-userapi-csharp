@@ -48,7 +48,14 @@ namespace MotoFindrUserAPI.Application.Services
 
         public async Task<bool> AtualizarAsync(int id, MotoqueiroDTO motoqueiro)
         {
-            return await _motoqueiroRepository.AtualizarAsync(id, motoqueiro);
+            MotoEntity? moto = null;
+            if (motoqueiro.MotoId.HasValue)
+            {
+                moto = await AtribuirEValidarMoto(motoqueiro.MotoId.Value);
+            }
+            var entity = _mapper.Map<MotoqueiroEntity>(motoqueiro);
+            entity.Moto = moto;
+            return await _motoqueiroRepository.AtualizarAsync(id, entity);
         }
 
         public async Task<bool> RemoverAsync(int id)
@@ -65,6 +72,12 @@ namespace MotoFindrUserAPI.Application.Services
             if (moto.Motoqueiro != null && moto.Motoqueiro.Id != id)
                 throw new Exception("Esta moto já está associada a outro motoqueiro.");
             return moto;
+        }
+
+        public async Task<IEnumerable<MotoqueiroDTO?>> ObterTodos()
+        {
+            var entities = await _motoqueiroRepository.BuscarTodos();
+            return entities.Select(x => _mapper.Map<MotoqueiroDTO>(x));
         }
     }
 }

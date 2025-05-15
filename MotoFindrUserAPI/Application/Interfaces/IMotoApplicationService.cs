@@ -7,6 +7,7 @@ namespace MotoFindrUserAPI.Application.Interfaces
         Task<MotoDTO?> ObterPorIdAsync(int id);
         Task<MotoDTO?> ObterPorPlacaAsync(string placa);
         Task<MotoDTO?> ObterPorChassiAsync(string chassi);
+        Task<IEnumerable<MotoDTO?>> ObterTodos();
         Task<MotoDTO> CriarAsync(MotoDTO moto);
         Task<bool> AtualizarAsync(int id, MotoDTO moto);
         Task<bool> RemoverAsync(int id);

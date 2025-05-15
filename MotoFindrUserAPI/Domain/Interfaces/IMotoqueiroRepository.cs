@@ -6,6 +6,7 @@ namespace MotoFindrUserAPI.Domain.Interfaces
     {
         Task<MotoqueiroEntity?> BuscarPorIdAsync(int id);
         Task<MotoqueiroEntity?> BuscarPorCpfAsync(string cpf);
+        Task<IEnumerable<MotoqueiroEntity?>> BuscarTodos();
         Task<MotoqueiroEntity> SalvarAsync(MotoqueiroEntity motoqueiro);
         Task<bool> AtualizarAsync(int id, MotoqueiroEntity motoqueiro);
         Task<bool> DeletarAsync(int id);
