@@ -30,6 +30,7 @@ namespace MotoFindrUserAPI.Infrastructure.Repositories
             motoqueiroExistente.Endereco = motoqueiro.Endereco;
             motoqueiroExistente.DataNascimento = motoqueiro.DataNascimento;
             motoqueiroExistente.MotoId = motoqueiro.MotoId;
+            motoqueiroExistente.Moto = motoqueiro.Moto;
             await _context.SaveChangesAsync();
             return true;
         }
@@ -50,6 +51,13 @@ namespace MotoFindrUserAPI.Infrastructure.Repositories
             var motoqueiro = await _context.Motoqueiro.FindAsync(id);
             if (motoqueiro == null)
                 throw new Exception($"Motoqueiro de id {id} não existe");
+
+            var moto = await _context.Moto.FindAsync(motoqueiro.MotoId);
+            if(moto != null)
+            {
+                moto.Motoqueiro = null;
+                moto.MotoqueiroId = null;
+            }
 
              _context.Motoqueiro.Remove(motoqueiro!);
             await _context.SaveChangesAsync();

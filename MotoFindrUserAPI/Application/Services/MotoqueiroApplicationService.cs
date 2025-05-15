@@ -34,12 +34,12 @@ namespace MotoFindrUserAPI.Application.Services
         public async Task<MotoqueiroDTO> CriarAsync(MotoqueiroDTO motoqueiro)
         {
             MotoEntity? moto = null;
+            var entity = _mapper.Map<MotoqueiroEntity>(motoqueiro);
             if (motoqueiro.MotoId.HasValue)
             {
-                moto = await AtribuirEValidarMoto(motoqueiro.MotoId.Value);
+                moto = await AtribuirEValidarMotoAsync(motoqueiro.MotoId.Value, entity);
             }
 
-            var entity = _mapper.Map<MotoqueiroEntity>(motoqueiro);
             entity.Moto = moto;
 
             entity = await _motoqueiroRepository.SalvarAsync(entity);
@@ -49,11 +49,11 @@ namespace MotoFindrUserAPI.Application.Services
         public async Task<bool> AtualizarAsync(int id, MotoqueiroDTO motoqueiro)
         {
             MotoEntity? moto = null;
+            var entity = _mapper.Map<MotoqueiroEntity>(motoqueiro);
             if (motoqueiro.MotoId.HasValue)
             {
-                moto = await AtribuirEValidarMoto(motoqueiro.MotoId.Value);
+                moto = await AtribuirEValidarMotoAsync(motoqueiro.MotoId.Value, entity);
             }
-            var entity = _mapper.Map<MotoqueiroEntity>(motoqueiro);
             entity.Moto = moto;
             return await _motoqueiroRepository.AtualizarAsync(id, entity);
         }
@@ -63,14 +63,19 @@ namespace MotoFindrUserAPI.Application.Services
             return await _motoqueiroRepository.DeletarAsync(id);
         }
 
-        private async Task<MotoEntity?> AtribuirEValidarMoto(int id)
+        private async Task<MotoEntity?> AtribuirEValidarMotoAsync(int motoId, MotoqueiroEntity motoqueiroEntity)
         {
-            var moto = await _motoRepository.BuscarPorIdAsync(id);
+            var moto = await _motoRepository.BuscarPorIdAsync(motoId);
             if (moto == null)
                 throw new Exception("Moto não encontrada");
 
-            if (moto.Motoqueiro != null && moto.Motoqueiro.Id != id)
+            if (moto.Motoqueiro != null && moto.Motoqueiro.Id != motoId)
                 throw new Exception("Esta moto já está associada a outro motoqueiro.");
+
+            moto.Motoqueiro = motoqueiroEntity;
+            moto.MotoqueiroId = motoqueiroEntity.MotoId;
+
+            await _motoRepository.AtualizarAsync(motoId, moto);
             return moto;
         }
 
