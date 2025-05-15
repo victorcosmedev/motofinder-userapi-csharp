@@ -9,13 +9,19 @@ namespace MotoFindrUserAPI.Configurations
         public AutoMapperProfile()
         {
             CreateMap<MotoEntity, MotoDTO>()
-                .ReverseMap();
+                .ReverseMap()
+                .ForMember(dest => dest.Motoqueiro,
+             opt => opt.Ignore()); // Evita sobrescrita do relacionamento
 
             // MotoqueiroEntity <-> MotoqueiroDTO
             CreateMap<MotoqueiroEntity, MotoqueiroDTO>()
                 .ForMember(dest => dest.MotoId,
-                          opt => opt.MapFrom(src => src.Moto != null ? src.Moto.Id : (int?)null))
-                .ReverseMap();
+                          opt => opt.MapFrom(src => src.MotoId)) // Mapeia direto do MotoId da entity
+                .ReverseMap()
+                .ForMember(dest => dest.MotoId,
+                          opt => opt.MapFrom(src => src.MotoId ?? 0)) // Trata null como 0
+                .ForPath(dest => dest.Moto,
+                        opt => opt.Ignore());
         }
     }
 }
