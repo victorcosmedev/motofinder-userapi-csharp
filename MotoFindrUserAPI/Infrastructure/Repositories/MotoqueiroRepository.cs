@@ -42,8 +42,7 @@ namespace MotoFindrUserAPI.Infrastructure.Repositories
 
         public async Task<MotoqueiroEntity?> BuscarPorIdAsync(int id)
         {
-            return await _context.Motoqueiro
-                .FirstOrDefaultAsync(m => m.Id == id);
+            return await _context.Motoqueiro.FindAsync(id);
         }
 
         public async Task<bool> DeletarAsync(int id)
