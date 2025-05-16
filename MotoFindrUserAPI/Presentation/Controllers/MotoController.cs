@@ -2,6 +2,7 @@
 using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Domain.Entities;
+using MotoFindrUserAPI.Utils;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace MotoFindrUserAPI.Presentation.Controllers
@@ -19,8 +20,8 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
         [HttpGet("{id}")]
         [SwaggerOperation(
-            Summary = "Obter moto por ID",
-            Description = "Retorna uma moto específica com base no ID fornecido"
+            Summary = ApiDoc.GetMotoByIdSummary,
+            Description = ApiDoc.GetMotoByIdDescription
         )]
         [SwaggerResponse(StatusCodes.Status200OK, "Moto encontrada com sucesso", typeof(MotoDTO))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Moto não encontrada")]
@@ -41,8 +42,8 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
         [HttpGet("placa/{placa}")]
         [SwaggerOperation(
-            Summary = "Obter moto por placa",
-            Description = "Retorna uma moto específica com base na placa fornecida"
+            Summary = ApiDoc.GetByPlacaSummary,
+            Description = ApiDoc.GetByPlacaDescription
         )]
         [SwaggerResponse(StatusCodes.Status200OK, "Moto encontrada com sucesso", typeof(MotoDTO))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Moto não encontrada")]
@@ -64,8 +65,8 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
         [HttpGet("chassi/{chassi}")]
         [SwaggerOperation(
-            Summary = "Obter moto por chassi",
-            Description = "Retorna uma moto específica com base no chassi fornecido"
+            Summary = ApiDoc.GetMotoByChassiSummary,
+            Description = ApiDoc.GetMotoByChassiDescription
         )]
         [SwaggerResponse(StatusCodes.Status200OK, "Moto encontrada com sucesso", typeof(MotoDTO))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Moto não encontrada")]
@@ -87,8 +88,8 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
         [HttpPost]
         [SwaggerOperation(
-            Summary = "Criar nova moto",
-            Description = "Cadastra uma nova moto no sistema"
+            Summary = ApiDoc.SalvarMotoSummary,
+            Description = ApiDoc.SalvarMotoDescription
         )]
         [SwaggerResponse(StatusCodes.Status201Created, "Moto criada com sucesso", typeof(MotoDTO))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Dados da moto inválidos")]
@@ -108,8 +109,8 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
         [HttpPut("{id}")]
         [SwaggerOperation(
-            Summary = "Atualizar moto existente",
-            Description = "Atualiza os dados de uma moto existente"
+            Summary = ApiDoc.AtualizarMotoSummary,
+            Description = ApiDoc.AtualizarMotoDescription
         )]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Moto atualizada com sucesso")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "IDs inconsistentes ou dados inválidos")]
@@ -130,8 +131,8 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
         [HttpDelete("{id}")]
         [SwaggerOperation(
-            Summary = "Remover moto",
-            Description = "Exclui permanentemente uma moto do sistema"
+            Summary = ApiDoc.DeletarMotoSummary,
+            Description = ApiDoc.DeletarMotoDescription
         )]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Moto removida com sucesso")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Moto não encontrada")]
@@ -151,8 +152,8 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
         [HttpGet]
         [SwaggerOperation(
-            Summary = "Obter todas as motos cadastradas",
-            Description = "Buscar todas as motos salvas no sistema."
+            Summary = ApiDoc.BuscarTodasMotosSummary,
+            Description = ApiDoc.BuscarTodasMotosDescription
         )]
         [SwaggerResponse(StatusCodes.Status200OK, "Lista de motos obtida com sucesso", typeof(IEnumerable<MotoDTO>))]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Nenhuma moto encontrada")]

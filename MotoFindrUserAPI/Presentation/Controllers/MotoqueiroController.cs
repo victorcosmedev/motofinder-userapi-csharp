@@ -2,6 +2,7 @@
 using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Domain.Entities;
+using MotoFindrUserAPI.Utils;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace MotoFindrUserAPI.Presentation.Controllers
@@ -19,8 +20,8 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
         [HttpGet("{id}")]
         [SwaggerOperation(
-            Summary = "Obtém um motoqueiro pelo ID",
-            Description = "Retorna os detalhes do motoqueiro com o ID especificado"
+            Summary = ApiDoc.BuscarMotoqueiroPorIdSummary,
+            Description = ApiDoc.BuscarMotoqueiroPorIdDescription
         )]
         [SwaggerResponse(StatusCodes.Status200OK, "Motoqueiro encontrado com sucesso", typeof(MotoqueiroDTO))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Motoqueiro não encontrado")]
@@ -40,8 +41,8 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
         [HttpGet("cpf/{cpf}")]
         [SwaggerOperation(
-            Summary = "Busca motoqueiro por CPF",
-            Description = "Realiza a busca de um motoqueiro utilizando o CPF como filtro"
+            Summary = ApiDoc.BuscarMotoqueiroPorCpfSummary,
+            Description = ApiDoc.BuscarMotoqueiroPorCpfDescription
         )]
         [SwaggerResponse(StatusCodes.Status200OK, "Motoqueiro encontrado com sucesso", typeof(MotoqueiroDTO))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Motoqueiro não encontrado")]
@@ -64,8 +65,8 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
         [HttpPost]
         [SwaggerOperation(
-            Summary = "Cria um novo motoqueiro",
-            Description = "Cadastra um novo motoqueiro no sistema"
+            Summary = ApiDoc.SalvarMotoqueiroSummary,
+            Description = ApiDoc.SalvarMotoqueiroDescription
         )]
         [SwaggerResponse(StatusCodes.Status201Created, "Motoqueiro criado com sucesso", typeof(MotoqueiroDTO))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Dados do motoqueiro inválidos")]
@@ -84,8 +85,8 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
         [HttpPut("{id}")]
         [SwaggerOperation(
-            Summary = "Atualiza um motoqueiro existente",
-            Description = "Atualiza os dados do motoqueiro com o ID especificado"
+            Summary = ApiDoc.AtualizarMotoqueiroSummary,
+            Description = ApiDoc.AtualizarMotoqueiroDescription
         )]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Motoqueiro atualizado com sucesso")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "IDs inconsistentes ou dados inválidos")]
@@ -106,11 +107,10 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             }
         }
 
-        // DELETE: api/motoqueiro/{id}
         [HttpDelete("{id}")]
         [SwaggerOperation(
-            Summary = "Remove um motoqueiro",
-            Description = "Exclui permanentemente o motoqueiro com o ID especificado"
+            Summary = ApiDoc.DeletarMotoqueiroSummary,
+            Description = ApiDoc.DeletarMotoqueiroDescription
         )]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Motoqueiro removido com sucesso")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Motoqueiro não encontrado")]
@@ -130,8 +130,8 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
         [HttpGet]
         [SwaggerOperation(
-            Summary = "Obter todos os motoqueiros cadastrados",
-            Description = "Buscar todos os motoqueiros salvos no sistema."
+            Summary = ApiDoc.BuscarTodosMotoqueirosSummary,
+            Description = ApiDoc.BuscarTodosMotoqueirosDescription
         )]
         [SwaggerResponse(StatusCodes.Status200OK, "Lista de motoqueiros obtida com sucesso", typeof(IEnumerable<MotoqueiroDTO>))]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Nenhum motoqueiro encontrado")]

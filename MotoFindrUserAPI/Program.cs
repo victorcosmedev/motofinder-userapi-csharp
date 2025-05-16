@@ -26,7 +26,10 @@ builder.Services.AddTransient<IMotoqueiroRepository, MotoqueiroRepository>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 
+builder.Services.AddSwaggerGen(conf => {
 
+    conf.EnableAnnotations();
+});
 
 var app = builder.Build();
 
