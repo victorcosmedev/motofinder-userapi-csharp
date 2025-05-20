@@ -41,7 +41,7 @@ public class MotoApplicationService : IMotoApplicationService
     {
         MotoqueiroEntity? motoqueiro = null;
         var entity = _mapper.Map<MotoEntity>(moto);
-        if (moto.MotoqueiroId.HasValue)
+        if (moto.MotoqueiroId.HasValue && moto.MotoqueiroId != 0)
         {
             motoqueiro = await AtribuirEValidarMotoqueiroAsync(moto.MotoqueiroId.Value, entity);
         }
@@ -56,7 +56,7 @@ public class MotoApplicationService : IMotoApplicationService
     {
         MotoqueiroEntity? motoqueiro = null;
         var entity = _mapper.Map<MotoEntity>(moto);
-        if (moto.MotoqueiroId.HasValue)
+        if (moto.MotoqueiroId.HasValue && moto.MotoqueiroId != 0)
         {
             motoqueiro = await AtribuirEValidarMotoqueiroAsync(moto.MotoqueiroId.Value, entity);
         }

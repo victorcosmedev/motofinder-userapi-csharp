@@ -35,7 +35,7 @@ namespace MotoFindrUserAPI.Application.Services
         {
             MotoEntity? moto = null;
             var entity = _mapper.Map<MotoqueiroEntity>(motoqueiro);
-            if (motoqueiro.MotoId.HasValue)
+            if (motoqueiro.MotoId.HasValue && motoqueiro.MotoId != 0)
             {
                 moto = await AtribuirEValidarMotoAsync(motoqueiro.MotoId.Value, entity);
             }
@@ -50,7 +50,7 @@ namespace MotoFindrUserAPI.Application.Services
         {
             MotoEntity? moto = null;
             var entity = _mapper.Map<MotoqueiroEntity>(motoqueiro);
-            if (motoqueiro.MotoId.HasValue)
+            if (motoqueiro.MotoId.HasValue && motoqueiro.MotoId != 0)
             {
                 moto = await AtribuirEValidarMotoAsync(motoqueiro.MotoId.Value, entity);
             }
