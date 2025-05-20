@@ -3,6 +3,17 @@
 A ideia da nossa solução é elaborar um sistema de localização indoor para as motos dentro dos pátios da Mottu, já que a principal queixa dos stakeholders é justamente a ineficiência e imprecisão do sistema de GPS quando se trata de espaços tão curtos.
 Desta forma, o **MotoFindr** surge como um software capaz de organizar, sistematizar e cadastrar as motos que chegam aos pátios de modo a sanar as dores da Mottu.
 
+## Nome Integrantes
+<div align="center">
+ 
+| Nome | RM |
+| ------------- |:-------------:|
+| Arthur Eduardo Luna Pulini|554848|
+|Lucas Almeida Fernandes de Moraes| 557569     |
+|Victor Nascimento Cosme|558856|
+ 
+</div>
+
 ## 🎯 Objetivo  
 Gerenciar o status das motos nos pátios, com foco no:  
 🔹 **Atrelamento**: Vinculação automática moto-motoqueiro na entrada  
