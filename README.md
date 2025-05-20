@@ -11,16 +11,12 @@ Desta forma, o **MotoFindr** surge como um software capaz de organizar, sistemat
 
 ## Nome Integrantes
 
-<div  align="center">
+<div align="center">
 
-| Nome | RM |
-
-| ------------- |:-------------:|
-
-| Arthur Eduardo Luna Pulini|554848|
-
-|Lucas Almeida Fernandes de Moraes| 557569 |
-
+| Nome | RM |  
+| ------------- |:-------------:|  
+| Arthur Eduardo Luna Pulini|554848|  
+|Lucas Almeida Fernandes de Moraes| 557569 |  
 |Victor Nascimento Cosme|558856|
 
 </div>
