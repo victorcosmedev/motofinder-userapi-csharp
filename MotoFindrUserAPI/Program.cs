@@ -15,9 +15,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connectionString = "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle.fiap.com.br)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SID=ORCL)));User Id=rm558856;Password=fiap2025;";
-builder.Services.AddDbContext<ApplicationContext>(options =>
-    options.UseOracle(connectionString));
+//var connectionString = "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle.fiap.com.br)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SID=ORCL)));User Id=rm558856;Password=fiap2025;";
+builder.Services.AddDbContext<ApplicationContext>(option => {
+    option.UseOracle(builder.Configuration.GetConnectionString("Oracle"));
+});
+
 
 builder.Services.AddTransient<IMotoApplicationService, MotoApplicationService>();
 builder.Services.AddTransient<IMotoqueiroApplicationService, MotoqueiroApplicationService>();

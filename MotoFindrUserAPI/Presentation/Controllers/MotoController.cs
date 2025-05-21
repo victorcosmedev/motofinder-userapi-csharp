@@ -163,7 +163,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             try
             {
                 var motos = await _motoService.ObterTodos();
-                if (motos != null)
+                if (motos != null && motos.Any())
                     return Ok(motos);
                 return NoContent();
             }
