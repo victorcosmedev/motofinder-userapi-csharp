@@ -54,7 +54,7 @@ Gerenciar o status das motos nos pátios, com foco no:
 ## Instalação do projeto - Orientações
 
 #### Credenciais
-Para rodar o projeto, é necessário inserir as credenciais do banco de dados Oracle da FIAP no arquivo `appsettings.json`.
+Para rodar o projeto, é necessário inserir as credenciais do banco de dados Oracle da FIAP no arquivo `appsettings.Development.json`.
 #### Aplicação das entidades em tabelas no banco de dados
 Após inserir as credenciais, deve-se abrir o Packet Manager Console (Tools > NuGet Package Manager > Package Manager Console) e inserir o comando: `update-database` de modo que as entidades sejam refletidas em banco de dados.
 #### Rodar o projeto
