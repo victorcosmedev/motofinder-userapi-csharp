@@ -12,13 +12,17 @@ namespace MotoFindrUserAPI.Infrastructure.AppData
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<MotoEntity>()
+                .HasOne(m => m.Motoqueiro)
+                .WithOne(mq => mq.Moto)
+                .HasForeignKey<MotoEntity>(m => m.MotoqueiroId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             modelBuilder.Entity<MotoqueiroEntity>()
                 .HasOne(mq => mq.Moto)
                 .WithOne(m => m.Motoqueiro)
-                .HasForeignKey<MotoEntity>(m => m.MotoqueiroId)
+                .HasForeignKey<MotoqueiroEntity>(mq => mq.MotoId)
                 .IsRequired(false);
-
-            base.OnModelCreating(modelBuilder);
         }
 
     }

@@ -39,6 +39,10 @@ namespace MotoFindrUserAPI.Application.Services
             {
                 moto = await AtribuirEValidarMotoAsync(motoqueiro.MotoId.Value, entity);
             }
+            else
+            {
+                entity.MotoId = null;
+            }
 
             entity.Moto = moto;
 
@@ -53,8 +57,13 @@ namespace MotoFindrUserAPI.Application.Services
             if (motoqueiro.MotoId.HasValue && motoqueiro.MotoId != 0)
             {
                 moto = await AtribuirEValidarMotoAsync(motoqueiro.MotoId.Value, entity);
+            } else
+            {
+                entity.MotoId = null;
             }
+
             entity.Moto = moto;
+            
             return await _motoqueiroRepository.AtualizarAsync(id, entity);
         }
 
