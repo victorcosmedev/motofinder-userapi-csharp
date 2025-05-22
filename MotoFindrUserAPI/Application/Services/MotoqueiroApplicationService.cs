@@ -82,7 +82,7 @@ namespace MotoFindrUserAPI.Application.Services
                 throw new Exception("Esta moto já está associada a outro motoqueiro.");
 
             moto.Motoqueiro = motoqueiroEntity;
-            moto.MotoqueiroId = motoqueiroEntity.MotoId;
+            moto.MotoqueiroId = motoqueiroEntity.Id;
 
             await _motoRepository.AtualizarAsync(motoId, moto);
             return moto;
