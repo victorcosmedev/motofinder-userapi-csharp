@@ -96,6 +96,16 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
         public async Task<ActionResult<MotoDTO>> Post([FromBody] MotoDTO moto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new
+                {
+                    Errors = ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage)
+                });
+            }
+
             try
             {
                 var novaMoto = await _motoService.CriarAsync(moto);
@@ -118,6 +128,16 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
         public async Task<IActionResult> Put(int id, [FromBody] MotoDTO moto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new
+                {
+                    Errors = ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage)
+                });
+            }
+
             try
             {
                 var atualizado = await _motoService.AtualizarAsync(id, moto);

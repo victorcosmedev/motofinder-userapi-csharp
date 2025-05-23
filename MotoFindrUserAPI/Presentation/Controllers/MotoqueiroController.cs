@@ -72,6 +72,16 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Dados do motoqueiro inválidos")]
         public async Task<IActionResult> Criar([FromBody] MotoqueiroDTO motoqueiro)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new
+                {
+                    Errors = ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage)
+                });
+            }
+
             try
             {
                 var novoMotoqueiro = await _service.CriarAsync(motoqueiro);
@@ -93,6 +103,17 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, "Motoqueiro não encontrado")]
         public async Task<IActionResult> Atualizar(int id, [FromBody] MotoqueiroDTO motoqueiro)
         {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new
+                {
+                    Errors = ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage)
+                });
+            }
+
             try
             {
                 if (id != motoqueiro.Id)
