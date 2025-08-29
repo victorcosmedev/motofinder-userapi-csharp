@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MotoFindrUserAPI.Domain.Entities
 {
     [Table("tb_mf_endereco")]
-    public class Endereco
+    public class EnderecoEntity
     {
         [Key]
         public int Id { get; set; }
@@ -19,5 +19,7 @@ namespace MotoFindrUserAPI.Domain.Entities
         public string Numero { get; set; } = string.Empty;
         [Required]
         public string Localidade { get; set; } = string.Empty;
+        [Required]
+        public int MotoqueiroId { get; set; }
     }
 }
