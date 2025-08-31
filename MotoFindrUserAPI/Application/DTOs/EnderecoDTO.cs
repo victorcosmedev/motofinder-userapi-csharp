@@ -19,7 +19,10 @@ namespace MotoFindrUserAPI.Application.DTOs
         public string Numero { get; set; } = string.Empty;
         [Required(ErrorMessage = "Localidade é obrigatório")]
         [Range(3, 100, ErrorMessage = "Localidade deve ter entre 3 e 100 caracteres")]
-        public string Localidade { get; set; } = string.Empty;
+        public string Municipio { get; set; } = string.Empty;
         public int? MotoqueiroId { get; set; }
+        [MinLength(8, ErrorMessage = "CEP precisa ter 8 caracteres")]
+        [MaxLength(8, ErrorMessage = "CEP precisa ter 8 caracteres")]
+        public string? Cep { get; set; }
     }
 }
