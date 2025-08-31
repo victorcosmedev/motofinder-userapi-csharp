@@ -15,6 +15,8 @@ namespace MotoFindrUserAPI.Domain.Entities
         [Required]
         public string Complemento { get; set; } = string.Empty;
         [Required]
+        public string Municipio { get; set; }
+        [Required]
         public string Uf { get; set; } = string.Empty;
         [Required]
         public string Numero { get; set; } = string.Empty;
