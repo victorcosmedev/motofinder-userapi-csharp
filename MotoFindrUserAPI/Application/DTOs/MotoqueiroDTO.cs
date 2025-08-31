@@ -13,7 +13,7 @@ namespace MotoFindrUserAPI.Application.DTOs
         public string Cpf { get; set; } = string.Empty;
         [Required]
         [StringLength(200, MinimumLength = 5)]
-        public string Endereco { get; set; } = string.Empty;
+        public EnderecoDTO? Endereco { get; set; }
         [Required]
         public DateTime DataNascimento { get; set; }
         public int? MotoId { get; set; }

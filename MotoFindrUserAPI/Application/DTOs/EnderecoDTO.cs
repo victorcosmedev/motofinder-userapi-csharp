@@ -20,5 +20,6 @@ namespace MotoFindrUserAPI.Application.DTOs
         [Required(ErrorMessage = "Localidade é obrigatório")]
         [Range(3, 100, ErrorMessage = "Localidade deve ter entre 3 e 100 caracteres")]
         public string Localidade { get; set; } = string.Empty;
+        public int MotoqueiroId { get; set; }
     }
 }
