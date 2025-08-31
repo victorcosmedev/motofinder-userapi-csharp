@@ -53,9 +53,12 @@ namespace MotoFindrUserAPI.Infrastructure.Repositories
             return moto;
         }
 
-        public async Task<IEnumerable<MotoEntity?>> BuscarTodos()
+        public async Task<IEnumerable<MotoEntity?>> BuscarTodos(int pageNumber, int pageSize)
         {
-            var motos = await _context.Moto.ToListAsync();
+            var motos = await _context.Moto
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
             return motos;
         }
 

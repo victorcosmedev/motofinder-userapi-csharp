@@ -95,9 +95,9 @@ public class MotoApplicationService : IMotoApplicationService
         return motoqueiro;
     }
 
-    public async Task<IEnumerable<MotoDTO?>> ObterTodos()
+    public async Task<IEnumerable<MotoDTO?>> ObterTodos(int pageNumber, int pageSize)
     {
-        var entities = await _motoRepository.BuscarTodos();
+        var entities = await _motoRepository.BuscarTodos(pageNumber, pageSize);
         return entities.Select(x => _mapper.Map<MotoDTO>(x));
     }
 }
