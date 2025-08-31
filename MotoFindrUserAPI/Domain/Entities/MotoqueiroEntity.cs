@@ -14,7 +14,7 @@ namespace MotoFindrUserAPI.Domain.Entities
         [Required]
         public string Cpf { get; set; }
         [Required]
-        public EnderecoEntity Endereco { get; set; }
+        public EnderecoEntity? Endereco { get; set; }
         [Required]
         public DateTime DataNascimento { get; set; }
         public int? MotoId { get; set; }
