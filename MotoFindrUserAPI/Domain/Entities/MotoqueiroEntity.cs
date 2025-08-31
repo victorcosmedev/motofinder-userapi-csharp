@@ -13,6 +13,7 @@ namespace MotoFindrUserAPI.Domain.Entities
         public string Nome { get; set; }
         [Required]
         public string Cpf { get; set; }
+        public int? EnderecoId { get; set; }
         [Required]
         public EnderecoEntity? Endereco { get; set; }
         [Required]
