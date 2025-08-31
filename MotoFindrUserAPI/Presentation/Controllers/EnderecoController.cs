@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
+using MotoFindrUserAPI.Utils.Hateoas;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace MotoFindrUserAPI.Presentation.Controllers
@@ -17,9 +18,9 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
         [HttpGet("{id}")]
         [SwaggerOperation(
-        Summary = "Buscar endereço por ID",
-        Description = "Retorna um endereço específico com base no ID informado."
-    )]
+            Summary = "Buscar endereço por ID",
+            Description = "Retorna um endereço específico com base no ID informado."
+        )]
         [SwaggerResponse(StatusCodes.Status200OK, "Endereço encontrado com sucesso", typeof(EnderecoDTO))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Endereço não encontrado")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
@@ -28,8 +29,21 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             try
             {
                 var endereco = await _enderecoService.ObterPorIdAsync(id);
-                if (endereco == null) return NotFound();
-                return Ok(endereco);
+                if (endereco == null) 
+                    return NotFound();
+
+                var hateoas = new HateoasResponse<EnderecoDTO>
+                {
+                    Data = endereco,
+                    Links = new List<LinkDto>
+                    {
+                        new LinkDto { Rel = "self", Href = Url.Action(nameof(GetById), new { id }), Method = "GET" },
+                        new LinkDto { Rel = "update", Href = Url.Action(nameof(Put), new { id }), Method = "PUT" },
+                        new LinkDto { Rel = "delete", Href = Url.Action(nameof(Delete), new { id }), Method = "DELETE" }
+                    }
+                };
+
+                return Ok(hateoas);
             }
             catch (Exception ex)
             {
@@ -60,7 +74,18 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             try
             {
                 var novoEndereco = await _enderecoService.CriarAsync(endereco);
-                return CreatedAtAction(nameof(GetById), new { id = novoEndereco.Id }, novoEndereco);
+                var hateoas = new HateoasResponse<EnderecoDTO>
+                {
+                    Data = novoEndereco,
+                    Links = new List<LinkDto>
+                    {
+                        new LinkDto { Rel = "self", Href = Url.Action(nameof(GetById), new { id = novoEndereco.Id }), Method = "GET" },
+                        new LinkDto { Rel = "update", Href = Url.Action(nameof(Put), new { id = novoEndereco.Id }), Method = "PUT" },
+                        new LinkDto { Rel = "delete", Href = Url.Action(nameof(Delete), new { id = novoEndereco.Id }), Method = "DELETE" }
+                    }
+                };
+
+                return CreatedAtAction(nameof(GetById), new { id = novoEndereco.Id }, hateoas);
             }
             catch (Exception ex)
             {
@@ -92,7 +117,19 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             try
             {
                 var atualizado = await _enderecoService.AtualizarAsync(id, endereco);
-                return atualizado ? NoContent() : NotFound();
+                if (!atualizado)
+                    return NotFound("Endereco não encontrado");
+
+                var hateoas = new HateoasResponse<EnderecoDTO>
+                {
+                    Data = endereco,
+                    Links = new List<LinkDto>
+                    {
+                        new LinkDto { Rel = "self", Href = Url.Action(nameof(GetById), new { id }), Method = "GET" },
+                        new LinkDto { Rel = "delete", Href = Url.Action(nameof(Delete), new { id }), Method = "DELETE" }
+                    }
+                };
+                return Ok(hateoas);
             }
             catch (Exception ex)
             {
@@ -113,7 +150,17 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             try
             {
                 var removido = await _enderecoService.DeletarAsync(id);
-                return removido ? NoContent() : NotFound();
+                if (!removido)
+                    return NotFound("Endereco não encontrado");
+                var hateoas = new HateoasResponse<string>
+                {
+                    Message = "Endereco removido com sucesso",
+                    Links = new List<LinkDto>
+                    {
+                        new LinkDto { Rel = "create", Href = Url.Action(nameof(Post)), Method = "POST" }
+                    }
+                };  
+                return Ok(hateoas);
             }
             catch (Exception ex)
             {
