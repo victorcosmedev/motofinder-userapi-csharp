@@ -266,7 +266,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
                 if(motos == null || !motos.Any())
                     return NotFound("Nenhuma moto encontrada");
                 
-                var hateoas = motos.Select(m => new HateoasResponse<MotoqueiroDTO>
+                var hateoas = motos.Select(m => new HateoasResponse<MotoDTO>
                 {
                     Data = m,
                     Links = new List<LinkDto>
