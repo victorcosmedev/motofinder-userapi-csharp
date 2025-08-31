@@ -94,5 +94,6 @@ namespace MotoFindrUserAPI.Application.Services
             return entities.Select(x => _mapper.Map<MotoqueiroDTO>(x));
         }
     }
+
 }
 
