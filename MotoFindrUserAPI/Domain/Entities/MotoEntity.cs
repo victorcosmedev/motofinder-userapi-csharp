@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace MotoFindrUserAPI.Domain.Entities
 {
@@ -18,6 +19,7 @@ namespace MotoFindrUserAPI.Domain.Entities
         [MaxLength(7)]
         public string Placa { get; set; } = string.Empty;
         public int? MotoqueiroId { get; set; }
+        [JsonIgnore]
         public MotoqueiroEntity? Motoqueiro { get; set; }
     }
 }

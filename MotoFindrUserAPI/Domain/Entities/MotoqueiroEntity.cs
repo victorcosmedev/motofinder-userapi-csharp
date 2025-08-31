@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace MotoFindrUserAPI.Domain.Entities
 {
@@ -13,11 +14,10 @@ namespace MotoFindrUserAPI.Domain.Entities
         [Required]
         public string Cpf { get; set; }
         [Required]
-        public string Endereco { get; set; }
+        public EnderecoEntity Endereco { get; set; }
         [Required]
         public DateTime DataNascimento { get; set; }
         public int? MotoId { get; set; }
         public MotoEntity? Moto { get; set; }
-
     }
 }
