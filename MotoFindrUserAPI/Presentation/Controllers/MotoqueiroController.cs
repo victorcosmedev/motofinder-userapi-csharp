@@ -3,6 +3,7 @@ using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Domain.Entities;
 using MotoFindrUserAPI.Utils;
+using MotoFindrUserAPI.Utils.Hateoas;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace MotoFindrUserAPI.Presentation.Controllers
@@ -31,7 +32,41 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             try
             {
                 var motoqueiro = await _service.ObterPorIdAsync(id);
-                return motoqueiro == null ? NotFound() : Ok(motoqueiro);
+                if(motoqueiro == null)
+                    return NotFound();
+
+                var hateoas = new HateoasResponse<MotoqueiroDTO>
+                {
+                    Data = motoqueiro,
+                    Links = new List<LinkDto>
+                    {
+                        new LinkDto
+                        {
+                            Rel = "self",
+                            Href = Url.Action(nameof(ObterPorId), new { id = id }) ?? string.Empty,
+                            Method = "GET"
+                        },
+                        new LinkDto
+                        {
+                            Rel = "update",
+                            Href = Url.Action(nameof(Atualizar), new { id = id }) ?? string.Empty,
+                            Method = "PUT"
+                        },
+                        new LinkDto
+                        {
+                            Rel = "delete",
+                            Href = Url.Action(nameof(Remover), new { id = id }) ?? string.Empty,
+                            Method = "DELETE"
+                        },
+                        new LinkDto
+                        {
+                            Rel = "todos",
+                            Href = Url.Action(nameof(BuscarTodos)) ?? string.Empty,
+                            Method = "GET"
+                        }
+                    }
+                };
+                return Ok(hateoas);
             }
             catch (Exception ex)
             {
@@ -55,7 +90,43 @@ namespace MotoFindrUserAPI.Presentation.Controllers
                     return BadRequest("CPF não informado");
 
                 var motoqueiro = await _service.ObterPorCpfAsync(cpf);
-                return motoqueiro == null ? NotFound() : Ok(motoqueiro);
+
+                if(motoqueiro == null)
+                    return NotFound();
+
+                var hateoas = new HateoasResponse<MotoqueiroDTO>
+                {
+                    Data = motoqueiro,
+                    Links = new List<LinkDto>
+                    {
+                        new LinkDto
+                        {
+                            Rel = "self",
+                            Href = Url.Action(nameof(ObterPorCpf), new { cpf = cpf }) ?? string.Empty,
+                            Method = "GET"
+                        },
+                        new LinkDto
+                        {
+                            Rel = "update",
+                            Href = Url.Action(nameof(Atualizar), new { id = motoqueiro.Id }) ?? string.Empty,
+                            Method = "PUT"
+                        },
+                        new LinkDto
+                        {
+                            Rel = "delete",
+                            Href = Url.Action(nameof(Remover), new { id = motoqueiro.Id }) ?? string.Empty,
+                            Method = "DELETE"
+                        },
+                        new LinkDto
+                        {
+                            Rel = "todos",
+                            Href = Url.Action(nameof(BuscarTodos)) ?? string.Empty,
+                            Method = "GET"
+                        }
+                    }
+                };
+
+                return Ok(hateoas);
             }
             catch (Exception ex)
             {
@@ -85,7 +156,40 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             try
             {
                 var novoMotoqueiro = await _service.CriarAsync(motoqueiro);
-                return CreatedAtAction(nameof(ObterPorId), new { id = novoMotoqueiro.Id }, novoMotoqueiro);
+
+                var hateoas = new HateoasResponse<MotoqueiroDTO>
+                {
+                    Data = novoMotoqueiro,
+                    Links = new List<LinkDto>
+                    {
+                        new LinkDto
+                        {
+                            Rel = "self",
+                            Href = Url.Action(nameof(ObterPorId), new { id = novoMotoqueiro.Id }) ?? string.Empty,
+                            Method = "GET"
+                        },
+                        new LinkDto
+                        {
+                            Rel = "update",
+                            Href = Url.Action(nameof(Atualizar), new { id = novoMotoqueiro.Id }) ?? string.Empty,
+                            Method = "PUT"
+                        },
+                        new LinkDto
+                        {
+                            Rel = "delete",
+                            Href = Url.Action(nameof(Remover), new { id = novoMotoqueiro.Id }) ?? string.Empty,
+                            Method = "DELETE"
+                        },
+                        new LinkDto
+                        {
+                            Rel = "todos",
+                            Href = Url.Action(nameof(BuscarTodos)) ?? string.Empty,
+                            Method = "GET"
+                        }
+                    }
+                };
+
+                return CreatedAtAction(nameof(ObterPorId), new { id = novoMotoqueiro.Id }, hateoas);
             }
             catch (Exception ex)
             {
@@ -120,6 +224,42 @@ namespace MotoFindrUserAPI.Presentation.Controllers
                     return BadRequest("ID da URL não corresponde ao ID do motoqueiro");
 
                 var sucesso = await _service.AtualizarAsync(id, motoqueiro);
+
+                if(!sucesso)
+                    return NotFound();
+
+                var hateoas = new HateoasResponse<MotoqueiroDTO>
+                {
+                    Data = motoqueiro,
+                    Links = new List<LinkDto>
+                    {
+                        new LinkDto
+                        {
+                            Rel = "self",
+                            Href = Url.Action(nameof(ObterPorId), new { id = motoqueiro.Id }) ?? string.Empty,
+                            Method = "GET"
+                        },
+                        new LinkDto
+                        {
+                            Rel = "update",
+                            Href = Url.Action(nameof(Atualizar), new { id = motoqueiro.Id }) ?? string.Empty,
+                            Method = "PUT"
+                        },
+                        new LinkDto
+                        {
+                            Rel = "delete",
+                            Href = Url.Action(nameof(Remover), new { id = motoqueiro.Id }) ?? string.Empty,
+                            Method = "DELETE"
+                        },
+                        new LinkDto
+                        {
+                            Rel = "todos",
+                            Href = Url.Action(nameof(BuscarTodos)) ?? string.Empty,
+                            Method = "GET"
+                        }
+                    }
+                };
+
                 return sucesso ? NoContent() : NotFound();
             }
             catch (Exception ex)
@@ -141,7 +281,21 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             try
             {
                 var sucesso = await _service.RemoverAsync(id);
-                return sucesso ? NoContent() : NotFound();
+                if(!sucesso)
+                    return NotFound();
+
+                var hateoas = new HateoasResponse<object>
+                {
+                    Data = null,
+                    Message = "Motoqueiro removido com sucesso",
+                    Links = new List<LinkDto>
+                    {
+                        new LinkDto { Rel = "all", Href = Url.Action(nameof(BuscarTodos)), Method = "GET" },
+                        new LinkDto { Rel = "create", Href = Url.Action(nameof(Criar)), Method = "POST" }
+                    }
+                };
+
+                return Ok(hateoas);
             }
             catch (Exception ex)
             {
@@ -161,10 +315,22 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         {
             try
             {
-                var motoqueiro = await _service.ObterTodos();
-                if (motoqueiro != null && motoqueiro.Any())
-                    return Ok(motoqueiro);
-                return NoContent();
+                var motoqueiros = await _service.ObterTodos();
+                if (motoqueiros == null && !motoqueiros.Any())
+                    return NoContent();
+
+                var response = motoqueiros.Select(m => new HateoasResponse<MotoqueiroDTO>
+                {
+                    Data = m,
+                    Links = new List<LinkDto>
+                    {
+                        new LinkDto { Rel = "self", Href = Url.Action(nameof(ObterPorId), new { id = m.Id }), Method = "GET" },
+                        new LinkDto { Rel = "update", Href = Url.Action(nameof(Atualizar), new { id = m.Id }), Method = "PUT" },
+                        new LinkDto { Rel = "delete", Href = Url.Action(nameof(Remover), new { id = m.Id }), Method = "DELETE" }
+                    }
+                });
+
+                return Ok(response);
             }
             catch (Exception ex)
             {
