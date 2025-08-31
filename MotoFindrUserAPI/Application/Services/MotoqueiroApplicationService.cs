@@ -88,9 +88,9 @@ namespace MotoFindrUserAPI.Application.Services
             return moto;
         }
 
-        public async Task<IEnumerable<MotoqueiroDTO?>> ObterTodos()
+        public async Task<IEnumerable<MotoqueiroDTO?>> ObterTodos(int pageNumber, int pageSize)
         {
-            var entities = await _motoqueiroRepository.BuscarTodos();
+            var entities = await _motoqueiroRepository.BuscarTodos(pageNumber, pageSize);
             return entities.Select(x => _mapper.Map<MotoqueiroDTO>(x));
         }
     }

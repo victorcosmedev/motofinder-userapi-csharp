@@ -2,7 +2,7 @@
 using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Domain.Entities;
-using MotoFindrUserAPI.Utils;
+using MotoFindrUserAPI.Utils.Doc;
 using MotoFindrUserAPI.Utils.Hateoas;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -311,11 +311,11 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Lista de motoqueiros obtida com sucesso", typeof(IEnumerable<MotoqueiroDTO>))]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Nenhum motoqueiro encontrado")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Requisição inválida")]
-        public async Task<IActionResult> BuscarTodos()
+        public async Task<IActionResult> BuscarTodos(int pageNumber, int pageSize)
         {
             try
             {
-                var motoqueiros = await _service.ObterTodos();
+                var motoqueiros = await _service.ObterTodos(pageNumber, pageSize);
                 if (motoqueiros == null && !motoqueiros.Any())
                     return NoContent();
 

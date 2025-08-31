@@ -70,9 +70,13 @@ namespace MotoFindrUserAPI.Infrastructure.Repositories
             return true;
         }
 
-        public async Task<IEnumerable<MotoqueiroEntity?>> BuscarTodos()
+        public async Task<IEnumerable<MotoqueiroEntity?>> BuscarTodos(int pageNumber, int pageSize)
         {
-            var motoqueiros = await _context.Motoqueiro.ToListAsync();
+            var motoqueiros = await _context.Motoqueiro
+                .Skip(pageNumber - 1 * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
             return motoqueiros;
         }
     }
