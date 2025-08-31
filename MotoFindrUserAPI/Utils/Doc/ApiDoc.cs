@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 
-namespace MotoFindrUserAPI.Utils
+namespace MotoFindrUserAPI.Utils.Doc
 {
     public static class ApiDoc
     {
