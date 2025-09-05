@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Domain.Entities;
@@ -27,6 +28,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Moto encontrada com sucesso", typeof(MotoDTO))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Moto não encontrada")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
+        [EnableRateLimiting("rateLimitPolicy")]
         public async Task<ActionResult<MotoDTO>> GetById(int id)
         {
             try
@@ -64,6 +66,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, "Moto não encontrada")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Placa inválida")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
+        [EnableRateLimiting("rateLimitPolicy")]
         public async Task<ActionResult<MotoDTO>> GetByPlaca(string placa)
         {
             try
@@ -99,6 +102,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, "Moto não encontrada")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Chassi inválido")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
+        [EnableRateLimiting("rateLimitPolicy")]
         public async Task<ActionResult<MotoDTO>> GetByChassi(string chassi)
         {
             try
@@ -133,6 +137,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status201Created, "Moto criada com sucesso", typeof(MotoDTO))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Dados da moto inválidos")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
+        [EnableRateLimiting("rateLimitPolicy")]
         public async Task<ActionResult<MotoDTO>> Post([FromBody] MotoDTO moto)
         {
             if (!ModelState.IsValid)
@@ -178,6 +183,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status400BadRequest, "IDs inconsistentes ou dados inválidos")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Moto não encontrada")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
+        [EnableRateLimiting("rateLimitPolicy")]
         public async Task<IActionResult> Put(int id, [FromBody] MotoDTO moto)
         {
             if (!ModelState.IsValid)
@@ -224,6 +230,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status204NoContent, "Moto removida com sucesso")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Moto não encontrada")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
+        [EnableRateLimiting("rateLimitPolicy")]
         public async Task<IActionResult> Delete(int id)
         {
             try
@@ -258,6 +265,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Lista de motos obtida com sucesso", typeof(IEnumerable<MotoDTO>))]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Nenhuma moto encontrada")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Requisição inválida")]
+        [EnableRateLimiting("rateLimitPolicy")]
         public async Task<IActionResult> BuscarTodos(int pageNumber, int pageSize)
         {
             try

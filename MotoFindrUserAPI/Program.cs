@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using MotoFindrUserAPI.Application.Interfaces;
@@ -6,6 +7,7 @@ using MotoFindrUserAPI.Configurations;
 using MotoFindrUserAPI.Domain.Interfaces;
 using MotoFindrUserAPI.Infrastructure.AppData;
 using MotoFindrUserAPI.Infrastructure.Repositories;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +51,24 @@ builder.Services.Configure<GzipCompressionProviderOptions>(options => {
     options.Level = System.IO.Compression.CompressionLevel.Fastest;
 });
 
+builder.Services.AddRateLimiter(options => {
+    options.AddFixedWindowLimiter(policyName: "rateLimitPolicy", opt => {
+        opt.PermitLimit = 5;
+        opt.Window = TimeSpan.FromSeconds(10);
+        opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        opt.QueueLimit = 2;
+    });
+
+    options.AddFixedWindowLimiter(policyName: "rateLimitPolicy2", opt => {
+        opt.PermitLimit = 3;
+        opt.Window = TimeSpan.FromSeconds(5);
+        opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        opt.QueueLimit = 2;
+    });
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+});
+
+
 
 var app = builder.Build();
 
@@ -63,6 +83,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.UseResponseCompression();
+app.UseRateLimiter();
 
 app.MapControllers();
 

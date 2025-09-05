@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Domain.Entities;
@@ -27,6 +28,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Motoqueiro encontrado com sucesso", typeof(MotoqueiroDTO))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Motoqueiro não encontrado")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Requisição inválida")]
+        [EnableRateLimiting("rateLimitPolicy")]
         public async Task<IActionResult> ObterPorId(int id)
         {
             try
@@ -82,6 +84,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Motoqueiro encontrado com sucesso", typeof(MotoqueiroDTO))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Motoqueiro não encontrado")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "CPF inválido ou não informado")]
+        [EnableRateLimiting("rateLimitPolicy")]
         public async Task<IActionResult> ObterPorCpf(string cpf)
         {
             try
@@ -141,6 +144,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         )]
         [SwaggerResponse(StatusCodes.Status201Created, "Motoqueiro criado com sucesso", typeof(MotoqueiroDTO))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Dados do motoqueiro inválidos")]
+        [EnableRateLimiting("rateLimitPolicy")]
         public async Task<IActionResult> Criar([FromBody] MotoqueiroDTO motoqueiro)
         {
             if (!ModelState.IsValid)
@@ -205,6 +209,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status204NoContent, "Motoqueiro atualizado com sucesso")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "IDs inconsistentes ou dados inválidos")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Motoqueiro não encontrado")]
+        [EnableRateLimiting("rateLimitPolicy")]
         public async Task<IActionResult> Atualizar(int id, [FromBody] MotoqueiroDTO motoqueiro)
         {
 
@@ -276,6 +281,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status204NoContent, "Motoqueiro removido com sucesso")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Motoqueiro não encontrado")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Erro ao remover motoqueiro")]
+        [EnableRateLimiting("rateLimitPolicy")]
         public async Task<IActionResult> Remover(int id)
         {
             try
@@ -311,6 +317,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Lista de motoqueiros obtida com sucesso", typeof(IEnumerable<MotoqueiroDTO>))]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Nenhum motoqueiro encontrado")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Requisição inválida")]
+        [EnableRateLimiting("rateLimitPolicy")]
         public async Task<IActionResult> BuscarTodos(int pageNumber, int pageSize)
         {
             try

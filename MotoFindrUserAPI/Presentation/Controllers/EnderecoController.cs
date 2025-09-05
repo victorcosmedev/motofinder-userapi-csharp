@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Utils.Hateoas;
@@ -24,6 +25,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Endereço encontrado com sucesso", typeof(EnderecoDTO))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Endereço não encontrado")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
+        [EnableRateLimiting("rateLimitPolicy")]
         public async Task<ActionResult<EnderecoDTO>> GetById(int id)
         {
             try
@@ -59,6 +61,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status201Created, "Endereço criado com sucesso", typeof(EnderecoDTO))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Dados do endereço inválidos")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
+        [EnableRateLimiting("rateLimitPolicy")]
         public async Task<ActionResult<EnderecoDTO>> Post([FromBody] EnderecoDTO endereco)
         {
             if (!ModelState.IsValid)
@@ -102,6 +105,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status400BadRequest, "IDs inconsistentes ou dados inválidos")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Endereço não encontrado")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
+        [EnableRateLimiting("rateLimitPolicy")]
         public async Task<IActionResult> Put(int id, [FromBody] EnderecoDTO endereco)
         {
             if (!ModelState.IsValid)
@@ -145,6 +149,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status204NoContent, "Endereço removido com sucesso")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Endereço não encontrado")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
+        [EnableRateLimiting("rateLimitPolicy")]
         public async Task<IActionResult> Delete(int id)
         {
             try
