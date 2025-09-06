@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.RateLimiting;
 using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Domain.Entities;
+using MotoFindrUserAPI.Models.Hateoas;
 using MotoFindrUserAPI.Utils.Doc;
-using MotoFindrUserAPI.Utils.Hateoas;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace MotoFindrUserAPI.Presentation.Controllers

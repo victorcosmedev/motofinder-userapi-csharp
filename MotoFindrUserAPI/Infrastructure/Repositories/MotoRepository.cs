@@ -2,6 +2,7 @@
 using MotoFindrUserAPI.Domain.Entities;
 using MotoFindrUserAPI.Domain.Interfaces;
 using MotoFindrUserAPI.Infrastructure.AppData;
+using MotoFindrUserAPI.Models.PageResultModel;
 
 namespace MotoFindrUserAPI.Infrastructure.Repositories
 {
@@ -53,13 +54,22 @@ namespace MotoFindrUserAPI.Infrastructure.Repositories
             return moto;
         }
 
-        public async Task<IEnumerable<MotoEntity?>> BuscarTodos(int pageNumber, int pageSize)
+        public async Task<PageResultModel<IEnumerable<MotoEntity?>>> BuscarTodos(int pageNumber, int pageSize)
         {
             var motos = await _context.Moto
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
-            return motos;
+
+            var pageResultModel = new PageResultModel<IEnumerable<MotoEntity?>>
+            {
+                Items = motos,
+                NumeroPagina = pageNumber,
+                TamanhoPagina = pageSize,
+                TotalItens = await _context.Moto.CountAsync()
+            };
+
+            return pageResultModel;
         }
 
         public async Task<bool> DeletarAsync(int id)

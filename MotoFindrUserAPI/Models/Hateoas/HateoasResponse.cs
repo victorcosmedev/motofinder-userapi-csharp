@@ -1,4 +1,4 @@
-﻿namespace MotoFindrUserAPI.Utils.Hateoas
+﻿namespace MotoFindrUserAPI.Models.Hateoas
 {
     public class HateoasResponse<T>
     {
