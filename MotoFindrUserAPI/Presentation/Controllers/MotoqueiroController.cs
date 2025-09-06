@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Extensions.Hosting;
 using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Domain.Entities;
 using MotoFindrUserAPI.Models.Hateoas;
+using MotoFindrUserAPI.Models.PageResultModel;
 using MotoFindrUserAPI.Utils.Doc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -322,20 +324,19 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         {
             try
             {
-                var motoqueiros = await _service.ObterTodos(pageNumber, pageSize);
-                if (motoqueiros == null && !motoqueiros.Any())
+                var pageResult = await _service.ObterTodos(pageNumber, pageSize);
+                if (pageResult.Items == null && !pageResult.Items.Any())
                     return NoContent();
 
-                var response = motoqueiros.Select(m => new HateoasResponse<MotoqueiroDTO>
+                var response = new HateoasResponse<PageResultModel<IEnumerable<MotoqueiroDTO>>>
                 {
-                    Data = m,
+                    Data = pageResult,
                     Links = new List<LinkDto>
                     {
-                        new LinkDto { Rel = "self", Href = Url.Action(nameof(ObterPorId), new { id = m.Id }), Method = "GET" },
-                        new LinkDto { Rel = "update", Href = Url.Action(nameof(Atualizar), new { id = m.Id }), Method = "PUT" },
-                        new LinkDto { Rel = "delete", Href = Url.Action(nameof(Remover), new { id = m.Id }), Method = "DELETE" }
+                        new LinkDto { Rel = "self", Href = Url.Action(nameof(BuscarTodos), new { pageNumber, pageSize }), Method = "GET" },
+                        new LinkDto { Rel = "create", Href = Url.Action(nameof(Criar)), Method = "POST" }
                     }
-                });
+                };
 
                 return Ok(response);
             }

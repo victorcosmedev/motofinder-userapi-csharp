@@ -3,6 +3,7 @@ using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Domain.Entities;
 using MotoFindrUserAPI.Domain.Interfaces;
+using MotoFindrUserAPI.Models.PageResultModel;
 
 namespace MotoFindrUserAPI.Application.Services;
 
@@ -95,9 +96,20 @@ public class MotoApplicationService : IMotoApplicationService
         return motoqueiro;
     }
 
-    public async Task<IEnumerable<MotoDTO?>> ObterTodos(int pageNumber, int pageSize)
+    public async Task<PageResultModel<IEnumerable<MotoDTO?>>> ObterTodos(int pageNumber, int pageSize)
     {
-        var entities = await _motoRepository.BuscarTodos(pageNumber, pageSize);
-        return entities.Select(x => _mapper.Map<MotoDTO>(x));
+        var pageResult = await _motoRepository.BuscarTodos(pageNumber, pageSize);
+
+        var dtos = pageResult.Items.Select(x => _mapper.Map<MotoDTO>(x));
+
+        var pageResultDto = new PageResultModel<IEnumerable<MotoDTO?>>
+        {
+            Items = dtos,
+            TotalItens = pageResult.TotalItens,
+            NumeroPagina = pageResult.NumeroPagina,
+            TamanhoPagina = pageResult.TamanhoPagina
+        };
+
+        return pageResultDto;
     }
 }

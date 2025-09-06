@@ -4,6 +4,7 @@ using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Domain.Entities;
 using MotoFindrUserAPI.Models.Hateoas;
+using MotoFindrUserAPI.Models.PageResultModel;
 using MotoFindrUserAPI.Utils.Doc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -270,25 +271,21 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         {
             try
             {
-                var motos = await _motoService.ObterTodos(pageNumber, pageSize);
-                if(motos == null || !motos.Any())
+                var pageResult = await _motoService.ObterTodos(pageNumber, pageSize);
+                if(pageResult.Items == null || !pageResult.Items.Any())
                     return NotFound("Nenhuma moto encontrada");
-                
-                var hateoas = motos.Select(m => new HateoasResponse<MotoDTO>
+
+                var hateoas = new HateoasResponse<PageResultModel<IEnumerable<MotoDTO>>>
                 {
-                    Data = m,
+                    Data = pageResult,
                     Links = new List<LinkDto>
                     {
-                        new LinkDto { Rel = "self", Href = Url.Action(nameof(GetById), new { id = m.Id }), Method = "GET" },
-                        new LinkDto { Rel = "all", Href = Url.Action(nameof(BuscarTodos)), Method = "GET" },
-                        new LinkDto { Rel = "byChassi", Href = Url.Action(nameof(GetByChassi), new { id = m.Chassi }), Method = "GET" },
-                        new LinkDto { Rel = "byPlaca", Href = Url.Action(nameof(GetByPlaca), new { id = m.Placa }), Method = "GET" },
-                        new LinkDto { Rel = "create", Href = Url.Action(nameof(Post)), Method = "POST" },
-                        new LinkDto { Rel = "update", Href = Url.Action(nameof(Put), new { id = m.Id }), Method = "PUT" },
-                        new LinkDto { Rel = "delete", Href = Url.Action(nameof(Delete), new { id = m.Id }), Method = "DELETE" }
+                        new LinkDto { Rel = "self", Href = Url.Action(nameof(BuscarTodos), new { pageNumber, pageSize }), Method = "GET" },
+                        new LinkDto { Rel = "create", Href = Url.Action(nameof(Post)), Method = "POST" }
                     }
-                });
-                return NoContent();
+                };
+
+                return Ok(hateoas);
             }
             catch (Exception ex)
             {
