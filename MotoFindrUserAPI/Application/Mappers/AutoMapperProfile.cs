@@ -2,7 +2,7 @@
 using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Domain.Entities;
 
-namespace MotoFindrUserAPI.Configurations
+namespace MotoFindrUserAPI.Application.Mappers
 {
     public class AutoMapperProfile : Profile
     {
