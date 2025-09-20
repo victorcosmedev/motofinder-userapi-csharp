@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MotoFindrUserAPI.Domain.Entities;
 
-namespace MotoFindrUserAPI.Infrastructure.AppData
+namespace MotoFindrUserAPI.Infrastructure.Data.AppData
 {
     public class ApplicationContext : DbContext
     {

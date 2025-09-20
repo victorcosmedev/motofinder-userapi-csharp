@@ -1,8 +1,8 @@
 ﻿using MotoFindrUserAPI.Domain.Entities;
 using MotoFindrUserAPI.Domain.Interfaces;
-using MotoFindrUserAPI.Infrastructure.AppData;
+using MotoFindrUserAPI.Infrastructure.Data.AppData;
 
-namespace MotoFindrUserAPI.Infrastructure.Repositories
+namespace MotoFindrUserAPI.Infrastructure.Data.Repositories
 {
     public class EnderecoRepository : IEnderecoRepository
     {

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MotoFindrUserAPI.Infrastructure.AppData;
+using MotoFindrUserAPI.Infrastructure.Data.AppData;
 using Oracle.EntityFrameworkCore.Metadata;
 
 #nullable disable
@@ -12,8 +12,8 @@ using Oracle.EntityFrameworkCore.Metadata;
 namespace MotoFindrUserAPI.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20250521233111_MudancaRelacionamentoMotoMotoqueiro")]
-    partial class MudancaRelacionamentoMotoMotoqueiro
+    [Migration("20250513175927_initdb")]
+    partial class initdb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,7 @@ namespace MotoFindrUserAPI.Migrations
                         .HasColumnType("NVARCHAR2(2000)");
 
                     b.Property<int?>("MotoqueiroId")
+                        .IsRequired()
                         .HasColumnType("NUMBER(10)");
 
                     b.Property<string>("Placa")
@@ -53,6 +54,9 @@ namespace MotoFindrUserAPI.Migrations
                         .HasColumnType("NVARCHAR2(7)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MotoqueiroId")
+                        .IsUnique();
 
                     b.ToTable("tb_mf_moto");
                 });
@@ -76,35 +80,27 @@ namespace MotoFindrUserAPI.Migrations
                         .IsRequired()
                         .HasColumnType("NVARCHAR2(2000)");
 
-                    b.Property<int?>("MotoId")
-                        .HasColumnType("NUMBER(10)");
-
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("NVARCHAR2(2000)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MotoId")
-                        .IsUnique()
-                        .HasFilter("\"MotoId\" IS NOT NULL");
-
                     b.ToTable("tb_mf_motoqueiro");
-                });
-
-            modelBuilder.Entity("MotoFindrUserAPI.Domain.Entities.MotoqueiroEntity", b =>
-                {
-                    b.HasOne("MotoFindrUserAPI.Domain.Entities.MotoEntity", "Moto")
-                        .WithOne("Motoqueiro")
-                        .HasForeignKey("MotoFindrUserAPI.Domain.Entities.MotoqueiroEntity", "MotoId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Moto");
                 });
 
             modelBuilder.Entity("MotoFindrUserAPI.Domain.Entities.MotoEntity", b =>
                 {
+                    b.HasOne("MotoFindrUserAPI.Domain.Entities.MotoqueiroEntity", "Motoqueiro")
+                        .WithOne("Moto")
+                        .HasForeignKey("MotoFindrUserAPI.Domain.Entities.MotoEntity", "MotoqueiroId");
+
                     b.Navigation("Motoqueiro");
+                });
+
+            modelBuilder.Entity("MotoFindrUserAPI.Domain.Entities.MotoqueiroEntity", b =>
+                {
+                    b.Navigation("Moto");
                 });
 #pragma warning restore 612, 618
         }

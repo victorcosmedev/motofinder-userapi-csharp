@@ -328,9 +328,11 @@ namespace MotoFindrUserAPI.Presentation.Controllers
                 if (pageResult.Items == null && !pageResult.Items.Any())
                     return NoContent();
 
-                var response = new HateoasResponse<PageResultModel<IEnumerable<MotoqueiroDTO>>>
+                var pageResults = BuildPageResultsForBuscarTodos(pageResult);
+
+                var response = new HateoasResponse<PageResultModel<IEnumerable<HateoasResponse<MotoqueiroDTO>>>>
                 {
-                    Data = pageResult,
+                    Data = pageResults,
                     Links = new List<LinkDto>
                     {
                         new LinkDto { Rel = "self", Href = Url.Action(nameof(BuscarTodos), new { pageNumber, pageSize }), Method = "GET" },
@@ -344,6 +346,42 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        private PageResultModel<IEnumerable<HateoasResponse<MotoqueiroDTO>>>  BuildPageResultsForBuscarTodos(PageResultModel<IEnumerable<MotoqueiroDTO>> pageResult)
+        {
+            var pageResults = new PageResultModel<IEnumerable<HateoasResponse<MotoqueiroDTO>>>
+            {
+                Items = pageResult.Items.Select(motoqueiro => new HateoasResponse<MotoqueiroDTO>
+                {
+                    Data = motoqueiro,
+                    Links = new List<LinkDto>
+                    {
+                        new LinkDto
+                        {
+                            Rel = "self",
+                            Href = Url.Action(nameof(ObterPorId), new { id = motoqueiro.Id }) ?? string.Empty,
+                            Method = "GET"
+                        },
+                        new LinkDto
+                        {
+                            Rel = "update",
+                            Href = Url.Action(nameof(Atualizar), new { id = motoqueiro.Id }) ?? string.Empty,
+                            Method = "PUT"
+                        },
+                        new LinkDto
+                        {
+                            Rel = "delete",
+                            Href = Url.Action(nameof(Remover), new { id = motoqueiro.Id }) ?? string.Empty,
+                            Method = "DELETE"
+                        }
+                    }
+                }),
+                TotalItens = pageResult.TotalItens,
+                NumeroPagina = pageResult.NumeroPagina,
+                TamanhoPagina = pageResult.TamanhoPagina
+            };
+            return pageResults;
         }
     }
 }

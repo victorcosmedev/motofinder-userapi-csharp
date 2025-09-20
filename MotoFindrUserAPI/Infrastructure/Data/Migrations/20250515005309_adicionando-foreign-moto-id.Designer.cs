@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MotoFindrUserAPI.Infrastructure.AppData;
+using MotoFindrUserAPI.Infrastructure.Data.AppData;
 using Oracle.EntityFrameworkCore.Metadata;
 
 #nullable disable
@@ -12,8 +12,8 @@ using Oracle.EntityFrameworkCore.Metadata;
 namespace MotoFindrUserAPI.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20250514201600_Remove-required-motoqueiroId")]
-    partial class RemoverequiredmotoqueiroId
+    [Migration("20250515005309_adicionando-foreign-moto-id")]
+    partial class adicionandoforeignmotoid
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,6 +79,9 @@ namespace MotoFindrUserAPI.Migrations
                     b.Property<string>("Endereco")
                         .IsRequired()
                         .HasColumnType("NVARCHAR2(2000)");
+
+                    b.Property<int>("MotoId")
+                        .HasColumnType("NUMBER(10)");
 
                     b.Property<string>("Nome")
                         .IsRequired()

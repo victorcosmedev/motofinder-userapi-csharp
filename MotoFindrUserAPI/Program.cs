@@ -5,8 +5,8 @@ using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Application.Mappers;
 using MotoFindrUserAPI.Application.Services;
 using MotoFindrUserAPI.Domain.Interfaces;
-using MotoFindrUserAPI.Infrastructure.AppData;
-using MotoFindrUserAPI.Infrastructure.Repositories;
+using MotoFindrUserAPI.Infrastructure.Data.AppData;
+using MotoFindrUserAPI.Infrastructure.Data.Repositories;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);

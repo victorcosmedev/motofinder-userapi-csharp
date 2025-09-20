@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MotoFindrUserAPI.Domain.Entities;
 using MotoFindrUserAPI.Domain.Interfaces;
-using MotoFindrUserAPI.Infrastructure.AppData;
+using MotoFindrUserAPI.Infrastructure.Data.AppData;
 using MotoFindrUserAPI.Models.PageResultModel;
 
-namespace MotoFindrUserAPI.Infrastructure.Repositories
+namespace MotoFindrUserAPI.Infrastructure.Data.Repositories
 {
     public class MotoRepository : IMotoRepository
     {
