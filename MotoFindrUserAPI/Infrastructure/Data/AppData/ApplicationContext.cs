@@ -24,6 +24,18 @@ namespace MotoFindrUserAPI.Infrastructure.Data.AppData
                 .WithOne(m => m.Motoqueiro)
                 .HasForeignKey<MotoqueiroEntity>(mq => mq.MotoId)
                 .IsRequired(false);
+
+            modelBuilder.Entity<MotoqueiroEntity>()
+                .HasOne(mq => mq.Endereco)
+                .WithOne(e => e.Motoqueiro)
+                .HasForeignKey<MotoqueiroEntity>(mq => mq.EnderecoId)
+                .IsRequired(false);
+
+            modelBuilder.Entity<EnderecoEntity>()
+                .HasOne(e => e.Motoqueiro)
+                .WithOne(mq => mq.Endereco)
+                .HasForeignKey<EnderecoEntity>(e => e.MotoqueiroId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
     }

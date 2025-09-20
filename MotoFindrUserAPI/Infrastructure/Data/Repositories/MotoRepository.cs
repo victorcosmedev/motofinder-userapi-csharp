@@ -54,7 +54,7 @@ namespace MotoFindrUserAPI.Infrastructure.Data.Repositories
             return moto;
         }
 
-        public async Task<PageResultModel<IEnumerable<MotoEntity?>>> BuscarTodos(int pageNumber, int pageSize)
+        public async Task<PageResultModel<IEnumerable<MotoEntity?>>> BuscarTodos(int pageNumber = 1, int pageSize = 10)
         {
             var motos = await _context.Moto
                 .Skip((pageNumber - 1) * pageSize)

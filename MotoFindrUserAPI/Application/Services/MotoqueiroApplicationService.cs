@@ -89,7 +89,7 @@ namespace MotoFindrUserAPI.Application.Services
             return moto;
         }
 
-        public async Task<PageResultModel<IEnumerable<MotoqueiroDTO?>>> ObterTodos(int pageNumber, int pageSize)
+        public async Task<PageResultModel<IEnumerable<MotoqueiroDTO?>>> ObterTodos(int pageNumber = 1, int pageSize = 10)
         {
             var pageResult = await _motoqueiroRepository.BuscarTodos(pageNumber, pageSize);
 

@@ -320,7 +320,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status204NoContent, "Nenhum motoqueiro encontrado")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Requisição inválida")]
         [EnableRateLimiting("rateLimitPolicy")]
-        public async Task<IActionResult> BuscarTodos(int pageNumber, int pageSize)
+        public async Task<IActionResult> BuscarTodos(int pageNumber = 1, int pageSize = 10)
         {
             try
             {

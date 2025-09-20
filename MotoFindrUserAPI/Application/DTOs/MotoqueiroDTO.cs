@@ -11,7 +11,7 @@ namespace MotoFindrUserAPI.Application.DTOs
         [Required]
         [StringLength(11, MinimumLength = 11, ErrorMessage = "CPF deve ter 11 caracteres")]
         public string Cpf { get; set; } = string.Empty;
-        [Required]
+        public int? EnderecoId { get; set; }
         [StringLength(200, MinimumLength = 5)]
         public EnderecoDTO? Endereco { get; set; }
         [Required]

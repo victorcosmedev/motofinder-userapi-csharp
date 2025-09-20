@@ -96,7 +96,7 @@ public class MotoApplicationService : IMotoApplicationService
         return motoqueiro;
     }
 
-    public async Task<PageResultModel<IEnumerable<MotoDTO?>>> ObterTodos(int pageNumber, int pageSize)
+    public async Task<PageResultModel<IEnumerable<MotoDTO?>>> ObterTodos(int pageNumber = 1, int pageSize = 10)
     {
         var pageResult = await _motoRepository.BuscarTodos(pageNumber, pageSize);
 
