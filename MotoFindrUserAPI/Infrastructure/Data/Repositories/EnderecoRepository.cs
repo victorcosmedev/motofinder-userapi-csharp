@@ -73,7 +73,7 @@ namespace MotoFindrUserAPI.Infrastructure.Data.Repositories
                 Items = endereco,
                 NumeroPagina = pageNumber,
                 TamanhoPagina = pageSize,
-                TotalItens = await _context.Moto.CountAsync()
+                TotalItens = await _context.Endereco.CountAsync()
             };
 
             return pageResultModel;
