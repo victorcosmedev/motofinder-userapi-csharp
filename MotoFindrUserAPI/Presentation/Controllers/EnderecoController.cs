@@ -190,7 +190,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             var pageResult = await _enderecoService.ObterTodos(pageNumber, pageSize);
 
             if (pageResult.Items == null || !pageResult.Items.Any())
-                return NotFound("Nenhum endereco encontrado");
+                return NoContent();
 
             var pageResults = BuildPageResultsForBuscarTodos(pageResult);
             var response = new HateoasResponse<PageResultModel<IEnumerable<HateoasResponse<EnderecoDTO>>>>

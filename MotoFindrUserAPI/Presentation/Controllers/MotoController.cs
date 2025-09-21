@@ -273,7 +273,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             {
                 var pageResult = await _motoService.ObterTodos(pageNumber, pageSize);
                 if(pageResult.Items == null || !pageResult.Items.Any())
-                    return NotFound("Nenhuma moto encontrada");
+                    return NoContent();
 
                 var pageResults = BuildPageResultsForBuscarTodos(pageResult);
 
