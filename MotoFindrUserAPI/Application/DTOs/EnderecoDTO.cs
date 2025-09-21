@@ -9,7 +9,7 @@ namespace MotoFindrUserAPI.Application.DTOs
         [StringLength(200, MinimumLength = 10, ErrorMessage = "Logradouro deve ter entre 10 e 200 caracteres")]
         public string Logradouro { get; set; } = string.Empty;
         [Required(ErrorMessage = "Complemento é obrigatório")]
-        [StringLength(100, MinimumLength = 5, ErrorMessage = "Complemento deve ter entre 5 e 100 caracteres")]
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "Complemento deve ter entre 5 e 100 caracteres")]
         public string Complemento { get; set; } = string.Empty;
         [Required(ErrorMessage = "UF é obrigatório")]
         [StringLength(2, MinimumLength = 2, ErrorMessage = "UF deve ter 2 caracteres")]
