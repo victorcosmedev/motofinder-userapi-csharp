@@ -242,6 +242,11 @@ Aqui estão disponibilizados os JSONs para teste da API.
   "cep": "01311000"
 }
 ```
+--- 
+**Obter Todos**
+**URL:** `localhost:5045/api/endereco`
+
+---
 **GET por ID**
 **URL:** `localhost:5045/api/endereco/{id}`
 
