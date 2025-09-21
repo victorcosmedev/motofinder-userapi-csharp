@@ -44,6 +44,7 @@ namespace MotoFindrUserAPI.Infrastructure.Data.Repositories
             if(motoqueiro != null)
             {
                 motoqueiro.Endereco = null;
+                motoqueiro.EnderecoId = null;
             }
 
             _context.Endereco.Remove(endereco);
