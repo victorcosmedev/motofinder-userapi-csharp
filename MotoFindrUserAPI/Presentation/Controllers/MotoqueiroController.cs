@@ -348,7 +348,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             }
         }
 
-        private PageResultModel<IEnumerable<HateoasResponse<MotoqueiroDTO>>>  BuildPageResultsForBuscarTodos(PageResultModel<IEnumerable<MotoqueiroDTO>> pageResult)
+        private PageResultModel<IEnumerable<HateoasResponse<MotoqueiroDTO>>> BuildPageResultsForBuscarTodos(PageResultModel<IEnumerable<MotoqueiroDTO>> pageResult)
         {
             var pageResults = new PageResultModel<IEnumerable<HateoasResponse<MotoqueiroDTO>>>
             {
