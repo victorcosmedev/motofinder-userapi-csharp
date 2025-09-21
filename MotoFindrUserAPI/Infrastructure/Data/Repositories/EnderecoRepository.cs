@@ -19,14 +19,17 @@ namespace MotoFindrUserAPI.Infrastructure.Data.Repositories
             
             if(enderecoExistente == null)
                 throw new Exception($"Endereço com id {id} não existe.");
+
+            if (enderecoExistente.MotoqueiroId != endereco.MotoqueiroId)
+                throw new Exception("Não é permitido alterar o motoqueiro associado a este endereço.");
+
             enderecoExistente.Logradouro = endereco.Logradouro;
             enderecoExistente.Complemento = endereco.Complemento;
             enderecoExistente.Municipio = endereco.Municipio;
             enderecoExistente.Uf = endereco.Uf;
             enderecoExistente.Cep = endereco.Cep;
             enderecoExistente.Numero = endereco.Numero;
-            if(enderecoExistente.MotoqueiroId != endereco.MotoqueiroId)
-                throw new Exception("Não é permitido alterar o motoqueiro associado a este endereço.");
+            
             await _context.SaveChangesAsync();
             return true;
         }
