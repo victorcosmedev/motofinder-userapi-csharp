@@ -31,10 +31,13 @@ namespace MotoFindrUserAPI.Application.Services
                 throw new Exception("O ID do motoqueiro é obrigatório para criar um endereço.");
 
             var motoqueiro = await AtribuirEValidarMotoqueiroAsync(endereco.MotoqueiroId.Value, entity);
-            entity.Motoqueiro = motoqueiro;
-            entity.MotoqueiroId = motoqueiro.Id;
 
             entity = await _enderecoRepository.SalvarAsync(entity);
+            motoqueiro.Endereco = entity;
+            motoqueiro.EnderecoId = entity.Id;
+
+            await _motoqueiroRepository.AtualizarAsync(motoqueiro.Id, motoqueiro);
+
             return _mapper.Map<EnderecoDTO>(entity);
         }
 
@@ -42,9 +45,6 @@ namespace MotoFindrUserAPI.Application.Services
         {
             var entity = _mapper.Map<EnderecoEntity>(endereco);
             var motoqueiro = await AtribuirEValidarMotoqueiroAsync(endereco.MotoqueiroId.Value, entity);
-            
-            entity.Motoqueiro = motoqueiro;
-            entity.MotoqueiroId = motoqueiro.Id;
 
             return await _enderecoRepository.AtualizarAsync(id, entity);
         }
@@ -60,10 +60,12 @@ namespace MotoFindrUserAPI.Application.Services
             if (motoqueiro == null)
                 throw new Exception($"Motoqueiro de id {motoqueiroId} não existe.");
 
-            if (motoqueiro.EnderecoId.HasValue && motoqueiro.EnderecoId != 0)
+            if (motoqueiro.EnderecoId.HasValue && motoqueiro.EnderecoId != 0 && motoqueiro.EnderecoId != endereco.Id)
                 throw new Exception($"Motoqueiro de id {motoqueiroId} já possui um endereço atribuído.");
 
             endereco.MotoqueiroId = motoqueiroId;
+            endereco.Motoqueiro = motoqueiro;
+
             return _mapper.Map<MotoqueiroEntity>(motoqueiro);
         }
     }
