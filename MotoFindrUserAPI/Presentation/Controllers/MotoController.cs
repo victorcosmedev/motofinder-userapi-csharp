@@ -275,9 +275,11 @@ namespace MotoFindrUserAPI.Presentation.Controllers
                 if(pageResult.Items == null || !pageResult.Items.Any())
                     return NotFound("Nenhuma moto encontrada");
 
-                var hateoas = new HateoasResponse<PageResultModel<IEnumerable<MotoDTO>>>
+                var pageResults = BuildPageResultsForBuscarTodos(pageResult);
+
+                var response = new HateoasResponse<PageResultModel<IEnumerable<HateoasResponse<MotoDTO>>>>
                 {
-                    Data = pageResult,
+                    Data = pageResults,
                     Links = new List<LinkDto>
                     {
                         new LinkDto { Rel = "self", Href = Url.Action(nameof(BuscarTodos), new { pageNumber, pageSize }), Method = "GET" },
@@ -285,12 +287,50 @@ namespace MotoFindrUserAPI.Presentation.Controllers
                     }
                 };
 
-                return Ok(hateoas);
+                return Ok(response);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
+        #region Helpers
+        private PageResultModel<IEnumerable<HateoasResponse<MotoDTO>>> BuildPageResultsForBuscarTodos(PageResultModel<IEnumerable<MotoDTO>> pageResult)
+        {
+            var pageResults = new PageResultModel<IEnumerable<HateoasResponse<MotoDTO>>>
+            {
+                Items = pageResult.Items.Select(endereco => new HateoasResponse<MotoDTO>
+                {
+                    Data = endereco,
+                    Links = new List<LinkDto>
+                    {
+                        new LinkDto
+                        {
+                            Rel = "self",
+                            Href = Url.Action(nameof(GetById), new { id = endereco.Id }) ?? string.Empty,
+                            Method = "GET"
+                        },
+                        new LinkDto
+                        {
+                            Rel = "update",
+                            Href = Url.Action(nameof(Put), new { id = endereco.Id }) ?? string.Empty,
+                            Method = "PUT"
+                        },
+                        new LinkDto
+                        {
+                            Rel = "delete",
+                            Href = Url.Action(nameof(Delete), new { id = endereco.Id }) ?? string.Empty,
+                            Method = "DELETE"
+                        }
+                    }
+                }),
+                TotalItens = pageResult.TotalItens,
+                NumeroPagina = pageResult.NumeroPagina,
+                TamanhoPagina = pageResult.TamanhoPagina
+            };
+            return pageResults;
+        }
+        #endregion
     }
 }
