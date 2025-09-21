@@ -3,6 +3,8 @@ using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Domain.Entities;
 using MotoFindrUserAPI.Domain.Interfaces;
+using MotoFindrUserAPI.Models.Hateoas;
+using MotoFindrUserAPI.Models.PageResultModel;
 
 namespace MotoFindrUserAPI.Application.Services
 {
@@ -22,6 +24,23 @@ namespace MotoFindrUserAPI.Application.Services
         {
             var entity = await _enderecoRepository.BuscarPorIdAsync(id);
             return _mapper.Map<EnderecoDTO>(entity);
+        }
+
+        public async Task<PageResultModel<IEnumerable<EnderecoDTO?>>> ObterTodos(int pageNumber = 1, int pageSize = 10)
+        {
+            var pageResult = await _enderecoRepository.BuscarTodos(pageNumber, pageSize);
+
+            var dtos = pageResult.Items.Select(x => _mapper.Map<EnderecoDTO>(x));
+
+            var pageResultDto = new PageResultModel<IEnumerable<EnderecoDTO?>>
+            {
+                Items = dtos,
+                TotalItens = pageResult.TotalItens,
+                NumeroPagina = pageResult.NumeroPagina,
+                TamanhoPagina = pageResult.TamanhoPagina
+            };
+
+            return pageResultDto;
         }
 
         public async Task<EnderecoDTO> CriarAsync(EnderecoDTO endereco)
@@ -66,7 +85,14 @@ namespace MotoFindrUserAPI.Application.Services
             endereco.MotoqueiroId = motoqueiroId;
             endereco.Motoqueiro = motoqueiro;
 
+            motoqueiro.Endereco = endereco;
+            motoqueiro.EnderecoId = endereco.Id;
+
+            await _motoqueiroRepository.AtualizarAsync(motoqueiroId, motoqueiro);
+
             return _mapper.Map<MotoqueiroEntity>(motoqueiro);
         }
+
+
     }
 }

@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.RateLimiting;
 using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Models.Hateoas;
+using MotoFindrUserAPI.Models.PageResultModel;
+using MotoFindrUserAPI.Utils.Doc;
 using Swashbuckle.AspNetCore.Annotations;
+using System;
 
 namespace MotoFindrUserAPI.Presentation.Controllers
 {
@@ -19,8 +22,8 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
         [HttpGet("{id}")]
         [SwaggerOperation(
-            Summary = "Buscar endereço por ID",
-            Description = "Retorna um endereço específico com base no ID informado."
+            Summary = ApiDoc.BuscarEnderecoPorIdSummary,
+            Description = ApiDoc.BuscarEnderecoPorIdDescription
         )]
         [SwaggerResponse(StatusCodes.Status200OK, "Endereço encontrado com sucesso", typeof(EnderecoDTO))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Endereço não encontrado")]
@@ -55,8 +58,8 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
         [HttpPost]
         [SwaggerOperation(
-            Summary = "Criar novo endereço",
-            Description = "Salva um novo endereço no sistema."
+            Summary = ApiDoc.SalvarEnderecoSummary,
+            Description = ApiDoc.SalvarEnderecoDescription
         )]
         [SwaggerResponse(StatusCodes.Status201Created, "Endereço criado com sucesso", typeof(EnderecoDTO))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Dados do endereço inválidos")]
@@ -98,8 +101,8 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
         [HttpPut("{id}")]
         [SwaggerOperation(
-            Summary = "Atualizar endereço",
-            Description = "Atualiza um endereço existente com base no ID informado."
+            Summary = ApiDoc.AtualizarEnderecoSummary,
+            Description = ApiDoc.AtualizarEnderecoDescription
         )]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Endereço atualizado com sucesso")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "IDs inconsistentes ou dados inválidos")]
@@ -143,8 +146,8 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
         [HttpDelete("{id}")]
         [SwaggerOperation(
-            Summary = "Deletar endereço",
-            Description = "Remove um endereço existente com base no ID informado."
+            Summary = ApiDoc.DeletarEnderecoSummary,
+            Description = ApiDoc.DeletarEnderecoDescription
         )]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Endereço removido com sucesso")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Endereço não encontrado")]
@@ -172,5 +175,75 @@ namespace MotoFindrUserAPI.Presentation.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet]
+        [SwaggerOperation(
+            Summary = ApiDoc.BuscarTodosEnderecosSummary,
+            Description = ApiDoc.BuscarTodosEnderecosDescription
+        )]
+        [SwaggerResponse(StatusCodes.Status200OK, "Lista de endereços obtida com sucesso", typeof(IEnumerable<EnderecoDTO>))]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Nenhum endereço encontrado")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Requisição inválida")]
+        [EnableRateLimiting("rateLimitPolicy")]
+        public async Task<IActionResult> BuscarTodos(int pageNumber = 1, int pageSize = 10)
+        {
+            var pageResult = await _enderecoService.ObterTodos(pageNumber, pageSize);
+
+            if (pageResult.Items == null || !pageResult.Items.Any())
+                return NotFound("Nenhum endereco encontrado");
+
+            var pageResults = BuildPageResultsForBuscarTodos(pageResult);
+            var response = new HateoasResponse<PageResultModel<IEnumerable<HateoasResponse<EnderecoDTO>>>>
+            {
+                Data = pageResults,
+                Links = new List<LinkDto>
+                {
+                    new LinkDto { Rel = "self", Href = Url.Action(nameof(BuscarTodos), new { pageNumber, pageSize }), Method = "GET" },
+                    new LinkDto { Rel = "create", Href = Url.Action(nameof(Post)), Method = "POST" }
+                }
+            };
+
+            return Ok(response);
+        }
+
+        #region Helpers
+
+        private PageResultModel<IEnumerable<HateoasResponse<EnderecoDTO>>> BuildPageResultsForBuscarTodos(PageResultModel<IEnumerable<EnderecoDTO>> pageResult)
+        {
+            var pageResults = new PageResultModel<IEnumerable<HateoasResponse<EnderecoDTO>>>
+            {
+                Items = pageResult.Items.Select(endereco => new HateoasResponse<EnderecoDTO>
+                {
+                    Data = endereco,
+                    Links = new List<LinkDto>
+                    {
+                        new LinkDto
+                        {
+                            Rel = "self",
+                            Href = Url.Action(nameof(GetById), new { id = endereco.Id }) ?? string.Empty,
+                            Method = "GET"
+                        },
+                        new LinkDto
+                        {
+                            Rel = "update",
+                            Href = Url.Action(nameof(Put), new { id = endereco.Id}) ?? string.Empty,
+                            Method = "PUT"
+                        },
+                        new LinkDto
+                        {
+                            Rel = "delete",
+                            Href = Url.Action(nameof(Delete), new { id = endereco.Id }) ?? string.Empty,
+                            Method = "DELETE"
+                        }
+                    }
+                }),
+                TotalItens = pageResult.TotalItens,
+                NumeroPagina = pageResult.NumeroPagina,
+                TamanhoPagina = pageResult.TamanhoPagina
+            };
+
+            return pageResults;
+        }
+        #endregion
     }
 }

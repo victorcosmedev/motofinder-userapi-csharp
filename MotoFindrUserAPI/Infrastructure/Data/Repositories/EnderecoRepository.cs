@@ -1,6 +1,8 @@
-﻿using MotoFindrUserAPI.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using MotoFindrUserAPI.Domain.Entities;
 using MotoFindrUserAPI.Domain.Interfaces;
 using MotoFindrUserAPI.Infrastructure.Data.AppData;
+using MotoFindrUserAPI.Models.PageResultModel;
 
 namespace MotoFindrUserAPI.Infrastructure.Data.Repositories
 {
@@ -13,10 +15,10 @@ namespace MotoFindrUserAPI.Infrastructure.Data.Repositories
         }
         public async Task<bool> AtualizarAsync(int id, EnderecoEntity endereco)
         {
-            var enderecoExistente = await _context.Endereco.FindAsync(endereco.Id);
+            var enderecoExistente = await _context.Endereco.FindAsync(id);
             
             if(enderecoExistente == null)
-                throw new Exception($"Endereço com id {endereco.Id} não existe.");
+                throw new Exception($"Endereço com id {id} não existe.");
             enderecoExistente.Logradouro = endereco.Logradouro;
             enderecoExistente.Complemento = endereco.Complemento;
             enderecoExistente.Municipio = endereco.Municipio;
@@ -57,6 +59,24 @@ namespace MotoFindrUserAPI.Infrastructure.Data.Repositories
             await _context.Endereco.AddAsync(endereco);
             await _context.SaveChangesAsync();
             return endereco;
+        }
+
+        public async Task<PageResultModel<IEnumerable<EnderecoEntity?>>> BuscarTodos(int pageNumber = 1, int pageSize = 10)
+        {
+            var endereco = await _context.Endereco
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var pageResultModel = new PageResultModel<IEnumerable<EnderecoEntity?>>
+            {
+                Items = endereco,
+                NumeroPagina = pageNumber,
+                TamanhoPagina = pageSize,
+                TotalItens = await _context.Moto.CountAsync()
+            };
+
+            return pageResultModel;
         }
     }
 }
