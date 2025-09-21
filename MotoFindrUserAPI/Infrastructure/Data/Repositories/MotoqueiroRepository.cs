@@ -39,12 +39,16 @@ namespace MotoFindrUserAPI.Infrastructure.Data.Repositories
         public async Task<MotoqueiroEntity?> BuscarPorCpfAsync(string cpf)
         {
             return await _context.Motoqueiro
-                .FirstOrDefaultAsync(m => m.Cpf == cpf);
+                .Include(x => x.Endereco)
+                .FirstOrDefaultAsync(x => x.Cpf == cpf);
         }
 
         public async Task<MotoqueiroEntity?> BuscarPorIdAsync(int id)
         {
-            return await _context.Motoqueiro.FindAsync(id);
+            return await _context.Motoqueiro
+                .Include(x => x.Endereco)
+                .FirstOrDefaultAsync(x => x.Id == id);
+                
         }
 
         public async Task<bool> DeletarAsync(int id)
@@ -76,6 +80,7 @@ namespace MotoFindrUserAPI.Infrastructure.Data.Repositories
             var motoqueiros = await _context.Motoqueiro
                 .Skip(pageNumber - 1 * pageSize)
                 .Take(pageSize)
+                .Include(x => x.Endereco)
                 .ToListAsync();
 
             var pageResultModel = new PageResultModel<IEnumerable<MotoqueiroEntity?>>
