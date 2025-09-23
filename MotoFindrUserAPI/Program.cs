@@ -7,6 +7,7 @@ using MotoFindrUserAPI.Application.Services;
 using MotoFindrUserAPI.Domain.Interfaces;
 using MotoFindrUserAPI.Infrastructure.Data.AppData;
 using MotoFindrUserAPI.Infrastructure.Data.Repositories;
+using Swashbuckle.AspNetCore.Filters;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,8 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 //var connectionString = "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle.fiap.com.br)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SID=ORCL)));User Id=rm558856;Password=fiap2025;";
 builder.Services.AddDbContext<ApplicationContext>(option => {
@@ -33,11 +32,13 @@ builder.Services.AddTransient<IEnderecoRepository, EnderecoRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
-
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(conf => {
-
     conf.EnableAnnotations();
+    conf.ExampleFilters();
 });
+
+builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
 
 builder.Services.AddResponseCompression(options => {
     //options.EnableForHttps = true;

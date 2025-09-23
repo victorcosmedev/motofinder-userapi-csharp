@@ -6,7 +6,10 @@ using MotoFindrUserAPI.Domain.Entities;
 using MotoFindrUserAPI.Models.Hateoas;
 using MotoFindrUserAPI.Models.PageResultModel;
 using MotoFindrUserAPI.Utils.Doc;
+using MotoFindrUserAPI.Utils.Samples.Moto;
+using MotoFindrUserAPI.Utils.Samples.Motoqueiro;
 using Swashbuckle.AspNetCore.Annotations;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace MotoFindrUserAPI.Presentation.Controllers
 {
@@ -29,6 +32,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Moto encontrada com sucesso", typeof(MotoDTO))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Moto não encontrada")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
+        [SwaggerResponseExample(statusCode:200, typeof(MotoResponseSample))]
         [EnableRateLimiting("rateLimitPolicy")]
         public async Task<ActionResult<MotoDTO>> GetById(int id)
         {
@@ -67,6 +71,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, "Moto não encontrada")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Placa inválida")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
+        [SwaggerResponseExample(statusCode: 200, typeof(MotoResponseSample))]
         [EnableRateLimiting("rateLimitPolicy")]
         public async Task<ActionResult<MotoDTO>> GetByPlaca(string placa)
         {
@@ -103,6 +108,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, "Moto não encontrada")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Chassi inválido")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
+        [SwaggerResponseExample(statusCode: 200, typeof(MotoResponseSample))]
         [EnableRateLimiting("rateLimitPolicy")]
         public async Task<ActionResult<MotoDTO>> GetByChassi(string chassi)
         {
@@ -131,6 +137,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         }
 
         [HttpPost]
+        [SwaggerRequestExample(typeof(MotoDTO), typeof(MotoRequestSample))]
         [SwaggerOperation(
             Summary = ApiDoc.SalvarMotoSummary,
             Description = ApiDoc.SalvarMotoDescription
@@ -138,6 +145,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status201Created, "Moto criada com sucesso", typeof(MotoDTO))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Dados da moto inválidos")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
+        [SwaggerResponseExample(statusCode: 200, typeof(MotoqueiroResponseSample))]
         [EnableRateLimiting("rateLimitPolicy")]
         public async Task<ActionResult<MotoDTO>> Post([FromBody] MotoDTO moto)
         {
@@ -266,6 +274,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Lista de motos obtida com sucesso", typeof(IEnumerable<MotoDTO>))]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Nenhuma moto encontrada")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Requisição inválida")]
+        [SwaggerResponseExample(statusCode: 200, typeof(MotoqueiroResponseListSample))]
         [EnableRateLimiting("rateLimitPolicy")]
         public async Task<IActionResult> BuscarTodos(int pageNumber = 1, int pageSize = 10)
         {

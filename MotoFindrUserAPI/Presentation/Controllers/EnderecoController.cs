@@ -5,7 +5,9 @@ using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Models.Hateoas;
 using MotoFindrUserAPI.Models.PageResultModel;
 using MotoFindrUserAPI.Utils.Doc;
+using MotoFindrUserAPI.Utils.Samples.Endereco;
 using Swashbuckle.AspNetCore.Annotations;
+using Swashbuckle.AspNetCore.Filters;
 using System;
 
 namespace MotoFindrUserAPI.Presentation.Controllers
@@ -28,6 +30,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Endereço encontrado com sucesso", typeof(EnderecoDTO))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Endereço não encontrado")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
+        [SwaggerResponseExample(statusCode: 200, typeof(EnderecoResponseSample))]
         [EnableRateLimiting("rateLimitPolicy")]
         public async Task<ActionResult<EnderecoDTO>> GetById(int id)
         {
@@ -57,6 +60,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         }
 
         [HttpPost]
+        [SwaggerRequestExample(typeof(EnderecoDTO), typeof(EnderecoRequestSample))]
         [SwaggerOperation(
             Summary = ApiDoc.SalvarEnderecoSummary,
             Description = ApiDoc.SalvarEnderecoDescription
@@ -184,6 +188,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Lista de endereços obtida com sucesso", typeof(IEnumerable<EnderecoDTO>))]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Nenhum endereço encontrado")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Requisição inválida")]
+        [SwaggerResponseExample(statusCode: 200, typeof(EnderecoResponseListSample))]
         [EnableRateLimiting("rateLimitPolicy")]
         public async Task<IActionResult> BuscarTodos(int pageNumber = 1, int pageSize = 10)
         {

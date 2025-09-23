@@ -49,17 +49,17 @@ namespace MotoFindrUserAPI.Utils.Doc
         public const string BuscarEnderecoPorIdSummary = "Buscar endereço por ID";
         public const string BuscarEnderecoPorIdDescription = "Retorna um endereço específico com base no ID informado.";
 
-        public const string SalvarEnderecoSummary = "Cria um novo motoqueiro";
-        public const string SalvarEnderecoDescription = "Cadastra um novo motoqueiro no sistema";
+        public const string SalvarEnderecoSummary = "Cria um novo endereço";
+        public const string SalvarEnderecoDescription = "Cadastra um novo endereço no sistema";
 
-        public const string AtualizarEnderecoSummary = "Atualiza um motoqueiro existente";
-        public const string AtualizarEnderecoDescription = "Atualiza os dados do motoqueiro com o ID especificado";
+        public const string AtualizarEnderecoSummary = "Atualiza um endereço existente";
+        public const string AtualizarEnderecoDescription = "Atualiza os dados do endereço com o ID especificado";
 
-        public const string DeletarEnderecoSummary = "Remove um motoqueiro";
-        public const string DeletarEnderecoDescription = "Exclui permanentemente o motoqueiro com o ID especificado";
+        public const string DeletarEnderecoSummary = "Remove um endereço";
+        public const string DeletarEnderecoDescription = "Exclui permanentemente o endereço com o ID especificado";
 
-        public const string BuscarTodosEnderecosSummary = "Obter todos os motoqueiros cadastrados";
-        public const string BuscarTodosEnderecosDescription = "Buscar todos os motoqueiros salvos no sistema.";
+        public const string BuscarTodosEnderecosSummary = "Obter todos os endereços cadastrados";
+        public const string BuscarTodosEnderecosDescription = "Buscar todos os endereços salvos no sistema.";
         #endregion
     }
 }

@@ -7,7 +7,9 @@ using MotoFindrUserAPI.Domain.Entities;
 using MotoFindrUserAPI.Models.Hateoas;
 using MotoFindrUserAPI.Models.PageResultModel;
 using MotoFindrUserAPI.Utils.Doc;
+using MotoFindrUserAPI.Utils.Samples.Motoqueiro;
 using Swashbuckle.AspNetCore.Annotations;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace MotoFindrUserAPI.Presentation.Controllers
 {
@@ -30,6 +32,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Motoqueiro encontrado com sucesso", typeof(MotoqueiroDTO))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Motoqueiro não encontrado")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Requisição inválida")]
+        [SwaggerResponseExample(statusCode: 200, typeof(MotoqueiroResponseSample))]
         [EnableRateLimiting("rateLimitPolicy")]
         public async Task<IActionResult> ObterPorId(int id)
         {
@@ -86,6 +89,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Motoqueiro encontrado com sucesso", typeof(MotoqueiroDTO))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Motoqueiro não encontrado")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "CPF inválido ou não informado")]
+        [SwaggerResponseExample(statusCode: 200, typeof(MotoqueiroResponseSample))]
         [EnableRateLimiting("rateLimitPolicy")]
         public async Task<IActionResult> ObterPorCpf(string cpf)
         {
@@ -140,12 +144,14 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         }
 
         [HttpPost]
+        [SwaggerRequestExample(typeof(MotoqueiroDTO), typeof(MotoqueiroRequestSample))]
         [SwaggerOperation(
             Summary = ApiDoc.SalvarMotoqueiroSummary,
             Description = ApiDoc.SalvarMotoqueiroDescription
         )]
         [SwaggerResponse(StatusCodes.Status201Created, "Motoqueiro criado com sucesso", typeof(MotoqueiroDTO))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Dados do motoqueiro inválidos")]
+        [SwaggerResponseExample(statusCode: 200, typeof(MotoqueiroResponseSample))]
         [EnableRateLimiting("rateLimitPolicy")]
         public async Task<IActionResult> Criar([FromBody] MotoqueiroDTO motoqueiro)
         {
@@ -319,6 +325,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Lista de motoqueiros obtida com sucesso", typeof(IEnumerable<MotoqueiroDTO>))]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Nenhum motoqueiro encontrado")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Requisição inválida")]
+        [SwaggerResponseExample(statusCode:200, typeof(MotoqueiroResponseListSample))]
         [EnableRateLimiting("rateLimitPolicy")]
         public async Task<IActionResult> BuscarTodos(int pageNumber = 1, int pageSize = 10)
         {
