@@ -9,12 +9,12 @@ namespace MotoFindrUserAPI.Utils.Samples.Moto
         {
             return new MotoDTO
             {
-                Id = 0, // Usually 0 for create requests
+                Id = 0,
                 Modelo = "Honda CB 500F",
                 AnoDeFabricacao = 2022,
                 Chassi = "9C2PC4000MR123456",
                 Placa = "ABC1D23",
-                MotoqueiroId = 1
+                MotoqueiroId = 0
             };
         }
     }

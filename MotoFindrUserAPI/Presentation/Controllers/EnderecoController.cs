@@ -38,7 +38,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             {
                 var endereco = await _enderecoService.ObterPorIdAsync(id);
                 if (endereco == null) 
-                    return NotFound();
+                    return NotFound("Endereço não encontrado");
 
                 var hateoas = new HateoasResponse<EnderecoDTO>
                 {
@@ -186,7 +186,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             Description = ApiDoc.BuscarTodosEnderecosDescription
         )]
         [SwaggerResponse(StatusCodes.Status200OK, "Lista de endereços obtida com sucesso", typeof(IEnumerable<EnderecoDTO>))]
-        [SwaggerResponse(StatusCodes.Status204NoContent, "Nenhum endereço encontrado")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Nenhum endereço encontrado")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Requisição inválida")]
         [SwaggerResponseExample(statusCode: 200, typeof(EnderecoResponseListSample))]
         [EnableRateLimiting("rateLimitPolicy")]
@@ -195,7 +195,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             var pageResult = await _enderecoService.ObterTodos(pageNumber, pageSize);
 
             if (pageResult.Items == null || !pageResult.Items.Any())
-                return NoContent();
+                return NotFound();
 
             var pageResults = BuildPageResultsForBuscarTodos(pageResult);
             var response = new HateoasResponse<PageResultModel<IEnumerable<HateoasResponse<EnderecoDTO>>>>

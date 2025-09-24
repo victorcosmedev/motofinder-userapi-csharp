@@ -13,17 +13,9 @@ namespace MotoFindrUserAPI.Utils.Samples.Motoqueiro
                 Nome = "Carlos Silva",
                 Cpf = "12345678901",
                 DataNascimento = new DateTime(1995, 5, 20),
-                Endereco = new EnderecoDTO
-                {
-                    Id = 0,
-                    Logradouro = "Rua das Flores",
-                    Numero = "123",
-                    Complemento = "Apto 45",
-                    Uf = "SP",
-                    Municipio = "São Paulo",
-                    Cep = "01234567"
-                },
-                MotoId = 1
+                EnderecoId = 0,
+                Endereco = null,
+                MotoId = 0
             };
         }
     }
