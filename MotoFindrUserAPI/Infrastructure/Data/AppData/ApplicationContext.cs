@@ -10,6 +10,7 @@ namespace MotoFindrUserAPI.Infrastructure.Data.AppData
         public DbSet<MotoEntity> Moto { get; set; }
         public DbSet<MotoqueiroEntity> Motoqueiro { get; set; }
         public DbSet<EnderecoEntity> Endereco { get; set; }
+        public DbSet<UserEntity> User { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
