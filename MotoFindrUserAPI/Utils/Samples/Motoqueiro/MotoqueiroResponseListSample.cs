@@ -14,7 +14,7 @@ namespace MotoFindrUserAPI.Utils.Samples.Motoqueiro
                 Nome = "Pedro Santos",
                 Cpf = "11122233344",
                 DataNascimento = new DateTime(1988, 1, 1),
-                Endereco = new EnderecoDTO {
+                Endereco = new EnderecoDto {
                     Id = 1,
                     Logradouro = "Rua A",
                     Numero = "12",
@@ -31,7 +31,7 @@ namespace MotoFindrUserAPI.Utils.Samples.Motoqueiro
                 Nome = "Maria Costa",
                 Cpf = "55566677788",
                 DataNascimento = new DateTime(1992, 12, 25),
-                Endereco = new EnderecoDTO {
+                Endereco = new EnderecoDto {
                     Id = 2,
                     Logradouro = "Rua B",
                     Numero = "45",

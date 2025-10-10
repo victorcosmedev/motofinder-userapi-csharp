@@ -3,13 +3,13 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace MotoFindrUserAPI.Utils.Samples.Endereco
 {
-    public class EnderecoResponseListSample : IExamplesProvider<IEnumerable<EnderecoDTO>>
+    public class EnderecoResponseListSample : IExamplesProvider<IEnumerable<EnderecoDto>>
     {
-        public IEnumerable<EnderecoDTO> GetExamples()
+        public IEnumerable<EnderecoDto> GetExamples()
         {
-            return new List<EnderecoDTO>
+            return new List<EnderecoDto>
             {
-                new EnderecoDTO {
+                new EnderecoDto {
                     Id = 1,
                     Logradouro = "Av. Brasil",
                     Numero = "10",
@@ -19,7 +19,7 @@ namespace MotoFindrUserAPI.Utils.Samples.Endereco
                     Cep = "24020000",
                     MotoqueiroId = 1
                 },
-                new EnderecoDTO {
+                new EnderecoDto {
                     Id = 2,
                     Logradouro = "Rua das Palmeiras",
                     Numero = "20",

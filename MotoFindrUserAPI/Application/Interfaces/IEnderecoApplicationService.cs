@@ -5,10 +5,10 @@ namespace MotoFindrUserAPI.Application.Interfaces
 {
     public interface IEnderecoApplicationService
     {
-        Task<EnderecoDTO?> ObterPorIdAsync(int id);
-        Task<EnderecoDTO> CriarAsync(EnderecoDTO endereco);
-        Task<bool> AtualizarAsync(int id, EnderecoDTO endereco);
+        Task<EnderecoDto?> ObterPorIdAsync(int id);
+        Task<EnderecoDto> CriarAsync(EnderecoDto endereco);
+        Task<bool> AtualizarAsync(int id, EnderecoDto endereco);
         Task<bool> DeletarAsync(int id);
-        Task<PageResultModel<IEnumerable<EnderecoDTO?>>> ObterTodos(int pageNumber = 1, int pageSize = 10);
+        Task<PageResultModel<IEnumerable<EnderecoDto?>>> ObterTodos(int pageNumber = 1, int pageSize = 10);
     }
 }

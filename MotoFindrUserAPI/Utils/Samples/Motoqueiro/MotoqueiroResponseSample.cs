@@ -13,7 +13,7 @@ namespace MotoFindrUserAPI.Utils.Samples.Motoqueiro
                 Nome = "Barbara Oliveira",
                 Cpf = "98765432100",
                 DataNascimento = new DateTime(1990, 3, 15),
-                Endereco = new EnderecoDTO
+                Endereco = new EnderecoDto
                 {
                     Id = 1,
                     Logradouro = "Av. Paulista",

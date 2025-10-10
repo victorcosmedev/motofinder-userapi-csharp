@@ -20,19 +20,19 @@ namespace MotoFindrUserAPI.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<EnderecoDTO?> ObterPorIdAsync(int id)
+        public async Task<EnderecoDto?> ObterPorIdAsync(int id)
         {
             var entity = await _enderecoRepository.BuscarPorIdAsync(id);
-            return _mapper.Map<EnderecoDTO>(entity);
+            return _mapper.Map<EnderecoDto>(entity);
         }
 
-        public async Task<PageResultModel<IEnumerable<EnderecoDTO?>>> ObterTodos(int pageNumber = 1, int pageSize = 10)
+        public async Task<PageResultModel<IEnumerable<EnderecoDto?>>> ObterTodos(int pageNumber = 1, int pageSize = 10)
         {
             var pageResult = await _enderecoRepository.BuscarTodos(pageNumber, pageSize);
 
-            var dtos = pageResult.Items.Select(x => _mapper.Map<EnderecoDTO>(x));
+            var dtos = pageResult.Items.Select(x => _mapper.Map<EnderecoDto>(x));
 
-            var pageResultDto = new PageResultModel<IEnumerable<EnderecoDTO?>>
+            var pageResultDto = new PageResultModel<IEnumerable<EnderecoDto?>>
             {
                 Items = dtos,
                 TotalItens = pageResult.TotalItens,
@@ -43,7 +43,7 @@ namespace MotoFindrUserAPI.Application.Services
             return pageResultDto;
         }
 
-        public async Task<EnderecoDTO> CriarAsync(EnderecoDTO endereco)
+        public async Task<EnderecoDto> CriarAsync(EnderecoDto endereco)
         {
             var entity = _mapper.Map<EnderecoEntity>(endereco);
             if (!endereco.MotoqueiroId.HasValue || endereco.MotoqueiroId == 0)
@@ -57,10 +57,10 @@ namespace MotoFindrUserAPI.Application.Services
 
             await _motoqueiroRepository.AtualizarAsync(motoqueiro.Id, motoqueiro);
 
-            return _mapper.Map<EnderecoDTO>(entity);
+            return _mapper.Map<EnderecoDto>(entity);
         }
 
-        public async Task<bool> AtualizarAsync(int id, EnderecoDTO endereco)
+        public async Task<bool> AtualizarAsync(int id, EnderecoDto endereco)
         {
             var entity = _mapper.Map<EnderecoEntity>(endereco);
             var motoqueiro = await AtribuirEValidarMotoqueiroAsync(endereco.MotoqueiroId.Value, entity);

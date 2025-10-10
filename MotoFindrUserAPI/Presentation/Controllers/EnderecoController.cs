@@ -27,12 +27,12 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             Summary = ApiDoc.BuscarEnderecoPorIdSummary,
             Description = ApiDoc.BuscarEnderecoPorIdDescription
         )]
-        [SwaggerResponse(StatusCodes.Status200OK, "Endereço encontrado com sucesso", typeof(EnderecoDTO))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Endereço encontrado com sucesso", typeof(EnderecoDto))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Endereço não encontrado")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
         [SwaggerResponseExample(statusCode: 200, typeof(EnderecoResponseSample))]
         [EnableRateLimiting("rateLimitPolicy")]
-        public async Task<ActionResult<EnderecoDTO>> GetById(int id)
+        public async Task<ActionResult<EnderecoDto>> GetById(int id)
         {
             try
             {
@@ -40,7 +40,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
                 if (endereco == null) 
                     return NotFound("Endereço não encontrado");
 
-                var hateoas = new HateoasResponse<EnderecoDTO>
+                var hateoas = new HateoasResponse<EnderecoDto>
                 {
                     Data = endereco,
                     Links = new List<LinkDto>
@@ -60,16 +60,16 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         }
 
         [HttpPost]
-        [SwaggerRequestExample(typeof(EnderecoDTO), typeof(EnderecoRequestSample))]
+        [SwaggerRequestExample(typeof(EnderecoDto), typeof(EnderecoRequestSample))]
         [SwaggerOperation(
             Summary = ApiDoc.SalvarEnderecoSummary,
             Description = ApiDoc.SalvarEnderecoDescription
         )]
-        [SwaggerResponse(StatusCodes.Status201Created, "Endereço criado com sucesso", typeof(EnderecoDTO))]
+        [SwaggerResponse(StatusCodes.Status201Created, "Endereço criado com sucesso", typeof(EnderecoDto))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Dados do endereço inválidos")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
         [EnableRateLimiting("rateLimitPolicy")]
-        public async Task<ActionResult<EnderecoDTO>> Post([FromBody] EnderecoDTO endereco)
+        public async Task<ActionResult<EnderecoDto>> Post([FromBody] EnderecoDto endereco)
         {
             if (!ModelState.IsValid)
             {
@@ -84,7 +84,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             try
             {
                 var novoEndereco = await _enderecoService.CriarAsync(endereco);
-                var hateoas = new HateoasResponse<EnderecoDTO>
+                var hateoas = new HateoasResponse<EnderecoDto>
                 {
                     Data = novoEndereco,
                     Links = new List<LinkDto>
@@ -113,7 +113,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, "Endereço não encontrado")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
         [EnableRateLimiting("rateLimitPolicy")]
-        public async Task<IActionResult> Put(int id, [FromBody] EnderecoDTO endereco)
+        public async Task<IActionResult> Put(int id, [FromBody] EnderecoDto endereco)
         {
             if (!ModelState.IsValid)
             {
@@ -131,7 +131,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
                 if (!atualizado)
                     return NotFound("Endereco não encontrado");
 
-                var hateoas = new HateoasResponse<EnderecoDTO>
+                var hateoas = new HateoasResponse<EnderecoDto>
                 {
                     Data = endereco,
                     Links = new List<LinkDto>
@@ -185,7 +185,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             Summary = ApiDoc.BuscarTodosEnderecosSummary,
             Description = ApiDoc.BuscarTodosEnderecosDescription
         )]
-        [SwaggerResponse(StatusCodes.Status200OK, "Lista de endereços obtida com sucesso", typeof(IEnumerable<EnderecoDTO>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Lista de endereços obtida com sucesso", typeof(IEnumerable<EnderecoDto>))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Nenhum endereço encontrado")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Requisição inválida")]
         [SwaggerResponseExample(statusCode: 200, typeof(EnderecoResponseListSample))]
@@ -198,7 +198,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
                 return NotFound();
 
             var pageResults = BuildPageResultsForBuscarTodos(pageResult);
-            var response = new HateoasResponse<PageResultModel<IEnumerable<HateoasResponse<EnderecoDTO>>>>
+            var response = new HateoasResponse<PageResultModel<IEnumerable<HateoasResponse<EnderecoDto>>>>
             {
                 Data = pageResults,
                 Links = new List<LinkDto>
@@ -213,11 +213,11 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
         #region Helpers
 
-        private PageResultModel<IEnumerable<HateoasResponse<EnderecoDTO>>> BuildPageResultsForBuscarTodos(PageResultModel<IEnumerable<EnderecoDTO>> pageResult)
+        private PageResultModel<IEnumerable<HateoasResponse<EnderecoDto>>> BuildPageResultsForBuscarTodos(PageResultModel<IEnumerable<EnderecoDto>> pageResult)
         {
-            var pageResults = new PageResultModel<IEnumerable<HateoasResponse<EnderecoDTO>>>
+            var pageResults = new PageResultModel<IEnumerable<HateoasResponse<EnderecoDto>>>
             {
-                Items = pageResult.Items.Select(endereco => new HateoasResponse<EnderecoDTO>
+                Items = pageResult.Items.Select(endereco => new HateoasResponse<EnderecoDto>
                 {
                     Data = endereco,
                     Links = new List<LinkDto>

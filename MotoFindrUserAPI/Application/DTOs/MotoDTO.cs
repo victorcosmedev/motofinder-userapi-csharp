@@ -2,7 +2,7 @@
 
 namespace MotoFindrUserAPI.Application.DTOs
 {
-    public class MotoDTO
+    public class MotoDto
     {
         public int Id { get; set; }
         [StringLength(100, MinimumLength = 2, ErrorMessage = "O modelo deve ter entre 2 e 100 caracteres")]

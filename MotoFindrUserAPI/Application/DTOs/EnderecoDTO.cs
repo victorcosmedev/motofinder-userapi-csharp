@@ -2,7 +2,7 @@
 
 namespace MotoFindrUserAPI.Application.DTOs
 {
-    public class EnderecoDTO
+    public class EnderecoDto
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "Logradouro é obrigatório")]

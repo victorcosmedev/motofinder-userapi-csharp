@@ -2,7 +2,7 @@
 
 namespace MotoFindrUserAPI.Application.DTOs
 {
-    public class MotoqueiroDTO
+    public class MotoqueiroDto
     {
         public int Id { get; set; }
         [Required]
@@ -13,7 +13,7 @@ namespace MotoFindrUserAPI.Application.DTOs
         public string Cpf { get; set; } = string.Empty;
         public int? EnderecoId { get; set; }
         [StringLength(200, MinimumLength = 5)]
-        public EnderecoDTO? Endereco { get; set; }
+        public EnderecoDto? Endereco { get; set; }
         [Required]
         public DateTime DataNascimento { get; set; }
         public int? MotoId { get; set; }

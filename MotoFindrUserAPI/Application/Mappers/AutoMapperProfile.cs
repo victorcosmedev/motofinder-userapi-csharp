@@ -23,7 +23,7 @@ namespace MotoFindrUserAPI.Application.Mappers
                 .ForPath(dest => dest.Moto,
                         opt => opt.Ignore());
 
-            CreateMap<EnderecoEntity, EnderecoDTO>()
+            CreateMap<EnderecoEntity, EnderecoDto>()
             .ReverseMap()
             .ForMember(dest => dest.Motoqueiro,
                 opt => opt.Ignore());
