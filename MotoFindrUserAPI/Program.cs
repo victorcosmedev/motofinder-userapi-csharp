@@ -29,6 +29,8 @@ builder.Services.AddTransient<IMotoRepository, MotoRepository>();
 builder.Services.AddTransient<IMotoqueiroRepository, MotoqueiroRepository>();
 builder.Services.AddTransient<IEnderecoApplicationService, EnderecoApplicationService>();
 builder.Services.AddTransient<IEnderecoRepository, EnderecoRepository>();
+builder.Services.AddTransient<IAuthApplicationService, AuthApplicationService>();
+builder.Services.AddTransient<IAuthRepository, AuthRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
