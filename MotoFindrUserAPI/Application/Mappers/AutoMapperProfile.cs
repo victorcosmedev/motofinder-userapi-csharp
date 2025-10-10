@@ -8,13 +8,13 @@ namespace MotoFindrUserAPI.Application.Mappers
     {
         public AutoMapperProfile()
         {
-            CreateMap<MotoEntity, MotoDTO>()
+            CreateMap<MotoEntity, MotoDto>()
                 .ReverseMap()
                 .ForMember(dest => dest.Motoqueiro,
              opt => opt.Ignore()); 
 
            
-            CreateMap<MotoqueiroEntity, MotoqueiroDTO>()
+            CreateMap<MotoqueiroEntity, MotoqueiroDto>()
                 .ForMember(dest => dest.MotoId,
                           opt => opt.MapFrom(src => src.MotoId)) 
                 .ReverseMap()

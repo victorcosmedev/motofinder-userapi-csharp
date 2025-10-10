@@ -5,12 +5,12 @@ namespace MotoFindrUserAPI.Application.Interfaces
 {
     public interface IMotoApplicationService
     {
-        Task<MotoDTO?> ObterPorIdAsync(int id);
-        Task<MotoDTO?> ObterPorPlacaAsync(string placa);
-        Task<MotoDTO?> ObterPorChassiAsync(string chassi);
-        Task<PageResultModel<IEnumerable<MotoDTO?>>> ObterTodos(int pageNumber = 1, int pageSize = 10);
-        Task<MotoDTO> CriarAsync(MotoDTO moto);
-        Task<bool> AtualizarAsync(int id, MotoDTO moto);
+        Task<MotoDto?> ObterPorIdAsync(int id);
+        Task<MotoDto?> ObterPorPlacaAsync(string placa);
+        Task<MotoDto?> ObterPorChassiAsync(string chassi);
+        Task<PageResultModel<IEnumerable<MotoDto?>>> ObterTodos(int pageNumber = 1, int pageSize = 10);
+        Task<MotoDto> CriarAsync(MotoDto moto);
+        Task<bool> AtualizarAsync(int id, MotoDto moto);
         Task<bool> RemoverAsync(int id);
     }
 }

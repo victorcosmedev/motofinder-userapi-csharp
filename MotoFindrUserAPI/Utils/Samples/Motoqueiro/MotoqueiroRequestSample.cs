@@ -3,11 +3,11 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace MotoFindrUserAPI.Utils.Samples.Motoqueiro
 {
-    public class MotoqueiroRequestSample : IExamplesProvider<MotoqueiroDTO>
+    public class MotoqueiroRequestSample : IExamplesProvider<MotoqueiroDto>
     {
-        public MotoqueiroDTO GetExamples()
+        public MotoqueiroDto GetExamples()
         {
-            return new MotoqueiroDTO
+            return new MotoqueiroDto
             {
                 Id = 0,
                 Nome = "Carlos Silva",

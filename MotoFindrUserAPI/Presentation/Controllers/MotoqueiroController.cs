@@ -29,7 +29,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             Summary = ApiDoc.BuscarMotoqueiroPorIdSummary,
             Description = ApiDoc.BuscarMotoqueiroPorIdDescription
         )]
-        [SwaggerResponse(StatusCodes.Status200OK, "Motoqueiro encontrado com sucesso", typeof(MotoqueiroDTO))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Motoqueiro encontrado com sucesso", typeof(MotoqueiroDto))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Motoqueiro não encontrado")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Requisição inválida")]
         [SwaggerResponseExample(statusCode: 200, typeof(MotoqueiroResponseSample))]
@@ -42,7 +42,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
                 if(motoqueiro == null)
                     return NotFound("Nenhum motoqueiro encontrado");
 
-                var hateoas = new HateoasResponse<MotoqueiroDTO>
+                var hateoas = new HateoasResponse<MotoqueiroDto>
                 {
                     Data = motoqueiro,
                     Links = new List<LinkDto>
@@ -92,7 +92,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             Summary = ApiDoc.BuscarMotoqueiroPorCpfSummary,
             Description = ApiDoc.BuscarMotoqueiroPorCpfDescription
         )]
-        [SwaggerResponse(StatusCodes.Status200OK, "Motoqueiro encontrado com sucesso", typeof(MotoqueiroDTO))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Motoqueiro encontrado com sucesso", typeof(MotoqueiroDto))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Motoqueiro não encontrado")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "CPF inválido ou não informado")]
         [SwaggerResponseExample(statusCode: 200, typeof(MotoqueiroResponseSample))]
@@ -109,7 +109,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
                 if(motoqueiro == null)
                     return NotFound("Nenhum motoqueiro encontrado");
 
-                var hateoas = new HateoasResponse<MotoqueiroDTO>
+                var hateoas = new HateoasResponse<MotoqueiroDto>
                 {
                     Data = motoqueiro,
                     Links = new List<LinkDto>
@@ -156,16 +156,16 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         }
 
         [HttpPost]
-        [SwaggerRequestExample(typeof(MotoqueiroDTO), typeof(MotoqueiroRequestSample))]
+        [SwaggerRequestExample(typeof(MotoqueiroDto), typeof(MotoqueiroRequestSample))]
         [SwaggerOperation(
             Summary = ApiDoc.SalvarMotoqueiroSummary,
             Description = ApiDoc.SalvarMotoqueiroDescription
         )]
-        [SwaggerResponse(StatusCodes.Status201Created, "Motoqueiro criado com sucesso", typeof(MotoqueiroDTO))]
+        [SwaggerResponse(StatusCodes.Status201Created, "Motoqueiro criado com sucesso", typeof(MotoqueiroDto))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Dados do motoqueiro inválidos")]
         [SwaggerResponseExample(statusCode: 200, typeof(MotoqueiroResponseSample))]
         [EnableRateLimiting("rateLimitPolicy")]
-        public async Task<IActionResult> Criar([FromBody] MotoqueiroDTO motoqueiro)
+        public async Task<IActionResult> Criar([FromBody] MotoqueiroDto motoqueiro)
         {
             if (!ModelState.IsValid)
             {
@@ -181,7 +181,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             {
                 var novoMotoqueiro = await _service.CriarAsync(motoqueiro);
 
-                var hateoas = new HateoasResponse<MotoqueiroDTO>
+                var hateoas = new HateoasResponse<MotoqueiroDto>
                 {
                     Data = novoMotoqueiro,
                     Links = new List<LinkDto>
@@ -236,7 +236,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status400BadRequest, "IDs inconsistentes ou dados inválidos")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Motoqueiro não encontrado")]
         [EnableRateLimiting("rateLimitPolicy")]
-        public async Task<IActionResult> Atualizar(int id, [FromBody] MotoqueiroDTO motoqueiro)
+        public async Task<IActionResult> Atualizar(int id, [FromBody] MotoqueiroDto motoqueiro)
         {
 
             if (!ModelState.IsValid)
@@ -259,7 +259,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
                 if(!sucesso)
                     return NotFound("Motoqueiro não encontrado");
 
-                var hateoas = new HateoasResponse<MotoqueiroDTO>
+                var hateoas = new HateoasResponse<MotoqueiroDto>
                 {
                     Data = motoqueiro,
                     Links = new List<LinkDto>
@@ -346,7 +346,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             Summary = ApiDoc.BuscarTodosMotoqueirosSummary,
             Description = ApiDoc.BuscarTodosMotoqueirosDescription
         )]
-        [SwaggerResponse(StatusCodes.Status200OK, "Lista de motoqueiros obtida com sucesso", typeof(IEnumerable<MotoqueiroDTO>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Lista de motoqueiros obtida com sucesso", typeof(IEnumerable<MotoqueiroDto>))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Nenhum motoqueiro encontrado")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Requisição inválida")]
         [SwaggerResponseExample(statusCode:200, typeof(MotoqueiroResponseListSample))]
@@ -361,7 +361,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
                 var pageResults = BuildPageResultsForBuscarTodos(pageResult);
 
-                var response = new HateoasResponse<PageResultModel<IEnumerable<HateoasResponse<MotoqueiroDTO>>>>
+                var response = new HateoasResponse<PageResultModel<IEnumerable<HateoasResponse<MotoqueiroDto>>>>
                 {
                     Data = pageResults,
                     Links = new List<LinkDto>
@@ -379,11 +379,11 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             }
         }
         #region Helpers
-        private PageResultModel<IEnumerable<HateoasResponse<MotoqueiroDTO>>> BuildPageResultsForBuscarTodos(PageResultModel<IEnumerable<MotoqueiroDTO>> pageResult)
+        private PageResultModel<IEnumerable<HateoasResponse<MotoqueiroDto>>> BuildPageResultsForBuscarTodos(PageResultModel<IEnumerable<MotoqueiroDto>> pageResult)
         {
-            var pageResults = new PageResultModel<IEnumerable<HateoasResponse<MotoqueiroDTO>>>
+            var pageResults = new PageResultModel<IEnumerable<HateoasResponse<MotoqueiroDto>>>
             {
-                Items = pageResult.Items.Select(motoqueiro => new HateoasResponse<MotoqueiroDTO>
+                Items = pageResult.Items.Select(motoqueiro => new HateoasResponse<MotoqueiroDto>
                 {
                     Data = motoqueiro,
                     Links = new List<LinkDto>

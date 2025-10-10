@@ -29,12 +29,12 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             Summary = ApiDoc.GetMotoByIdSummary,
             Description = ApiDoc.GetMotoByIdDescription
         )]
-        [SwaggerResponse(StatusCodes.Status200OK, "Moto encontrada com sucesso", typeof(MotoDTO))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Moto encontrada com sucesso", typeof(MotoDto))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Moto não encontrada")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
         [SwaggerResponseExample(statusCode:200, typeof(MotoResponseSample))]
         [EnableRateLimiting("rateLimitPolicy")]
-        public async Task<ActionResult<MotoDTO>> GetById(int id)
+        public async Task<ActionResult<MotoDto>> GetById(int id)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
                 if (moto == null) 
                     return NotFound("Moto não encontrada");
 
-                var hateoas = new HateoasResponse<MotoDTO>
+                var hateoas = new HateoasResponse<MotoDto>
                 {
                     Data = moto,
                     Links = new List<LinkDto>
@@ -69,20 +69,20 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             Summary = ApiDoc.GetByPlacaSummary,
             Description = ApiDoc.GetByPlacaDescription
         )]
-        [SwaggerResponse(StatusCodes.Status200OK, "Moto encontrada com sucesso", typeof(MotoDTO))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Moto encontrada com sucesso", typeof(MotoDto))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Moto não encontrada")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Placa inválida")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
         [SwaggerResponseExample(statusCode: 200, typeof(MotoResponseSample))]
         [EnableRateLimiting("rateLimitPolicy")]
-        public async Task<ActionResult<MotoDTO>> GetByPlaca(string placa)
+        public async Task<ActionResult<MotoDto>> GetByPlaca(string placa)
         {
             try
             {
                 var moto = await _motoService.ObterPorPlacaAsync(placa);
                 if (moto == null) return NotFound("Moto não encontrada");
 
-                var hateoas = new HateoasResponse<MotoDTO>
+                var hateoas = new HateoasResponse<MotoDto>
                 {
                     Data = moto,
                     Links = new List<LinkDto>
@@ -107,20 +107,20 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             Summary = ApiDoc.GetMotoByChassiSummary,
             Description = ApiDoc.GetMotoByChassiDescription
         )]
-        [SwaggerResponse(StatusCodes.Status200OK, "Moto encontrada com sucesso", typeof(MotoDTO))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Moto encontrada com sucesso", typeof(MotoDto))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Moto não encontrada")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Chassi inválido")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
         [SwaggerResponseExample(statusCode: 200, typeof(MotoResponseSample))]
         [EnableRateLimiting("rateLimitPolicy")]
-        public async Task<ActionResult<MotoDTO>> GetByChassi(string chassi)
+        public async Task<ActionResult<MotoDto>> GetByChassi(string chassi)
         {
             try
             {
                 var moto = await _motoService.ObterPorChassiAsync(chassi);
                 if (moto == null) return NotFound("Moto não encontrada");
 
-                var hateoas = new HateoasResponse<MotoDTO>
+                var hateoas = new HateoasResponse<MotoDto>
                 {
                     Data = moto,
                     Links = new List<LinkDto>
@@ -141,17 +141,17 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         }
 
         [HttpPost]
-        [SwaggerRequestExample(typeof(MotoDTO), typeof(MotoRequestSample))]
+        [SwaggerRequestExample(typeof(MotoDto), typeof(MotoRequestSample))]
         [SwaggerOperation(
             Summary = ApiDoc.SalvarMotoSummary,
             Description = ApiDoc.SalvarMotoDescription
         )]
-        [SwaggerResponse(StatusCodes.Status201Created, "Moto criada com sucesso", typeof(MotoDTO))]
+        [SwaggerResponse(StatusCodes.Status201Created, "Moto criada com sucesso", typeof(MotoDto))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Dados da moto inválidos")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
         [SwaggerResponseExample(statusCode: 200, typeof(MotoqueiroResponseSample))]
         [EnableRateLimiting("rateLimitPolicy")]
-        public async Task<ActionResult<MotoDTO>> Post([FromBody] MotoDTO moto)
+        public async Task<ActionResult<MotoDto>> Post([FromBody] MotoDto moto)
         {
             if (!ModelState.IsValid)
             {
@@ -167,7 +167,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             {
                 var novaMoto = await _motoService.CriarAsync(moto);
 
-                var hateoas = new HateoasResponse<MotoDTO>
+                var hateoas = new HateoasResponse<MotoDto>
                 {
                     Data = novaMoto,
                     Links = new List<LinkDto>
@@ -199,7 +199,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, "Moto não encontrada")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
         [EnableRateLimiting("rateLimitPolicy")]
-        public async Task<IActionResult> Put(int id, [FromBody] MotoDTO moto)
+        public async Task<IActionResult> Put(int id, [FromBody] MotoDto moto)
         {
             if (!ModelState.IsValid)
             {
@@ -217,7 +217,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
                 if(!atualizado)
                     return BadRequest("IDs inconsistentes ou dados inválidos");
 
-                var hateoas = new HateoasResponse<MotoDTO>
+                var hateoas = new HateoasResponse<MotoDto>
                 {
                     Data = moto,
                     Links = new List<LinkDto>
@@ -279,7 +279,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             Summary = ApiDoc.BuscarTodasMotosSummary,
             Description = ApiDoc.BuscarTodasMotosDescription
         )]
-        [SwaggerResponse(StatusCodes.Status200OK, "Lista de motos obtida com sucesso", typeof(IEnumerable<MotoDTO>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Lista de motos obtida com sucesso", typeof(IEnumerable<MotoDto>))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Nenhuma moto encontrada")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Requisição inválida")]
         [SwaggerResponseExample(statusCode: 200, typeof(MotoqueiroResponseListSample))]
@@ -294,7 +294,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
                 var pageResults = BuildPageResultsForBuscarTodos(pageResult);
 
-                var response = new HateoasResponse<PageResultModel<IEnumerable<HateoasResponse<MotoDTO>>>>
+                var response = new HateoasResponse<PageResultModel<IEnumerable<HateoasResponse<MotoDto>>>>
                 {
                     Data = pageResults,
                     Links = new List<LinkDto>
@@ -313,11 +313,11 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         }
 
         #region Helpers
-        private PageResultModel<IEnumerable<HateoasResponse<MotoDTO>>> BuildPageResultsForBuscarTodos(PageResultModel<IEnumerable<MotoDTO>> pageResult)
+        private PageResultModel<IEnumerable<HateoasResponse<MotoDto>>> BuildPageResultsForBuscarTodos(PageResultModel<IEnumerable<MotoDto>> pageResult)
         {
-            var pageResults = new PageResultModel<IEnumerable<HateoasResponse<MotoDTO>>>
+            var pageResults = new PageResultModel<IEnumerable<HateoasResponse<MotoDto>>>
             {
-                Items = pageResult.Items.Select(moto => new HateoasResponse<MotoDTO>
+                Items = pageResult.Items.Select(moto => new HateoasResponse<MotoDto>
                 {
                     Data = moto,
                     Links = new List<LinkDto>

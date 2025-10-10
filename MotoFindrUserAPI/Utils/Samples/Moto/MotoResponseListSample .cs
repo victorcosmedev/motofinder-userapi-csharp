@@ -3,13 +3,13 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace MotoFindrUserAPI.Utils.Samples.Moto
 {
-    public class MotoResponseListSample : IExamplesProvider<IEnumerable<MotoDTO>>
+    public class MotoResponseListSample : IExamplesProvider<IEnumerable<MotoDto>>
     {
-        public IEnumerable<MotoDTO> GetExamples()
+        public IEnumerable<MotoDto> GetExamples()
         {
-            return new List<MotoDTO>
+            return new List<MotoDto>
         {
-            new MotoDTO {
+            new MotoDto {
                 Id = 1,
                 Modelo = "Kawasaki Ninja 400",
                 AnoDeFabricacao = 2020,
@@ -17,7 +17,7 @@ namespace MotoFindrUserAPI.Utils.Samples.Moto
                 Placa = "AAA0B11",
                 MotoqueiroId = 1
             },
-            new MotoDTO {
+            new MotoDto {
                 Id = 2,
                 Modelo = "Suzuki GSX-S750",
                 AnoDeFabricacao = 2019,

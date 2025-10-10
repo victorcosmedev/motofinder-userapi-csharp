@@ -20,25 +20,25 @@ public class MotoApplicationService : IMotoApplicationService
         _mapper = mapper;
     }
 
-    public async Task<MotoDTO?> ObterPorIdAsync(int id)
+    public async Task<MotoDto?> ObterPorIdAsync(int id)
     {
         var entity = await _motoRepository.BuscarPorIdAsync(id);
-        return _mapper.Map<MotoDTO>(entity);
+        return _mapper.Map<MotoDto>(entity);
     }
 
-    public async Task<MotoDTO?> ObterPorPlacaAsync(string placa)
+    public async Task<MotoDto?> ObterPorPlacaAsync(string placa)
     {
         var entity = await _motoRepository.BuscarPorPlacaAsync(placa);
-        return _mapper.Map<MotoDTO>(entity);
+        return _mapper.Map<MotoDto>(entity);
     }
 
-    public async Task<MotoDTO?> ObterPorChassiAsync(string chassi)
+    public async Task<MotoDto?> ObterPorChassiAsync(string chassi)
     {
         var entity = await _motoRepository.BuscarPorChassiAsync(chassi);
-        return _mapper.Map<MotoDTO>(entity);
+        return _mapper.Map<MotoDto>(entity);
     }
 
-    public async Task<MotoDTO> CriarAsync(MotoDTO moto)
+    public async Task<MotoDto> CriarAsync(MotoDto moto)
     {
         MotoqueiroEntity? motoqueiro = null;
         var entity = _mapper.Map<MotoEntity>(moto);
@@ -57,10 +57,10 @@ public class MotoApplicationService : IMotoApplicationService
 
         entity = await _motoRepository.SalvarAsync(entity);
 
-        return _mapper.Map<MotoDTO>(entity);
+        return _mapper.Map<MotoDto>(entity);
     }
 
-    public async Task<bool> AtualizarAsync(int id, MotoDTO moto)
+    public async Task<bool> AtualizarAsync(int id, MotoDto moto)
     {
         MotoqueiroEntity? motoqueiro = null;
         var entity = _mapper.Map<MotoEntity>(moto);
@@ -98,13 +98,13 @@ public class MotoApplicationService : IMotoApplicationService
         return motoqueiro;
     }
 
-    public async Task<PageResultModel<IEnumerable<MotoDTO?>>> ObterTodos(int pageNumber = 1, int pageSize = 10)
+    public async Task<PageResultModel<IEnumerable<MotoDto?>>> ObterTodos(int pageNumber = 1, int pageSize = 10)
     {
         var pageResult = await _motoRepository.BuscarTodos(pageNumber, pageSize);
 
-        var dtos = pageResult.Items.Select(x => _mapper.Map<MotoDTO>(x));
+        var dtos = pageResult.Items.Select(x => _mapper.Map<MotoDto>(x));
 
-        var pageResultDto = new PageResultModel<IEnumerable<MotoDTO?>>
+        var pageResultDto = new PageResultModel<IEnumerable<MotoDto?>>
         {
             Items = dtos,
             TotalItens = pageResult.TotalItens,

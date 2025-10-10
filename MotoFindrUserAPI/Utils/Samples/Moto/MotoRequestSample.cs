@@ -3,11 +3,11 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace MotoFindrUserAPI.Utils.Samples.Moto
 {
-    public class MotoRequestSample : IExamplesProvider<MotoDTO>
+    public class MotoRequestSample : IExamplesProvider<MotoDto>
     {
-        public MotoDTO GetExamples()
+        public MotoDto GetExamples()
         {
-            return new MotoDTO
+            return new MotoDto
             {
                 Id = 0,
                 Modelo = "Honda CB 500F",

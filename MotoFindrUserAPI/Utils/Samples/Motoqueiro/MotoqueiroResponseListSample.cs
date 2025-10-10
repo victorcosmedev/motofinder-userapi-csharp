@@ -3,13 +3,13 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace MotoFindrUserAPI.Utils.Samples.Motoqueiro
 {
-    public class MotoqueiroResponseListSample : IExamplesProvider<IEnumerable<MotoqueiroDTO>>
+    public class MotoqueiroResponseListSample : IExamplesProvider<IEnumerable<MotoqueiroDto>>
     {
-        public IEnumerable<MotoqueiroDTO> GetExamples()
+        public IEnumerable<MotoqueiroDto> GetExamples()
         {
-            return new List<MotoqueiroDTO>
+            return new List<MotoqueiroDto>
         {
-            new MotoqueiroDTO {
+            new MotoqueiroDto {
                 Id = 1,
                 Nome = "Pedro Santos",
                 Cpf = "11122233344",
@@ -26,7 +26,7 @@ namespace MotoFindrUserAPI.Utils.Samples.Motoqueiro
                 },
                 MotoId = 1
             },
-            new MotoqueiroDTO {
+            new MotoqueiroDto {
                 Id = 2,
                 Nome = "Maria Costa",
                 Cpf = "55566677788",
