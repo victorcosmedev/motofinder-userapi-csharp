@@ -19,19 +19,7 @@ namespace MotoFindrUserAPI.Application.Services
         }
         public async Task<string?> LoginAsync(UserLoginDto loginDto)
         {
-            var user = await _authRepository.GetUserByUsernameAsync(loginDto.Username);
-            if(user == null)
-            {
-                return null;
-            }
-
-            bool isPasswordValid = Verify(loginDto.Password, user.PasswordHash);
-            if(!isPasswordValid)
-            {
-                return null;
-            }
-            
-            return GenerateJwtToken(user.Username);
+            return await _authRepository.AuthenticateAsync(loginDto.Username, loginDto.Password);
         }
 
         public async Task RegisterAsync(UserRegisterDto registerDto)
@@ -53,34 +41,5 @@ namespace MotoFindrUserAPI.Application.Services
 
             await _authRepository.CreateUserAsync(user, registerDto.Password);
         }
-
-        #region Helpers
-        private string GenerateJwtToken(string username)
-        {
-            var jwtKey = "B368E2721B7B7C4EF75D3CFA44F9F";
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
-
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
-
-            var issuer = "MotoFindrUserAPI";
-            var audience = "MotoFindrUserAPI";
-
-            var token = new JwtSecurityToken(
-                issuer: issuer,
-                audience: audience,
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(8),
-                signingCredentials: creds
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-        #endregion
     }
 }
