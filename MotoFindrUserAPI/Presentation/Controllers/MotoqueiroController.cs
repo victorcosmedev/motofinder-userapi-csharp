@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Hosting;
 using MotoFindrUserAPI.Application.DTOs;
@@ -14,7 +15,8 @@ using Swashbuckle.AspNetCore.Filters;
 namespace MotoFindrUserAPI.Presentation.Controllers
 {
     [ApiController]
-    [Route("/api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class MotoqueiroController : ControllerBase
     {
         private readonly IMotoqueiroApplicationService _service;
