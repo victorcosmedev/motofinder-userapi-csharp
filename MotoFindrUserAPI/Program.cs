@@ -1,3 +1,5 @@
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +23,12 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationContext>(option => {
     option.UseOracle(builder.Configuration.GetConnectionString("Oracle"));
 });
+
+builder.Services.AddHealthChecks()
+    .AddOracle(
+        builder.Configuration.GetConnectionString("Oracle"), 
+        name: "OracleHealthCheck"
+    );
 
 
 builder.Services.AddTransient<IMotoApplicationService, MotoApplicationService>();
@@ -92,5 +100,10 @@ app.UseResponseCompression();
 app.UseRateLimiter();
 
 app.MapControllers();
+
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.Run();
