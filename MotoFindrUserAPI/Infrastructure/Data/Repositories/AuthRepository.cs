@@ -33,7 +33,7 @@ namespace MotoFindrUserAPI.Infrastructure.Data.Repositories
                 return null;
             }
 
-            return GenerateJwt
+            return GenerateJwt(user);
         }
 
         public async Task<UserEntity> CreateUserAsync(UserEntity user, string password)
