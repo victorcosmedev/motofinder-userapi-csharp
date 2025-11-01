@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MotoFindrUserAPI.Application\MotoFindrUserAPI.Application.csproj" />
+    <ProjectReference Include="..\MotoFindrUserAPI.Domain\MotoFindrUserAPI.Domain.csproj" />
+    <ProjectReference Include="..\MotoFindrUserAPI.Infra.Data\MotoFindrUserAPI.Infra.Data.csproj" />
+  </ItemGroup>
+
 </Project>
