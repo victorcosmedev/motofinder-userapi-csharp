@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
@@ -22,6 +23,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
+    [AllowAnonymous]
     public async Task<IActionResult> Register([FromBody] UserRegisterDto request)
     {
         try
@@ -42,6 +44,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
+    [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] UserDto request)
     {
         var result = await _userService.AuthenticateAsync(request);
