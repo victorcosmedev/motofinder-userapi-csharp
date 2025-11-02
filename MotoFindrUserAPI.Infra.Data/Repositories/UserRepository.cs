@@ -8,7 +8,7 @@ using System.Text;
 
 namespace MotoFindrUserAPI.Infra.Data.Repositories
 {
-    public class AuthRepository : IAuthRepository
+    public class AuthRepository : IUserRepository
     {
         private readonly ApplicationContext _context;
         private readonly IConfiguration _configuration;

@@ -7,8 +7,8 @@ namespace MotoFindrUserAPI.Application.Services
 {
     public class AuthApplicationService : IAuthApplicationService
     {
-        private readonly IAuthRepository _authRepository;
-        public AuthApplicationService(IAuthRepository authRepository)
+        private readonly IUserRepository _authRepository;
+        public AuthApplicationService(IUserRepository authRepository)
         {
             _authRepository = authRepository;
         }

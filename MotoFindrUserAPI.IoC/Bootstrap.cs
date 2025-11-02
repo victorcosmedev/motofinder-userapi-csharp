@@ -27,7 +27,7 @@ public class Bootstrap
         services.AddTransient<IEnderecoRepository, EnderecoRepository>();
         
         services.AddTransient<IAuthApplicationService, AuthApplicationService>();
-        services.AddTransient<IAuthRepository, AuthRepository>();
+        services.AddTransient<IUserRepository, UserRepository>();
     }
 
 }
