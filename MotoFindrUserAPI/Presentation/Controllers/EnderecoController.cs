@@ -37,13 +37,12 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         {
             try
             {
-                var endereco = await _enderecoService.ObterPorIdAsync(id);
-                if (endereco == null) 
-                    return NotFound("Endereço não encontrado");
+                var result = await _enderecoService.ObterPorIdAsync(id);
+                if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
                 var hateoas = new HateoasResponse<EnderecoDto>
                 {
-                    Data = endereco,
+                    Data = result.Value,
                     Links = new List<LinkDto>
                     {
                         new LinkDto { Rel = "self", Href = Url.Action(nameof(GetById), new { id }), Method = "GET" },
@@ -84,19 +83,21 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
             try
             {
-                var novoEndereco = await _enderecoService.CriarAsync(endereco);
+                var result = await _enderecoService.CriarAsync(endereco);
+                if(result.IsSuccess == false) return StatusCode(result.StatusCode, result.Error);
+
                 var hateoas = new HateoasResponse<EnderecoDto>
                 {
-                    Data = novoEndereco,
+                    Data = result.Value,
                     Links = new List<LinkDto>
                     {
-                        new LinkDto { Rel = "self", Href = Url.Action(nameof(GetById), new { id = novoEndereco.Id }), Method = "GET" },
-                        new LinkDto { Rel = "update", Href = Url.Action(nameof(Put), new { id = novoEndereco.Id }), Method = "PUT" },
-                        new LinkDto { Rel = "delete", Href = Url.Action(nameof(Delete), new { id = novoEndereco.Id }), Method = "DELETE" }
+                        new LinkDto { Rel = "self", Href = Url.Action(nameof(GetById), new { id = result.Value?.Id }), Method = "GET" },
+                        new LinkDto { Rel = "update", Href = Url.Action(nameof(Put), new { id = result.Value?.Id }), Method = "PUT" },
+                        new LinkDto { Rel = "delete", Href = Url.Action(nameof(Delete), new { id = result.Value?.Id }), Method = "DELETE" }
                     }
                 };
 
-                return CreatedAtAction(nameof(GetById), new { id = novoEndereco.Id }, hateoas);
+                return CreatedAtAction(nameof(GetById), new { id = result.Value?.Id }, hateoas);
             }
             catch (Exception ex)
             {
@@ -128,9 +129,8 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
             try
             {
-                var atualizado = await _enderecoService.AtualizarAsync(id, endereco);
-                if (!atualizado)
-                    return NotFound("Endereco não encontrado");
+                var result = await _enderecoService.AtualizarAsync(id, endereco);
+                if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
                 var hateoas = new HateoasResponse<EnderecoDto>
                 {
@@ -162,9 +162,9 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         {
             try
             {
-                var removido = await _enderecoService.DeletarAsync(id);
-                if (!removido)
-                    return NotFound("Endereco não encontrado");
+                var result = await _enderecoService.DeletarAsync(id);
+                if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
                 var hateoas = new HateoasResponse<string>
                 {
                     Message = "Endereco removido com sucesso",
@@ -193,23 +193,32 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [EnableRateLimiting("rateLimitPolicy")]
         public async Task<IActionResult> BuscarTodos(int pageNumber = 1, int pageSize = 10)
         {
-            var pageResult = await _enderecoService.ObterTodos(pageNumber, pageSize);
-
-            if (pageResult.Items == null || !pageResult.Items.Any())
-                return NotFound();
-
-            var pageResults = BuildPageResultsForBuscarTodos(pageResult);
-            var response = new HateoasResponse<PageResultModel<IEnumerable<HateoasResponse<EnderecoDto>>>>
+            try
             {
-                Data = pageResults,
-                Links = new List<LinkDto>
+                var result = await _enderecoService.ObterTodos(pageNumber, pageSize);
+                if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+                if (result.Value?.Items == null || (!result.Value?.Items.Any() ?? false))
+                    return NotFound("Não há itens.");
+
+                var pageResults = BuildPageResultsForBuscarTodos(result.Value);
+
+                var response = new HateoasResponse<PageResultModel<IEnumerable<HateoasResponse<EnderecoDto>>>>
+                {
+                    Data = pageResults,
+                    Links = new List<LinkDto>
                 {
                     new LinkDto { Rel = "self", Href = Url.Action(nameof(BuscarTodos), new { pageNumber, pageSize }), Method = "GET" },
                     new LinkDto { Rel = "create", Href = Url.Action(nameof(Post)), Method = "POST" }
                 }
-            };
+                };
 
-            return Ok(response);
+                return Ok(response);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         #region Helpers

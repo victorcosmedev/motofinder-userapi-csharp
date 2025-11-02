@@ -4,6 +4,7 @@ using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Domain.Entities;
 using MotoFindrUserAPI.Domain.Interfaces;
 using MotoFindrUserAPI.Domain.Models.PageResultModel;
+using System.Net;
 
 namespace MotoFindrUserAPI.Application.Services
 {
@@ -19,57 +20,103 @@ namespace MotoFindrUserAPI.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<EnderecoDto?> ObterPorIdAsync(int id)
+        public async Task<OperationResult<EnderecoDto?>> ObterPorIdAsync(int id)
         {
-            var entity = await _enderecoRepository.BuscarPorIdAsync(id);
-            return _mapper.Map<EnderecoDto>(entity);
-        }
-
-        public async Task<PageResultModel<IEnumerable<EnderecoDto?>>> ObterTodos(int pageNumber = 1, int pageSize = 10)
-        {
-            var pageResult = await _enderecoRepository.BuscarTodos(pageNumber, pageSize);
-
-            var dtos = pageResult.Items.Select(x => _mapper.Map<EnderecoDto>(x));
-
-            var pageResultDto = new PageResultModel<IEnumerable<EnderecoDto?>>
+            try
             {
-                Items = dtos,
-                TotalItens = pageResult.TotalItens,
-                NumeroPagina = pageResult.NumeroPagina,
-                TamanhoPagina = pageResult.TamanhoPagina
-            };
+                var entity = await _enderecoRepository.BuscarPorIdAsync(id);
+                if (entity == null)
+                    return OperationResult<EnderecoDto?>.Failure($"Endereço de id {id} não encontrado.", (int)HttpStatusCode.NotFound);
+                return OperationResult<EnderecoDto?>.Success(_mapper.Map<EnderecoDto>(entity));
+            }
+            catch(Exception ex)
+            {
+                return OperationResult<EnderecoDto?>.Failure(ex.Message, (int)HttpStatusCode.InternalServerError);
+            }
 
-            return pageResultDto;
         }
 
-        public async Task<EnderecoDto> CriarAsync(EnderecoDto endereco)
+        public async Task<OperationResult<PageResultModel<IEnumerable<EnderecoDto?>>>> ObterTodos(int pageNumber = 1, int pageSize = 10)
         {
-            var entity = _mapper.Map<EnderecoEntity>(endereco);
-            if (!endereco.MotoqueiroId.HasValue || endereco.MotoqueiroId == 0)
-                throw new Exception("O ID do motoqueiro é obrigatório para criar um endereço.");
+            try
+            {
+                var pageResult = await _enderecoRepository.BuscarTodos(pageNumber, pageSize);
+                if (pageResult == null || !pageResult.Items.Any()) return OperationResult<PageResultModel<IEnumerable<EnderecoDto?>>>.Failure("Nenhum endereço encontrado.", (int)HttpStatusCode.NotFound);
 
-            var motoqueiro = await AtribuirEValidarMotoqueiroAsync(endereco.MotoqueiroId.Value, entity);
+                var dtos = pageResult.Items.Select(x => _mapper.Map<EnderecoDto>(x));
 
-            entity = await _enderecoRepository.SalvarAsync(entity);
-            motoqueiro.Endereco = entity;
-            motoqueiro.EnderecoId = entity.Id;
+                var pageResultDto = new PageResultModel<IEnumerable<EnderecoDto?>>
+                {
+                    Items = dtos,
+                    TotalItens = pageResult.TotalItens,
+                    NumeroPagina = pageResult.NumeroPagina,
+                    TamanhoPagina = pageResult.TamanhoPagina
+                };
 
-            await _motoqueiroRepository.AtualizarAsync(motoqueiro.Id, motoqueiro);
-
-            return _mapper.Map<EnderecoDto>(entity);
+                return OperationResult<PageResultModel<IEnumerable<EnderecoDto?>>>.Success(pageResultDto);
+            }
+            catch(Exception ex)
+            {
+                return OperationResult<PageResultModel<IEnumerable<EnderecoDto?>>>.Failure(ex.Message, (int)HttpStatusCode.InternalServerError);
+            }
         }
 
-        public async Task<bool> AtualizarAsync(int id, EnderecoDto endereco)
+        public async Task<OperationResult<EnderecoDto?>> CriarAsync(EnderecoDto endereco)
         {
-            var entity = _mapper.Map<EnderecoEntity>(endereco);
-            var motoqueiro = await AtribuirEValidarMotoqueiroAsync(endereco.MotoqueiroId.Value, entity);
+            try
+            {
+                var entity = _mapper.Map<EnderecoEntity>(endereco);
+                if (!endereco.MotoqueiroId.HasValue || endereco.MotoqueiroId == 0)
+                    throw new Exception("O ID do motoqueiro é obrigatório para criar um endereço.");
 
-            return await _enderecoRepository.AtualizarAsync(id, entity);
+                var motoqueiro = await AtribuirEValidarMotoqueiroAsync(endereco.MotoqueiroId.Value, entity);
+
+                entity = await _enderecoRepository.SalvarAsync(entity);
+                motoqueiro.Endereco = entity;
+                motoqueiro.EnderecoId = entity.Id;
+
+                await _motoqueiroRepository.AtualizarAsync(motoqueiro.Id, motoqueiro);
+
+                return OperationResult<EnderecoDto?>.Success(_mapper.Map<EnderecoDto>(entity));
+            }
+            catch (Exception ex)
+            {
+                return OperationResult<EnderecoDto?>.Failure(ex.Message, (int)HttpStatusCode.InternalServerError);
+            }
         }
 
-        public async Task<bool> DeletarAsync(int id)
+        public async Task<OperationResult<EnderecoDto?>> AtualizarAsync(int id, EnderecoDto endereco)
         {
-            return await _enderecoRepository.DeletarAsync(id);
+            try
+            {
+                var entity = _mapper.Map<EnderecoEntity>(endereco);
+                var motoqueiro = await AtribuirEValidarMotoqueiroAsync(endereco.MotoqueiroId.Value, entity);
+
+                var success = await _enderecoRepository.AtualizarAsync(id, entity);
+
+                if(success) return OperationResult<EnderecoDto?>.Success(null);
+
+                return OperationResult<EnderecoDto?>.Failure("Endereço não encontrado para atualização.", (int)HttpStatusCode.NotFound);
+            }
+            catch (Exception)
+            {
+                return OperationResult<EnderecoDto?>.Failure("Erro ao atualizar o endereço.", (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<OperationResult<EnderecoDto?>> DeletarAsync(int id)
+        {
+            try
+            {
+                var success = await _enderecoRepository.DeletarAsync(id);
+                if(success) return OperationResult<EnderecoDto?>.Success(null);
+
+                return OperationResult<EnderecoDto?>.Failure("Endereço não encontrado para deleção.", (int)HttpStatusCode.NotFound);
+            }
+            catch(Exception ex)
+            {
+                return OperationResult<EnderecoDto?>.Failure(ex.Message, (int)HttpStatusCode.InternalServerError);
+            }
         }
 
         private async Task<MotoqueiroEntity> AtribuirEValidarMotoqueiroAsync(int motoqueiroId, EnderecoEntity endereco)
