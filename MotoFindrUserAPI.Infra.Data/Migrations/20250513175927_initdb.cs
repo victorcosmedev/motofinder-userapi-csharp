@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace MotoFindrUserAPI.Migrations
+namespace MotoFindrUserAPI.Infra.Data.Migrations
 {
     /// <inheritdoc />
     public partial class initdb : Migration

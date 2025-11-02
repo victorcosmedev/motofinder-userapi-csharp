@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace MotoFindrUserAPI.Migrations
+namespace MotoFindrUserAPI.Infra.Data.Migrations
 {
     /// <inheritdoc />
     public partial class adicionandoforeignmotoid : Migration

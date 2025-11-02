@@ -3,12 +3,12 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MotoFindrUserAPI.Infrastructure.Data.AppData;
+using MotoFindrUserAPI.Infra.Data.AppData;
 using Oracle.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace MotoFindrUserAPI.Migrations
+namespace MotoFindrUserAPI.Infra.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
     partial class ApplicationContextModelSnapshot : ModelSnapshot
