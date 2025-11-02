@@ -1,5 +1,5 @@
 ﻿using MotoFindrUserAPI.Application.DTOs;
-using MotoFindrUserAPI.Models.PageResultModel;
+using MotoFindrUserAPI.Domain.Models.PageResultModel;
 
 namespace MotoFindrUserAPI.Application.Interfaces
 {
