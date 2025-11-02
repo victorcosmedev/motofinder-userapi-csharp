@@ -38,13 +38,13 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         {
             try
             {
-                var motoqueiro = await _service.ObterPorIdAsync(id);
-                if(motoqueiro == null)
-                    return NotFound("Nenhum motoqueiro encontrado");
+                var result = await _service.ObterPorIdAsync(id);
+
+                if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
                 var hateoas = new HateoasResponse<MotoqueiroDto>
                 {
-                    Data = motoqueiro,
+                    Data = result.Value,
                     Links = new List<LinkDto>
                     {
                         new LinkDto
@@ -56,7 +56,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
                         new LinkDto
                         {
                             Rel = "GetByCpf",
-                            Href = Url.Action(nameof(ObterPorCpf), new { cpf = motoqueiro.Cpf }) ?? string.Empty,
+                            Href = Url.Action(nameof(ObterPorCpf), new { cpf = result.Value.Cpf }) ?? string.Empty,
                             Method = "GET"
                         },
                         new LinkDto
@@ -104,14 +104,13 @@ namespace MotoFindrUserAPI.Presentation.Controllers
                 if (string.IsNullOrWhiteSpace(cpf))
                     return BadRequest("CPF não informado");
 
-                var motoqueiro = await _service.ObterPorCpfAsync(cpf);
+                var result = await _service.ObterPorCpfAsync(cpf);
 
-                if(motoqueiro == null)
-                    return NotFound("Nenhum motoqueiro encontrado");
+                if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
                 var hateoas = new HateoasResponse<MotoqueiroDto>
                 {
-                    Data = motoqueiro,
+                    Data = result.Value,
                     Links = new List<LinkDto>
                     {
                         new LinkDto
@@ -123,19 +122,19 @@ namespace MotoFindrUserAPI.Presentation.Controllers
                         new LinkDto
                         {
                             Rel = "ObterPorId",
-                            Href = Url.Action(nameof(ObterPorId), new { id = motoqueiro.Id }) ?? string.Empty,
+                            Href = Url.Action(nameof(ObterPorId), new { id = result.Value.Id }) ?? string.Empty,
                             Method = "GET"
                         },
                         new LinkDto
                         {
                             Rel = "update",
-                            Href = Url.Action(nameof(Atualizar), new { id = motoqueiro.Id }) ?? string.Empty,
+                            Href = Url.Action(nameof(Atualizar), new { id = result.Value.Id }) ?? string.Empty,
                             Method = "PUT"
                         },
                         new LinkDto
                         {
                             Rel = "delete",
-                            Href = Url.Action(nameof(Remover), new { id = motoqueiro.Id }) ?? string.Empty,
+                            Href = Url.Action(nameof(Remover), new { id = result.Value.Id }) ?? string.Empty,
                             Method = "DELETE"
                         },
                         new LinkDto
@@ -179,35 +178,37 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
             try
             {
-                var novoMotoqueiro = await _service.CriarAsync(motoqueiro);
+                var result = await _service.CriarAsync(motoqueiro);
+
+                if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
                 var hateoas = new HateoasResponse<MotoqueiroDto>
                 {
-                    Data = novoMotoqueiro,
+                    Data = result.Value,
                     Links = new List<LinkDto>
                     {
                         new LinkDto
                         {
                             Rel = "self",
-                            Href = Url.Action(nameof(ObterPorId), new { id = novoMotoqueiro.Id }) ?? string.Empty,
+                            Href = Url.Action(nameof(ObterPorId), new { id = result.Value.Id }) ?? string.Empty,
                             Method = "GET"
                         },
                         new LinkDto
                         {
                             Rel = "GetByCpf",
-                            Href = Url.Action(nameof(ObterPorCpf), new { id = novoMotoqueiro.Cpf }) ?? string.Empty,
+                            Href = Url.Action(nameof(ObterPorCpf), new { id = result.Value.Cpf }) ?? string.Empty,
                             Method = "GET"
                         },
                         new LinkDto
                         {
                             Rel = "update",
-                            Href = Url.Action(nameof(Atualizar), new { id = novoMotoqueiro.Id }) ?? string.Empty,
+                            Href = Url.Action(nameof(Atualizar), new { id = result.Value.Id }) ?? string.Empty,
                             Method = "PUT"
                         },
                         new LinkDto
                         {
                             Rel = "delete",
-                            Href = Url.Action(nameof(Remover), new { id = novoMotoqueiro.Id }) ?? string.Empty,
+                            Href = Url.Action(nameof(Remover), new { id = result.Value.Id }) ?? string.Empty,
                             Method = "DELETE"
                         },
                         new LinkDto
@@ -219,7 +220,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
                     }
                 };
 
-                return CreatedAtAction(nameof(ObterPorId), new { id = novoMotoqueiro.Id }, hateoas);
+                return CreatedAtAction(nameof(ObterPorId), new { id = result.Value.Id }, hateoas);
             }
             catch (Exception ex)
             {
@@ -254,14 +255,13 @@ namespace MotoFindrUserAPI.Presentation.Controllers
                 if (id != motoqueiro.Id)
                     return BadRequest("ID da URL não corresponde ao ID do motoqueiro");
 
-                var sucesso = await _service.AtualizarAsync(id, motoqueiro);
+                var result = await _service.AtualizarAsync(id, motoqueiro);
 
-                if(!sucesso)
-                    return NotFound("Motoqueiro não encontrado");
+                if(!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
                 var hateoas = new HateoasResponse<MotoqueiroDto>
                 {
-                    Data = motoqueiro,
+                    Data = result.Value,
                     Links = new List<LinkDto>
                     {
                         new LinkDto
@@ -297,7 +297,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
                     }
                 };
 
-                return sucesso ? NoContent() : NotFound("Motoqueiro não encontrado");
+                return result.IsSuccess ? NoContent() : NotFound("Motoqueiro não encontrado");
             }
             catch (Exception ex)
             {
@@ -318,9 +318,9 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         {
             try
             {
-                var sucesso = await _service.RemoverAsync(id);
-                if(!sucesso)
-                    return NotFound("Motoqueiro não encontrado");
+                var result = await _service.RemoverAsync(id);
+
+                if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
                 var hateoas = new HateoasResponse<object>
                 {
@@ -355,11 +355,12 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         {
             try
             {
-                var pageResult = await _service.ObterTodos(pageNumber, pageSize);
-                if (pageResult.Items == null && !pageResult.Items.Any())
-                    return NotFound("Nenhum motoqueiro encontrado");
+                var result = await _service.ObterTodos(pageNumber, pageSize);
 
-                var pageResults = BuildPageResultsForBuscarTodos(pageResult);
+                if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+
+                var pageResults = BuildPageResultsForBuscarTodos(result.Value);
 
                 var response = new HateoasResponse<PageResultModel<IEnumerable<HateoasResponse<MotoqueiroDto>>>>
                 {
@@ -379,8 +380,10 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             }
         }
         #region Helpers
-        private PageResultModel<IEnumerable<HateoasResponse<MotoqueiroDto>>> BuildPageResultsForBuscarTodos(PageResultModel<IEnumerable<MotoqueiroDto>> pageResult)
+        private PageResultModel<IEnumerable<HateoasResponse<MotoqueiroDto>>>? BuildPageResultsForBuscarTodos(PageResultModel<IEnumerable<MotoqueiroDto?>> pageResult)
         {
+            if (pageResult == null) return null;
+
             var pageResults = new PageResultModel<IEnumerable<HateoasResponse<MotoqueiroDto>>>
             {
                 Items = pageResult.Items.Select(motoqueiro => new HateoasResponse<MotoqueiroDto>
