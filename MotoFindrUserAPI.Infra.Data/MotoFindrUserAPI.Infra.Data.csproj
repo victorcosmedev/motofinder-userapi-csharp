@@ -15,4 +15,8 @@
     <PackageReference Include="Oracle.EntityFrameworkCore" Version="8.23.80" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MotoFindrUserAPI.Domain\MotoFindrUserAPI.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
