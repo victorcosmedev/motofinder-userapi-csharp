@@ -78,7 +78,6 @@ namespace MotoFindrUserAPI.Infra.Data.Repositories
             if (moto == null)
                 throw new Exception($"Moto de id {id} não existe.");
 
-            // Dissociando motoqueiro da moto que será excluída
             var motoqueiro = _context.Motoqueiro.Find(moto.MotoqueiroId);
             if(motoqueiro != null)
             {
