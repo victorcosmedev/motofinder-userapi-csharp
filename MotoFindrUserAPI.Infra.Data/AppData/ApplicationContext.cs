@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MotoFindrUserAPI.Domain.Entities;
 
 namespace MotoFindrUserAPI.Infra.Data.AppData
 {
