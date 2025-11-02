@@ -1,12 +1,7 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using MotoFindrUserAPI.Application.DTOs;
+﻿using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Domain.Entities;
 using MotoFindrUserAPI.Domain.Interfaces;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using static BCrypt.Net.BCrypt;
 
 namespace MotoFindrUserAPI.Application.Services
 {

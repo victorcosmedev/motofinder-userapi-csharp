@@ -3,7 +3,7 @@ using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Domain.Entities;
 using MotoFindrUserAPI.Domain.Interfaces;
-using MotoFindrUserAPI.Models.PageResultModel;
+using MotoFindrUserAPI.Domain.Models.PageResultModel;
 
 namespace MotoFindrUserAPI.Application.Services
 {
