@@ -1,5 +1,4 @@
 ﻿using MotoFindrUserAPI.Domain.Entities;
-using MotoFindrUserAPI.Models.PageResultModel;
 
 namespace MotoFindrUserAPI.Domain.Interfaces
 {
