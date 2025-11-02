@@ -5,10 +5,10 @@ using MotoFindrUserAPI.Domain.Interfaces;
 
 namespace MotoFindrUserAPI.Application.Services
 {
-    public class AuthApplicationService : IAuthApplicationService
+    public class UserApplicationService : IUserApplicationService
     {
         private readonly IUserRepository _authRepository;
-        public AuthApplicationService(IUserRepository authRepository)
+        public UserApplicationService(IUserRepository authRepository)
         {
             _authRepository = authRepository;
         }

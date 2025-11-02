@@ -2,7 +2,7 @@
 
 namespace MotoFindrUserAPI.Application.Interfaces
 {
-    public interface IAuthApplicationService
+    public interface IUserApplicationService
     {
         Task RegisterAsync(UserRegisterDto registerDto);
 

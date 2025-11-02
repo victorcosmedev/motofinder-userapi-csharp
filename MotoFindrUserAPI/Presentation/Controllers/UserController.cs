@@ -6,10 +6,10 @@ namespace MotoFindrUserAPI.Presentation.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController : ControllerBase
+public class UserController : ControllerBase
 {
-    private readonly IAuthApplicationService _authService;
-    public AuthController(IAuthApplicationService authService)
+    private readonly IUserApplicationService _authService;
+    public UserController(IUserApplicationService authService)
     {
         _authService = authService;
     }
