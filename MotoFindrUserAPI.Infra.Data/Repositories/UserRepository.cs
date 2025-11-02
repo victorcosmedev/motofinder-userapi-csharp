@@ -31,17 +31,17 @@ namespace MotoFindrUserAPI.Infra.Data.Repositories
             return user;
         }
 
-        public async Task<UserEntity> CreateUserAsync(UserEntity user, string password)
+        public async Task<UserEntity> CreateUserAsync(UserEntity user)
         {
             await _context.User.AddAsync(user);
             await _context.SaveChangesAsync();
             return user;
         }
 
-        public Task<bool> ExistsByUsernameOrEmailAsync(string username, string email)
+        public Task<bool> ExistsByUsernameOrEmailAsync(string username)
         {
             return _context.User
-                .AnyAsync(u => u.Username == username || u.Email == email);
+                .AnyAsync(u => u.Username == username);
         }
 
         public Task<UserEntity?> GetUserByUsernameAsync(string username)

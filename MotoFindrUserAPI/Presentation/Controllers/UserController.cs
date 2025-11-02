@@ -24,7 +24,7 @@ public class UserController : ControllerBase
 
     [HttpPost("register")]
     [AllowAnonymous]
-    public async Task<IActionResult> Register([FromBody] UserRegisterDto request)
+    public async Task<IActionResult> Register([FromBody] UserDto request)
     {
         try
         {

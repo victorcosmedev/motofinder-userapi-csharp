@@ -5,7 +5,7 @@ namespace MotoFindrUserAPI.Domain.Interfaces
     public interface IUserRepository
     {
         Task<UserEntity?> AuthenticateAsync(string username, string password);
-        Task<UserEntity> CreateUserAsync(UserEntity user, string password);
-        Task<bool> ExistsByUsernameOrEmailAsync(string username, string email);
+        Task<UserEntity> CreateUserAsync(UserEntity user);
+        Task<bool> ExistsByUsernameOrEmailAsync(string username);
     }
 }

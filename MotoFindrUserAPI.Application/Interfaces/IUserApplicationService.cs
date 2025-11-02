@@ -6,6 +6,6 @@ namespace MotoFindrUserAPI.Application.Interfaces
     public interface IUserApplicationService
     {
         Task<OperationResult<UserEntity?>> AuthenticateAsync(UserDto userDto);
-        Task RegisterAsync(UserRegisterDto registerDto);
+        Task RegisterAsync(UserDto registerDto);
     }
 }
