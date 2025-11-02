@@ -13,6 +13,7 @@ public class Bootstrap
 {
     public static void AddIoC(IServiceCollection services, IConfiguration configuration)
     {
+        //var connectionString = "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle.fiap.com.br)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SID=ORCL)));User Id=rm558856;Password=fiap2025;";
         services.AddDbContext<ApplicationContext>(options => {
             options.UseOracle(configuration.GetConnectionString("Oracle"));
         });
@@ -26,8 +27,8 @@ public class Bootstrap
         services.AddTransient<IEnderecoApplicationService, EnderecoApplicationService>();
         services.AddTransient<IEnderecoRepository, EnderecoRepository>();
         
-        services.AddTransient<IAuthApplicationService, AuthApplicationService>();
-        services.AddTransient<IAuthRepository, AuthRepository>();
+        services.AddTransient<IUserApplicationService, UserApplicationService>();
+        services.AddTransient<IUserRepository, UserRepository>();
     }
 
 }

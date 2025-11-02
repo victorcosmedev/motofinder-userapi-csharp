@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MotoFindrUserAPI.Application\MotoFindrUserAPI.Application.csproj" />
+    <ProjectReference Include="..\MotoFindrUserAPI.IoC\MotoFindrUserAPI.IoC.csproj" />
   </ItemGroup>
 
 </Project>

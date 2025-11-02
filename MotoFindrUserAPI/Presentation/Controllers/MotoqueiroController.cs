@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
@@ -11,6 +12,7 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace MotoFindrUserAPI.Presentation.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("/api/[controller]")]
     public class MotoqueiroController : ControllerBase

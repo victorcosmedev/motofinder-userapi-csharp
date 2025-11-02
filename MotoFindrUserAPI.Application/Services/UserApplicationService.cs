@@ -5,16 +5,26 @@ using MotoFindrUserAPI.Domain.Interfaces;
 
 namespace MotoFindrUserAPI.Application.Services
 {
-    public class AuthApplicationService : IAuthApplicationService
+    public class UserApplicationService : IUserApplicationService
     {
-        private readonly IAuthRepository _authRepository;
-        public AuthApplicationService(IAuthRepository authRepository)
+        private readonly IUserRepository _authRepository;
+        public UserApplicationService(IUserRepository authRepository)
         {
             _authRepository = authRepository;
         }
-        public async Task<string?> LoginAsync(UserLoginDto loginDto)
+
+        public async Task<OperationResult<UserEntity?>> AuthenticateAsync(UserDto userDto)
         {
-            return await _authRepository.AuthenticateAsync(loginDto.Username, loginDto.Password);
+            try
+            {
+                var userAuth = await _authRepository.AuthenticateAsync(userDto.Username, userDto.Password);
+
+                return OperationResult<UserEntity?>.Success(userAuth);
+            }
+            catch (Exception)
+            {
+                return OperationResult<UserEntity?>.Failure("Ocorreu um erro ao buscar o cliente");
+            }
         }
 
         public async Task RegisterAsync(UserRegisterDto registerDto)
@@ -25,13 +35,11 @@ namespace MotoFindrUserAPI.Application.Services
                 throw new InvalidOperationException("Usuário ou email já existe.");
             }
 
-            string passwordHash = HashPassword(registerDto.Password);
-
             var user = new UserEntity 
             { 
                 Username = registerDto.Username, 
                 Email = registerDto.Email, 
-                PasswordHash = passwordHash 
+                PasswordHash = registerDto.Password 
             };
 
             await _authRepository.CreateUserAsync(user, registerDto.Password);
