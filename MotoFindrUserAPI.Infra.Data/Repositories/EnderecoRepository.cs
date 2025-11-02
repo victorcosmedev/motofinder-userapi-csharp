@@ -4,7 +4,7 @@ using MotoFindrUserAPI.Domain.Interfaces;
 using MotoFindrUserAPI.Infrastructure.Data.AppData;
 using MotoFindrUserAPI.Models.PageResultModel;
 
-namespace MotoFindrUserAPI.Infrastructure.Data.Repositories
+namespace MotoFindrUserAPI.Infra.Data.Repositories
 {
     public class EnderecoRepository : IEnderecoRepository
     {

@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using static BCrypt.Net.BCrypt;
 
-namespace MotoFindrUserAPI.Infrastructure.Data.Repositories
+namespace MotoFindrUserAPI.Infra.Data.Repositories
 {
     public class AuthRepository : IAuthRepository
     {
