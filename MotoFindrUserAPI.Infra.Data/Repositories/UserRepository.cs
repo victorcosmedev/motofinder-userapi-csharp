@@ -8,12 +8,12 @@ using System.Text;
 
 namespace MotoFindrUserAPI.Infra.Data.Repositories
 {
-    public class AuthRepository : IUserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly ApplicationContext _context;
         private readonly IConfiguration _configuration;
 
-        public AuthRepository(ApplicationContext context)
+        public UserRepository(ApplicationContext context)
         {
             _context = context;
         }
