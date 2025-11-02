@@ -1,47 +1,64 @@
-﻿using MotoFindrUserAPI.Application.DTOs;
+﻿using AutoMapper;
+using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Domain.Entities;
 using MotoFindrUserAPI.Domain.Interfaces;
+using System.Net;
+using System.Net.Http.Headers;
 
 namespace MotoFindrUserAPI.Application.Services
 {
     public class UserApplicationService : IUserApplicationService
     {
         private readonly IUserRepository _authRepository;
-        public UserApplicationService(IUserRepository authRepository)
+        private readonly IMapper _mapper;
+        public UserApplicationService(IUserRepository authRepository, IMapper mapper)
         {
             _authRepository = authRepository;
+            _mapper = mapper;
         }
 
-        public async Task<OperationResult<UserEntity?>> AuthenticateAsync(UserDto userDto)
+        public async Task<OperationResult<UserDto?>> AuthenticateAsync(UserDto userDto)
         {
             try
             {
                 var userAuth = await _authRepository.AuthenticateAsync(userDto.Username, userDto.Password);
+                var dto = _mapper.Map<UserDto?>(userAuth);
 
-                return OperationResult<UserEntity?>.Success(userAuth);
+                return OperationResult<UserDto?>.Success(dto);
             }
             catch (Exception)
             {
-                return OperationResult<UserEntity?>.Failure("Ocorreu um erro ao buscar o cliente");
+                return OperationResult<UserDto?>.Failure("Ocorreu um erro ao buscar o cliente");
             }
         }
 
-        public async Task RegisterAsync(UserDto registerDto)
+        public async Task<OperationResult<UserDto?>> RegisterAsync(UserDto registerDto)
         {
-            var userExists = await _authRepository.ExistsByUsernameOrEmailAsync(registerDto.Username);
-            if (userExists)
+            try
             {
-                throw new InvalidOperationException("Usuário ou email já existe.");
+                var userExists = await _authRepository.ExistsByUsernameOrEmailAsync(registerDto.Username);
+                if (userExists)
+                {
+                    throw new InvalidOperationException("Usuário ou email já existe.");
+                }
+
+                var user = new UserEntity
+                {
+                    Username = registerDto.Username,
+                    PasswordHash = registerDto.Password
+                };
+
+                var entity = _authRepository.CreateUserAsync(user);
+                var dto = _mapper.Map<UserDto?>(entity);
+
+                return OperationResult<UserDto?>.Success(dto);
+            }
+            catch(Exception ex)
+            {
+                return OperationResult<UserDto?>.Failure(ex.Message, (int)HttpStatusCode.InternalServerError);
             }
 
-            var user = new UserEntity 
-            { 
-                Username = registerDto.Username, 
-                PasswordHash = registerDto.Password 
-            };
-
-            await _authRepository.CreateUserAsync(user);
         }
     }
 }
