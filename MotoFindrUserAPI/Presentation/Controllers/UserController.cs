@@ -22,7 +22,7 @@ public class UserController : ControllerBase
         _configuration = configuration;
     }
 
-    [HttpPost]
+    [HttpPost("register")]
     [AllowAnonymous]
     public async Task<IActionResult> Register([FromBody] UserRegisterDto request)
     {
@@ -43,7 +43,7 @@ public class UserController : ControllerBase
         }
     }
 
-    [HttpPost]
+    [HttpPost("login")]
     [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] UserDto request)
     {

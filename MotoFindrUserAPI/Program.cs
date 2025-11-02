@@ -51,7 +51,7 @@ builder.Services.AddSwaggerGen(conf => {
 
 builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
 
-var key = Encoding.ASCII.GetBytes(builder.Configuration["Jtw:Key"]!.ToString());
+var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]!.ToString());
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
