@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.Extensions.Hosting;
 using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
-using MotoFindrUserAPI.Domain.Entities;
-using MotoFindrUserAPI.Models.Hateoas;
-using MotoFindrUserAPI.Models.PageResultModel;
+using MotoFindrUserAPI.Domain.Models.Hateoas;
+using MotoFindrUserAPI.Domain.Models.PageResultModel;
 using MotoFindrUserAPI.Utils.Doc;
 using MotoFindrUserAPI.Utils.Samples.Motoqueiro;
 using Swashbuckle.AspNetCore.Annotations;
