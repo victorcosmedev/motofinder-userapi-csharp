@@ -2,9 +2,8 @@
 using Microsoft.AspNetCore.RateLimiting;
 using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
-using MotoFindrUserAPI.Domain.Entities;
-using MotoFindrUserAPI.Models.Hateoas;
-using MotoFindrUserAPI.Models.PageResultModel;
+using MotoFindrUserAPI.Domain.Models.Hateoas;
+using MotoFindrUserAPI.Domain.Models.PageResultModel;
 using MotoFindrUserAPI.Utils.Doc;
 using MotoFindrUserAPI.Utils.Samples.Moto;
 using MotoFindrUserAPI.Utils.Samples.Motoqueiro;

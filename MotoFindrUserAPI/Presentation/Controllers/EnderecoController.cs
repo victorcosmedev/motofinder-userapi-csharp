@@ -2,13 +2,12 @@
 using Microsoft.AspNetCore.RateLimiting;
 using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
-using MotoFindrUserAPI.Models.Hateoas;
-using MotoFindrUserAPI.Models.PageResultModel;
+using MotoFindrUserAPI.Domain.Models.Hateoas;
+using MotoFindrUserAPI.Domain.Models.PageResultModel;
 using MotoFindrUserAPI.Utils.Doc;
 using MotoFindrUserAPI.Utils.Samples.Endereco;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
-using System;
 
 namespace MotoFindrUserAPI.Presentation.Controllers
 {
