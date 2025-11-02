@@ -18,20 +18,17 @@ namespace MotoFindrUserAPI.Infra.Data.Repositories
             _context = context;
         }
 
-        public async Task<string?> AuthenticateAsync(string username, string password)
+        public async Task<UserEntity?> AuthenticateAsync(string username, string password)
         {
-            var user = await _context.User.FirstOrDefaultAsync(u => u.Username == username);
-            if(user == null)
+            var user = await _context.User
+                .FirstOrDefaultAsync(u => u.Username == username && u.PasswordHash == password);
+            
+            if(user is null)
             {
-                return null;
+                throw new Exception("Invalid username or password");
             }
 
-            if(!Verify(password, user.PasswordHash))
-            {
-                return null;
-            }
-
-            return GenerateJwt
+            return user;
         }
 
         public async Task<UserEntity> CreateUserAsync(UserEntity user, string password)
