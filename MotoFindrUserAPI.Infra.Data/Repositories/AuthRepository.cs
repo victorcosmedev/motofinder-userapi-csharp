@@ -1,12 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
 using MotoFindrUserAPI.Domain.Entities;
 using MotoFindrUserAPI.Domain.Interfaces;
-using MotoFindrUserAPI.Infrastructure.Data.AppData;
-using System.IdentityModel.Tokens.Jwt;
+using MotoFindrUserAPI.Infra.Data.AppData;
 using System.Security.Claims;
 using System.Text;
-using static BCrypt.Net.BCrypt;
 
 namespace MotoFindrUserAPI.Infra.Data.Repositories
 {

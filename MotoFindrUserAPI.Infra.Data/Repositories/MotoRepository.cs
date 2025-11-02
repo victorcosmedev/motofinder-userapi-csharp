@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MotoFindrUserAPI.Domain.Entities;
 using MotoFindrUserAPI.Domain.Interfaces;
+using MotoFindrUserAPI.Domain.Models.PageResultModel;
 using MotoFindrUserAPI.Infra.Data.AppData;
 
 namespace MotoFindrUserAPI.Infra.Data.Repositories
