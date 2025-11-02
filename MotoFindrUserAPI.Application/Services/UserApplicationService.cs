@@ -27,9 +27,9 @@ namespace MotoFindrUserAPI.Application.Services
             }
         }
 
-        public async Task RegisterAsync(UserRegisterDto registerDto)
+        public async Task RegisterAsync(UserDto registerDto)
         {
-            var userExists = await _authRepository.ExistsByUsernameOrEmailAsync(registerDto.Username, registerDto.Email);
+            var userExists = await _authRepository.ExistsByUsernameOrEmailAsync(registerDto.Username);
             if (userExists)
             {
                 throw new InvalidOperationException("Usuário ou email já existe.");
@@ -38,11 +38,10 @@ namespace MotoFindrUserAPI.Application.Services
             var user = new UserEntity 
             { 
                 Username = registerDto.Username, 
-                Email = registerDto.Email, 
                 PasswordHash = registerDto.Password 
             };
 
-            await _authRepository.CreateUserAsync(user, registerDto.Password);
+            await _authRepository.CreateUserAsync(user);
         }
     }
 }
