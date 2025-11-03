@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.Oracle" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MotoFindrUserAPI.Application\MotoFindrUserAPI.Application.csproj" />
     <ProjectReference Include="..\MotoFindrUserAPI.Domain\MotoFindrUserAPI.Domain.csproj" />
     <ProjectReference Include="..\MotoFindrUserAPI.Infra.Data\MotoFindrUserAPI.Infra.Data.csproj" />

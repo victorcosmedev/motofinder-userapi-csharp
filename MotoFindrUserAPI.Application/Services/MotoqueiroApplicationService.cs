@@ -4,6 +4,7 @@ using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Domain.Entities;
 using MotoFindrUserAPI.Domain.Interfaces;
 using MotoFindrUserAPI.Domain.Models.PageResultModel;
+using System.Net;
 
 namespace MotoFindrUserAPI.Application.Services
 {
@@ -20,19 +21,21 @@ namespace MotoFindrUserAPI.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<MotoqueiroDto?> ObterPorIdAsync(int id)
+        public async Task<OperationResult<MotoqueiroDto?>> ObterPorIdAsync(int id)
         {
             var entity = await _motoqueiroRepository.BuscarPorIdAsync(id);
-            return _mapper.Map<MotoqueiroDto>(entity);
+            var dtos = _mapper.Map<MotoqueiroDto>(entity);
+            return OperationResult<MotoqueiroDto?>.Success(dtos);
         }
 
-        public async Task<MotoqueiroDto?> ObterPorCpfAsync(string cpf)
+        public async Task<OperationResult<MotoqueiroDto?>> ObterPorCpfAsync(string cpf)
         {
             var entity = await _motoqueiroRepository.BuscarPorCpfAsync(cpf);
-            return _mapper.Map<MotoqueiroDto>(entity);
+            var dtos = _mapper.Map<MotoqueiroDto>(entity);
+            return OperationResult<MotoqueiroDto?>.Success(dtos);
         }
 
-        public async Task<MotoqueiroDto> CriarAsync(MotoqueiroDto motoqueiro)
+        public async Task<OperationResult<MotoqueiroDto?>> CriarAsync(MotoqueiroDto motoqueiro)
         {
             MotoEntity? moto = null;
             var entity = _mapper.Map<MotoqueiroEntity>(motoqueiro);
@@ -48,10 +51,10 @@ namespace MotoFindrUserAPI.Application.Services
             entity.Moto = moto;
 
             entity = await _motoqueiroRepository.SalvarAsync(entity);
-            return _mapper.Map<MotoqueiroDto>(entity);
+            return OperationResult<MotoqueiroDto?>.Success(_mapper.Map<MotoqueiroDto>(entity));
         }
 
-        public async Task<bool> AtualizarAsync(int id, MotoqueiroDto motoqueiro)
+        public async Task<OperationResult<MotoqueiroDto?>> AtualizarAsync(int id, MotoqueiroDto motoqueiro)
         {
             MotoEntity? moto = null;
             var entity = _mapper.Map<MotoqueiroEntity>(motoqueiro);
@@ -65,12 +68,26 @@ namespace MotoFindrUserAPI.Application.Services
 
             entity.Moto = moto;
             
-            return await _motoqueiroRepository.AtualizarAsync(id, entity);
+            var success = await _motoqueiroRepository.AtualizarAsync(id, entity);
+
+            if (success)
+            {
+                return OperationResult<MotoqueiroDto?>.Success(null);
+            }
+
+            return OperationResult<MotoqueiroDto?>.Failure("Falha ao atualizar o motoqueiro.");
         }
 
-        public async Task<bool> RemoverAsync(int id)
+        public async Task<OperationResult<MotoqueiroDto?>> RemoverAsync(int id)
         {
-            return await _motoqueiroRepository.DeletarAsync(id);
+            var success = await _motoqueiroRepository.DeletarAsync(id);
+
+            if (success)
+            {
+                return OperationResult<MotoqueiroDto?>.Success(null);
+            }
+
+            return OperationResult<MotoqueiroDto?>.Failure("Falha ao deletar o motoqueiro.");
         }
 
         private async Task<MotoEntity?> AtribuirEValidarMotoAsync(int motoId, MotoqueiroEntity motoqueiroEntity)
@@ -89,20 +106,31 @@ namespace MotoFindrUserAPI.Application.Services
             return moto;
         }
 
-        public async Task<PageResultModel<IEnumerable<MotoqueiroDto?>>> ObterTodos(int pageNumber = 1, int pageSize = 10)
+        public async Task<OperationResult<PageResultModel<IEnumerable<MotoqueiroDto?>>>> ObterTodos(int pageNumber = 1, int pageSize = 10)
         {
-            var pageResult = await _motoqueiroRepository.BuscarTodos(pageNumber, pageSize);
 
-            var dtos = pageResult.Items.Select(x => _mapper.Map<MotoqueiroDto>(x));
-
-            var pageResultDto = new PageResultModel<IEnumerable<MotoqueiroDto?>>
+            try
             {
-                Items = dtos,
-                TotalItens = pageResult.TotalItens,
-                NumeroPagina = pageResult.NumeroPagina,
-                TamanhoPagina = pageResult.TamanhoPagina
-            };
-            return pageResultDto;
+                var pageResult = await _motoqueiroRepository.BuscarTodos(pageNumber, pageSize);
+                if (!pageResult.Items.Any()) return OperationResult<PageResultModel<IEnumerable<MotoqueiroDto?>>>.Failure("Nenhum motoqueiro encontrado.", (int)HttpStatusCode.NotFound);
+
+                var dtos = pageResult.Items.Select(x => _mapper.Map<MotoqueiroDto>(x));
+
+                var pageResultDto = new PageResultModel<IEnumerable<MotoqueiroDto?>>
+                {
+                    Items = dtos,
+                    TotalItens = pageResult.TotalItens,
+                    NumeroPagina = pageResult.NumeroPagina,
+                    TamanhoPagina = pageResult.TamanhoPagina
+                };
+                
+                return OperationResult<PageResultModel<IEnumerable<MotoqueiroDto?>>>.Success(pageResultDto);
+            }
+            catch(Exception ex)
+            {
+                return OperationResult<PageResultModel<IEnumerable<MotoqueiroDto?>>>.Failure($"Erro ao obter motoqueiros: {ex.Message}");
+            }
+           
         }
     }
 

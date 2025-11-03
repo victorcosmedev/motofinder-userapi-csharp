@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotoFindrUserAPI.Infra.Data
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotoFindrUserAPI.IoC", "MotoFindrUserAPI.IoC\MotoFindrUserAPI.IoC.csproj", "{5A244E63-DA69-4166-8106-D0C0B1C318DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotoFindrUserAPI.Tests", "MotoFindrUserAPI.Tests\MotoFindrUserAPI.Tests.csproj", "{CDD8A1AA-F324-4A99-B777-611CBDF9F34B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{5A244E63-DA69-4166-8106-D0C0B1C318DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A244E63-DA69-4166-8106-D0C0B1C318DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A244E63-DA69-4166-8106-D0C0B1C318DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDD8A1AA-F324-4A99-B777-611CBDF9F34B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDD8A1AA-F324-4A99-B777-611CBDF9F34B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDD8A1AA-F324-4A99-B777-611CBDF9F34B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDD8A1AA-F324-4A99-B777-611CBDF9F34B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,6 +65,7 @@ Global
 		{8F9B335F-072A-4D9E-B6F9-A9626864EACE} = {31531664-76DC-48A5-8188-C11535DC0320}
 		{59F2ADE4-11B8-4EFC-ADDE-6E20D94A2C96} = {79C23DDF-3CA2-4BFE-82FE-44F5C4FFAD9F}
 		{5A244E63-DA69-4166-8106-D0C0B1C318DF} = {79C23DDF-3CA2-4BFE-82FE-44F5C4FFAD9F}
+		{CDD8A1AA-F324-4A99-B777-611CBDF9F34B} = {F7B00C8C-A26D-4763-B501-4AC4586D01BE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {93F59F5D-789B-4D47-A913-A01076581F83}

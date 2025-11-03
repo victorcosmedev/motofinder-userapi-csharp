@@ -131,6 +131,31 @@ namespace MotoFindrUserAPI.Infra.Data.Migrations
                     b.ToTable("tb_mf_motoqueiro");
                 });
 
+            modelBuilder.Entity("MotoFindrUserAPI.Domain.Entities.UserEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("NUMBER(10)");
+
+                    OraclePropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR2(2000)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("NVARCHAR2(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("tb_mf_user");
+                });
+
             modelBuilder.Entity("MotoFindrUserAPI.Domain.Entities.EnderecoEntity", b =>
                 {
                     b.HasOne("MotoFindrUserAPI.Domain.Entities.MotoqueiroEntity", "Motoqueiro")

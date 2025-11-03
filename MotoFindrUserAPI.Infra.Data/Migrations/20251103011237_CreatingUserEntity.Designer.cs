@@ -12,8 +12,8 @@ using Oracle.EntityFrameworkCore.Metadata;
 namespace MotoFindrUserAPI.Infra.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20250522002927_Corrigindo-Relacionamento")]
-    partial class CorrigindoRelacionamento
+    [Migration("20251103011237_CreatingUserEntity")]
+    partial class CreatingUserEntity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,49 @@ namespace MotoFindrUserAPI.Infra.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             OracleModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("MotoFindrUserAPI.Domain.Entities.EnderecoEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("NUMBER(10)");
+
+                    OraclePropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Cep")
+                        .HasMaxLength(8)
+                        .HasColumnType("NVARCHAR2(8)");
+
+                    b.Property<string>("Complemento")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR2(2000)");
+
+                    b.Property<string>("Logradouro")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR2(2000)");
+
+                    b.Property<int>("MotoqueiroId")
+                        .HasColumnType("NUMBER(10)");
+
+                    b.Property<string>("Municipio")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR2(2000)");
+
+                    b.Property<string>("Numero")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR2(2000)");
+
+                    b.Property<string>("Uf")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR2(2000)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MotoqueiroId")
+                        .IsUnique();
+
+                    b.ToTable("tb_mf_endereco");
+                });
 
             modelBuilder.Entity("MotoFindrUserAPI.Domain.Entities.MotoEntity", b =>
                 {
@@ -72,9 +115,8 @@ namespace MotoFindrUserAPI.Infra.Data.Migrations
                     b.Property<DateTime>("DataNascimento")
                         .HasColumnType("TIMESTAMP(7)");
 
-                    b.Property<string>("Endereco")
-                        .IsRequired()
-                        .HasColumnType("NVARCHAR2(2000)");
+                    b.Property<int?>("EnderecoId")
+                        .HasColumnType("NUMBER(10)");
 
                     b.Property<int?>("MotoId")
                         .HasColumnType("NUMBER(10)");
@@ -92,6 +134,42 @@ namespace MotoFindrUserAPI.Infra.Data.Migrations
                     b.ToTable("tb_mf_motoqueiro");
                 });
 
+            modelBuilder.Entity("MotoFindrUserAPI.Domain.Entities.UserEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("NUMBER(10)");
+
+                    OraclePropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR2(2000)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("NVARCHAR2(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("tb_mf_user");
+                });
+
+            modelBuilder.Entity("MotoFindrUserAPI.Domain.Entities.EnderecoEntity", b =>
+                {
+                    b.HasOne("MotoFindrUserAPI.Domain.Entities.MotoqueiroEntity", "Motoqueiro")
+                        .WithOne("Endereco")
+                        .HasForeignKey("MotoFindrUserAPI.Domain.Entities.EnderecoEntity", "MotoqueiroId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Motoqueiro");
+                });
+
             modelBuilder.Entity("MotoFindrUserAPI.Domain.Entities.MotoqueiroEntity", b =>
                 {
                     b.HasOne("MotoFindrUserAPI.Domain.Entities.MotoEntity", "Moto")
@@ -105,6 +183,11 @@ namespace MotoFindrUserAPI.Infra.Data.Migrations
             modelBuilder.Entity("MotoFindrUserAPI.Domain.Entities.MotoEntity", b =>
                 {
                     b.Navigation("Motoqueiro");
+                });
+
+            modelBuilder.Entity("MotoFindrUserAPI.Domain.Entities.MotoqueiroEntity", b =>
+                {
+                    b.Navigation("Endereco");
                 });
 #pragma warning restore 612, 618
         }

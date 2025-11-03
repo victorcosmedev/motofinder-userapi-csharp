@@ -6,7 +6,6 @@ using System.Xml.Linq;
 namespace MotoFindrUserAPI.Domain.Entities
 {
     [Table("tb_mf_user")]
-    [Index(nameof(Email), IsUnique = true)]
     [Index(nameof(Username), IsUnique = true)]
     public class UserEntity
     {
@@ -16,10 +15,6 @@ namespace MotoFindrUserAPI.Domain.Entities
         [StringLength(100)]
         public string Username { get; set; } = string.Empty;
         [Required]
-        [StringLength(100)]
-        public string Email { get; set; } = string.Empty;
-        [Required]
         public string PasswordHash { get; set; } = string.Empty;
-        public string Role { get; set; } = string.Empty;
     }
 }

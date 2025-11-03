@@ -27,6 +27,18 @@ namespace MotoFindrUserAPI.Application.Mappers
             .ReverseMap()
             .ForMember(dest => dest.Motoqueiro,
                 opt => opt.Ignore());
+
+            CreateMap<UserDto, UserEntity>()
+                    .ForMember(
+                        dest => dest.Id,
+                        opt => opt.Ignore()
+                    );
+
+            CreateMap<UserEntity, UserDto>()
+                .ForMember(
+                    dest => dest.Password,
+                    opt => opt.Ignore()
+                );
         }
     }
 }
