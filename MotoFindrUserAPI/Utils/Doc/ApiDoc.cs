@@ -61,5 +61,12 @@ namespace MotoFindrUserAPI.Utils.Doc
         public const string BuscarTodosEnderecosSummary = "Obter todos os endereços cadastrados";
         public const string BuscarTodosEnderecosDescription = "Buscar todos os endereços salvos no sistema.";
         #endregion
+        #region UserDoc
+        public const string RegisterUserSummary = "Registra um novo usuário";
+        public const string RegisterUserDescription = "Cria uma nova conta de usuário no sistema com nome de usuário e senha.";
+
+        public const string LoginUserSummary = "Autentica um usuário";
+        public const string LoginUserDescription = "Realiza o login do usuário, validando credenciais e retornando um token JWT."
+        #endregion
     }
 }
