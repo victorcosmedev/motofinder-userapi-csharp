@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Application.Services;
 using MotoFindrUserAPI.Domain.Interfaces;
 using MotoFindrUserAPI.Infra.Data.AppData;
+using MotoFindrUserAPI.Infra.Data.HealthCheck;
 using MotoFindrUserAPI.Infra.Data.Repositories;
 
 namespace MotoFindrUserAPI.IoC;
@@ -17,6 +19,10 @@ public class Bootstrap
         services.AddDbContext<ApplicationContext>(options => {
             options.UseOracle(configuration.GetConnectionString("Oracle"));
         });
+
+        services.AddHealthChecks()
+            .AddCheck("self", () => HealthCheckResult.Healthy(), tags: new[] { "live" })
+            .AddCheck<OracleHealthCheck>("mongo_query", tags: new[] { "ready" });
 
         services.AddTransient<IMotoRepository, MotoRepository>();
         services.AddTransient<IMotoApplicationService, MotoApplicationService>();
