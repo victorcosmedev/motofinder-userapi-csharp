@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using MotoFindrUserAPI.Application.DTOs;
@@ -14,7 +15,8 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("/api/v{version:apiVersion}/[controller]")]
     public class EnderecoController : ControllerBase
     {
         private readonly IEnderecoApplicationService _enderecoService;

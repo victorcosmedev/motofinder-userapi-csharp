@@ -22,7 +22,7 @@ public class Bootstrap
 
         services.AddHealthChecks()
             .AddCheck("self", () => HealthCheckResult.Healthy(), tags: new[] { "live" })
-            .AddCheck<OracleHealthCheck>("mongo_query", tags: new[] { "ready" });
+            .AddCheck<OracleHealthCheck>("oracle_query", tags: new[] { "ready" });
 
         services.AddTransient<IMotoRepository, MotoRepository>();
         services.AddTransient<IMotoApplicationService, MotoApplicationService>();
