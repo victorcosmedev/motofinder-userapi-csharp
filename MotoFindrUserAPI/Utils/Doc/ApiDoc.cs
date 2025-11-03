@@ -66,7 +66,7 @@ namespace MotoFindrUserAPI.Utils.Doc
         public const string RegisterUserDescription = "Cria uma nova conta de usuário no sistema com nome de usuário e senha.";
 
         public const string LoginUserSummary = "Autentica um usuário";
-        public const string LoginUserDescription = "Realiza o login do usuário, validando credenciais e retornando um token JWT."
+        public const string LoginUserDescription = "Realiza o login do usuário, validando credenciais e retornando um token JWT.";
         #endregion
     }
 }
