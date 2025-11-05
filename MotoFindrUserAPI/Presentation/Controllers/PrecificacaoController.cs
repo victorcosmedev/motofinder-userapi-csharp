@@ -1,11 +1,16 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
+using MotoFindrUserAPI.Utils.Doc;
+using MotoFindrUserAPI.Utils.Samples.Precificacao;
+using Swashbuckle.AspNetCore.Annotations;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace MotoFindrUserAPI.Presentation.Controllers
 {
@@ -40,6 +45,15 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         }
 
         [HttpPost("definir-preco")]
+        [EnableRateLimiting("rateLimitPolicy")]
+        [SwaggerOperation(
+            Summary = ApiDoc.DefinirPrecoSummary,
+            Description = ApiDoc.DefinirPrecoDescription
+        )]
+        [SwaggerResponse(StatusCodes.Status200OK, "Preço definido com sucesso", typeof(PrecificacaoMotoDto))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Moto não encontrada ou dados inválidos", typeof(MessageResponseDto))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "Não autorizado")]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(DefinirPrecoResponseSample))]
         public async Task<IActionResult> DefinirPreco(int motoId, double preco)
         {
             var result = await _service.DefinirPrecoMotoAsync(motoId, preco);
@@ -51,6 +65,16 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
 
         [HttpPost("treinar-modelo")]
+        [EnableRateLimiting("rateLimitPolicy")]
+        [SwaggerOperation(
+            Summary = ApiDoc.TreinarModeloSummary,
+            Description = ApiDoc.TreinarModeloDescription
+        )]
+        [SwaggerResponse(StatusCodes.Status200OK, "Modelo treinado com sucesso", typeof(MessageResponseDto))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Não há dados suficientes para treinar", typeof(MessageResponseDto))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "Não autorizado")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno durante o treinamento", typeof(MessageResponseDto))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TreinarModeloResponseSample))]
         public IActionResult TreinarModelo()
         {
             try
@@ -86,6 +110,15 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         }
 
         [HttpGet("prever")]
+        [AllowAnonymous]
+        [EnableRateLimiting("rateLimitPolicy")]
+        [SwaggerOperation(
+            Summary = ApiDoc.PreverPrecoSummary,
+            Description = ApiDoc.PreverPrecoDescription
+        )]
+        [SwaggerResponse(StatusCodes.Status200OK, "Previsão calculada com sucesso", typeof(PrevisaoPrecoDto))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Modelo ainda não foi treinado", typeof(MessageResponseDto))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(PreverPrecoResponseSample))]
         public IActionResult Prever(string modelo, int ano)
         {
             if (!System.IO.File.Exists(_caminhoModelo))
