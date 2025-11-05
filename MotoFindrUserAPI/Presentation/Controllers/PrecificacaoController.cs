@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.ML;
 using Microsoft.ML.Data;
+using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
 
 namespace MotoFindrUserAPI.Presentation.Controllers
@@ -99,7 +100,15 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             var engine = _mlContext.Model.CreatePredictionEngine<MotoTrainingData, MotoPricePrediction>(loadedModel);
             var prediction = engine.Predict(new MotoTrainingData { Modelo = modelo, Ano = (float)ano });
 
-            return Ok(new { Modelo = modelo, Ano = ano, PrecoEstimado = prediction.PrecoEstimado.ToString("C") });
+
+            var precificacao = new PrecificacaoTreinamentoDto
+            {
+                Modelo = modelo,
+                AnoDeFabricacao = ano,
+                Preco = prediction.PrecoEstimado
+            };
+
+            return Ok(precificacao);
         }
     }
 }

@@ -42,7 +42,7 @@ namespace MotoFindrUserAPI.Application.Mappers
 
             CreateMap<PrecificacaoMotoEntity, PrecificacaoMotoDto>().ReverseMap();
 
-            CreateMap<PrecificacaoMotoEntity, PrecificacaoDto>()
+            CreateMap<PrecificacaoMotoEntity, PrecificacaoTreinamentoDto>()
                 .ForMember(dest => dest.Modelo, opt => opt.MapFrom(src => src.Moto.Modelo))
                 .ForMember(dest => dest.AnoDeFabricacao, opt => opt.MapFrom(src => src.Moto.AnoDeFabricacao))
                 .ForMember(dest => dest.Preco, opt => opt.MapFrom(src => src.Preco));
