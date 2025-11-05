@@ -79,5 +79,13 @@ namespace MotoFindrUserAPI.Utils.Doc
         public const string PreverPrecoSummary = "Prevê o preço de uma moto";
         public const string PreverPrecoDescription = "Usa o modelo de ML treinado para estimar o preço de uma moto com base no modelo e ano de fabricação.";
         #endregion
+
+        #region HealthCheckDoc
+        public const string LiveCheckSummary = "Verifica se a API está online (Liveness)";
+        public const string LiveCheckDescription = "Verifica a saúde básica da aplicação (se está 'viva'). Retorna Healthy se a aplicação iniciou corretamente.";
+
+        public const string ReadyCheckSummary = "Verifica se a API está pronta para receber tráfego (Readiness)";
+        public const string ReadyCheckDescription = "Verifica a saúde das dependências externas (como o banco de dados Oracle). Retorna Healthy se a API e suas dependências estão prontas.";
+        #endregion
     }
 }
