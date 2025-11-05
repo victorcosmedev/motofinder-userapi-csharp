@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MotoFindrUserAPI.Domain.Entities;
+using MotoFindrUserAPI.Domain.Interfaces;
 using MotoFindrUserAPI.Infra.Data.AppData;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MotoFindrUserAPI.Infra.Data.Repositories
 {
-    public class PrecificacaoMotoRepository
+    public class PrecificacaoMotoRepository : IPrecificacaoMotoRepository
     {
         private readonly ApplicationContext _context;
 
