@@ -11,7 +11,7 @@ namespace MotoFindrUserAPI.Domain.Entities
         [Required]
         public int MotoId { get; set; }
         [Required]
-        [ForeignKey(nameof(MotoId)]
+        [ForeignKey(nameof(MotoId))]
         public MotoEntity Moto { get; set; }
         [Required]
         public double Preco { get; set; }
