@@ -68,5 +68,16 @@ namespace MotoFindrUserAPI.Utils.Doc
         public const string LoginUserSummary = "Autentica um usuário";
         public const string LoginUserDescription = "Realiza o login do usuário, validando credenciais e retornando um token JWT.";
         #endregion
+
+        #region PrecificacaoDoc
+        public const string DefinirPrecoSummary = "Define o preço de uma moto";
+        public const string DefinirPrecoDescription = "Registra ou atualiza o preço de uma moto existente para ser usado no treinamento do modelo de ML.";
+
+        public const string TreinarModeloSummary = "Inicia o treinamento do modelo de precificação";
+        public const string TreinarModeloDescription = "Usa todos os preços de motos definidos no banco para treinar o modelo de ML. Salva o modelo treinado em um arquivo .zip no servidor.";
+
+        public const string PreverPrecoSummary = "Prevê o preço de uma moto";
+        public const string PreverPrecoDescription = "Usa o modelo de ML treinado para estimar o preço de uma moto com base no modelo e ano de fabricação.";
+        #endregion
     }
 }

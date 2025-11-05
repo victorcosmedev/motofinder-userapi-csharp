@@ -12,6 +12,8 @@ namespace MotoFindrUserAPI.Infra.Data.AppData
         public DbSet<EnderecoEntity> Endereco { get; set; }
         public DbSet<UserEntity> User { get; set; }
 
+        public DbSet<PrecificacaoMotoEntity> PrecificacaoMotos { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MotoEntity>()
@@ -19,6 +21,12 @@ namespace MotoFindrUserAPI.Infra.Data.AppData
                 .WithOne(mq => mq.Moto)
                 .HasForeignKey<MotoEntity>(m => m.MotoqueiroId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<MotoEntity>()
+                .HasOne(m => m.PrecificacaoMoto)
+                .WithOne(pm => pm.Moto)
+                .HasForeignKey<PrecificacaoMotoEntity>(pm => pm.MotoId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<MotoqueiroEntity>()
                 .HasOne(mq => mq.Moto)
@@ -37,6 +45,10 @@ namespace MotoFindrUserAPI.Infra.Data.AppData
                 .WithOne(mq => mq.Endereco)
                 .HasForeignKey<EnderecoEntity>(e => e.MotoqueiroId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<PrecificacaoMotoEntity>()
+                .HasIndex(p => p.MotoId)
+                .IsUnique();
         }
 
     }
