@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MotoFindrUserAPI.Application.DTOs
 {
-    public class PrecificacaoTreinamentoDto
+    public class PrecificacaoDto
     {
         public string Modelo { get; set; } = string.Empty;
         public int AnoDeFabricacao { get; set; }

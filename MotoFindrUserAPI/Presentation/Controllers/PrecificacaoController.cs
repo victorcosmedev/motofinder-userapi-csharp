@@ -38,7 +38,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             public float PrecoEstimado { get; set; }
         }
 
-        [HttpPost]
+        [HttpPost("definir-preco")]
         public async Task<IActionResult> DefinirPreco(int motoId, double preco)
         {
             var result = await _service.DefinirPrecoMotoAsync(motoId, preco);
@@ -49,7 +49,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost("treinar-modelo")]
         public IActionResult TreinarModelo()
         {
             try
@@ -84,7 +84,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("prever")]
         public IActionResult Prever(string modelo, int ano)
         {
             if (!System.IO.File.Exists(_caminhoModelo))

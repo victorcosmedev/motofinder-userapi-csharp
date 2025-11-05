@@ -6,6 +6,6 @@ namespace MotoFindrUserAPI.Application.Interfaces
     public interface IPrecificacaoMotoApplicationService
     {
         Task<OperationResult<PrecificacaoMotoDto>> DefinirPrecoMotoAsync(int motoId, double preco);
-        IEnumerable<PrecificacaoTreinamentoDto> ObterDadosTreinamento();
+        IEnumerable<PrecificacaoDto> ObterDadosTreinamento();
     }
 }

@@ -37,11 +37,11 @@ namespace MotoFindrUserAPI.Application.Services
             return OperationResult<PrecificacaoMotoDto>.Success(dto);
         }
 
-        public IEnumerable<PrecificacaoTreinamentoDto> ObterDadosTreinamento()
+        public IEnumerable<PrecificacaoDto> ObterDadosTreinamento()
         {
             var entidades = _repository.ObterDadosParaTreinamento();
 
-            return _mapper.Map<IEnumerable<PrecificacaoTreinamentoDto>>(entidades);
+            return _mapper.Map<IEnumerable<PrecificacaoDto>>(entidades);
         }
     }
 }
