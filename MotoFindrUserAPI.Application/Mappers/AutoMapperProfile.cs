@@ -48,5 +48,4 @@ namespace MotoFindrUserAPI.Application.Mappers
                 .ForMember(dest => dest.Preco, opt => opt.MapFrom(src => src.Preco));
         }
     }
-    }
 }
