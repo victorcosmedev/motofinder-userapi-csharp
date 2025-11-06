@@ -36,8 +36,8 @@ public class Bootstrap
         services.AddTransient<IUserApplicationService, UserApplicationService>();
         services.AddTransient<IUserRepository, UserRepository>();
 
-        services.AddTransient<IPrecificacaoMotoApplicationService, PrecificacaoMotoApplicationService>();
-        services.AddTransient<IPrecificacaoMotoRepository, PrecificacaoMotoRepository>();
+        //services.AddTransient<IPrecificacaoMotoApplicationService, PrecificacaoMotoApplicationService>();
+        //services.AddTransient<IPrecificacaoMotoRepository, PrecificacaoMotoRepository>();
     }
 
 }

@@ -13,5 +13,7 @@ namespace MotoFindrUserAPI.Application.Interfaces
         Task<OperationResult<MotoDto?>> CriarAsync(MotoDto moto);
         Task<OperationResult<MotoDto?>> AtualizarAsync(int id, MotoDto moto);
         Task<OperationResult<MotoDto?>> RemoverAsync(int id);
+        Task<OperationResult<IEnumerable<MotoDto>>?> ObterDadosTreinamento();
+
     }
 }

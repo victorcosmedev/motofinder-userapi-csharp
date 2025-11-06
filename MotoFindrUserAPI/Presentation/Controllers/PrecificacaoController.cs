@@ -23,12 +23,12 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         private readonly MLContext _mlContext;
         private readonly string _caminhoModelo = 
             Path.Combine(Environment.CurrentDirectory, "Treinamento", "ModeloPrecificacao.zip");
-        private readonly IPrecificacaoMotoApplicationService _service;
+        private readonly IMotoApplicationService _motoService;
 
-        public PrecificacaoController(IPrecificacaoMotoApplicationService service)
+        public PrecificacaoController(IMotoApplicationService service)
         {
             _mlContext = new MLContext();
-            _service = service;
+            _motoService = service;
         }
 
         public class MotoTrainingData
@@ -44,25 +44,6 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             public float PrecoEstimado { get; set; }
         }
 
-        [HttpPost("definir-preco")]
-        [EnableRateLimiting("rateLimitPolicy")]
-        [SwaggerOperation(
-            Summary = ApiDoc.DefinirPrecoSummary,
-            Description = ApiDoc.DefinirPrecoDescription
-        )]
-        [SwaggerResponse(StatusCodes.Status200OK, "Preço definido com sucesso", typeof(PrecificacaoMotoDto))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "Moto não encontrada ou dados inválidos", typeof(MessageResponseDto))]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, "Não autorizado")]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(DefinirPrecoResponseSample))]
-        public async Task<IActionResult> DefinirPreco(int motoId, double preco)
-        {
-            var result = await _service.DefinirPrecoMotoAsync(motoId, preco);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-
-            return Ok(result.Value);
-        }
-
 
         [HttpPost("treinar-modelo")]
         [EnableRateLimiting("rateLimitPolicy")]
@@ -75,16 +56,18 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "Não autorizado")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno durante o treinamento", typeof(MessageResponseDto))]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TreinarModeloResponseSample))]
-        public IActionResult TreinarModelo()
+        public async Task<IActionResult> TreinarModelo()
         {
             try
             {
-                var dadosBrutos = _service.ObterDadosTreinamento();
+                var result = await _motoService.ObterDadosTreinamento();
 
-                if (!dadosBrutos.Any())
+                if(!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+                if (!result.Value.Any())
                     return BadRequest("Cadastre preços para algumas motos antes de treinar.");
 
-                var trainingData = dadosBrutos.Select(d => new MotoTrainingData
+                var trainingData = result.Value.Select(d => new MotoTrainingData
                 {
                     Modelo = d.Modelo,
                     Ano = (float)d.AnoDeFabricacao,
@@ -101,7 +84,7 @@ namespace MotoFindrUserAPI.Presentation.Controllers
                 var model = pipeline.Fit(dataView);
                 _mlContext.Model.Save(model, dataView.Schema, _caminhoModelo);
 
-                return Ok("Modelo treinado.");
+                return Ok("Modelo treinado com sucesso.");
             }
             catch (Exception ex)
             {
@@ -117,12 +100,12 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             Description = ApiDoc.PreverPrecoDescription
         )]
         [SwaggerResponse(StatusCodes.Status200OK, "Previsão calculada com sucesso", typeof(PrevisaoPrecoDto))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "Modelo ainda não foi treinado", typeof(MessageResponseDto))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Treine o modelo primeiro.", typeof(MessageResponseDto))]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(PreverPrecoResponseSample))]
         public IActionResult Prever(string modelo, int ano)
         {
             if (!System.IO.File.Exists(_caminhoModelo))
-                return BadRequest("Treine o modelo primeiro.");
+                return BadRequest(new MessageResponseDto { Message = "Treine o modelo primeiro." });
 
             ITransformer loadedModel;
             using (var stream = new FileStream(_caminhoModelo, FileMode.Open, FileAccess.Read, FileShare.Read))
@@ -134,14 +117,14 @@ namespace MotoFindrUserAPI.Presentation.Controllers
             var prediction = engine.Predict(new MotoTrainingData { Modelo = modelo, Ano = (float)ano });
 
 
-            var precificacao = new PrecificacaoTreinamentoDto
+            var resultado = new PrecificacaoTreinamentoDto
             {
                 Modelo = modelo,
                 AnoDeFabricacao = ano,
                 Preco = prediction.PrecoEstimado
             };
 
-            return Ok(precificacao);
+            return Ok(resultado);
         }
     }
 }
