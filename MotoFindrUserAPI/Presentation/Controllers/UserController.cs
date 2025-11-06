@@ -108,6 +108,17 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
+    [EnableRateLimiting("rateLimitPolicy")]
+    [SwaggerOperation(
+            Summary = ApiDoc.GetUserByUsernameSummary,
+            Description = ApiDoc.GetUserByUsernameDescription
+        )]
+    [SwaggerResponse(StatusCodes.Status200OK, "Usuário encontrado com sucesso", typeof(HateoasResponse<UserResponseDto>))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Nome de usuário não fornecido")]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized, "Não autorizado")]
+    [SwaggerResponse(StatusCodes.Status404NotFound, "Usuário não encontrado")]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(UserResponseSample))]
     public async Task<IActionResult> GetByUserName([FromQuery] string username)
     {
         if (username is null) return StatusCode((int)HttpStatusCode.BadRequest, "Username nulo");
@@ -132,6 +143,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("buscar-todos")]
+    [Authorize]
     [SwaggerOperation(
         Summary = ApiDoc.BuscarTodosUsuariosSummary,
         Description = ApiDoc.BuscarTodosUsuariosDescription

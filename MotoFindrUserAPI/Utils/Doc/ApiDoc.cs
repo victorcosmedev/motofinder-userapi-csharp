@@ -70,6 +70,9 @@ namespace MotoFindrUserAPI.Utils.Doc
 
         public const string BuscarTodosUsuariosSummary = "Lista todos os usuários";
         public const string BuscarTodosUsuariosDescription = "Retorna uma lista paginada de todos os usuários cadastrados no sistema.";
+
+        public const string GetUserByUsernameSummary = "Busca um usuário pelo nome de usuário";
+        public const string GetUserByUsernameDescription = "Retorna os detalhes de um usuário específico com base no seu username.";
         #endregion
 
         #region PrecificacaoDoc
