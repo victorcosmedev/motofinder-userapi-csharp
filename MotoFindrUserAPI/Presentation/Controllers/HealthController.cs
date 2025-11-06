@@ -2,6 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using MotoFindrUserAPI.Application.DTOs;
+using MotoFindrUserAPI.Utils.Doc;
+using MotoFindrUserAPI.Utils.Samples.Health;
+using Swashbuckle.AspNetCore.Annotations;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace MotoFindrUserAPI.Presentation.Controllers
 {
@@ -19,6 +24,13 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         }
 
         [HttpGet("live")]
+        [SwaggerOperation(
+            Summary = ApiDoc.LiveCheckSummary,
+            Description = ApiDoc.LiveCheckDescription
+        )]
+        [SwaggerResponse(StatusCodes.Status200OK, "API está online", typeof(HealthCheckResponseDto))]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, "API não está saudável", typeof(HealthCheckResponseDto))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(HealthCheckLiveSample))]
         public async Task<IActionResult> Live(CancellationToken ct)
         {
             var report = await _healthCheckService.CheckHealthAsync(
@@ -44,6 +56,13 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
 
         [HttpGet("ready")]
+        [SwaggerOperation(
+            Summary = ApiDoc.ReadyCheckSummary,
+            Description = ApiDoc.ReadyCheckDescription
+        )]
+        [SwaggerResponse(StatusCodes.Status200OK, "API e dependências estão prontas", typeof(HealthCheckResponseDto))]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, "API ou dependências não estão prontas", typeof(HealthCheckResponseDto))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(HealthCheckReadySample))]
         public async Task<IActionResult> Ready(CancellationToken ct)
         {
             var report = await _healthCheckService.CheckHealthAsync(r => r.Tags.Contains("ready"), ct);

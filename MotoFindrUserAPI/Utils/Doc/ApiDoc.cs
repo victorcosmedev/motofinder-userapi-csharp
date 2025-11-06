@@ -67,6 +67,31 @@ namespace MotoFindrUserAPI.Utils.Doc
 
         public const string LoginUserSummary = "Autentica um usuário";
         public const string LoginUserDescription = "Realiza o login do usuário, validando credenciais e retornando um token JWT.";
+
+        public const string BuscarTodosUsuariosSummary = "Lista todos os usuários";
+        public const string BuscarTodosUsuariosDescription = "Retorna uma lista paginada de todos os usuários cadastrados no sistema.";
+
+        public const string GetUserByUsernameSummary = "Busca um usuário pelo nome de usuário";
+        public const string GetUserByUsernameDescription = "Retorna os detalhes de um usuário específico com base no seu username.";
+        #endregion
+
+        #region PrecificacaoDoc
+        public const string DefinirPrecoSummary = "Define o preço de uma moto";
+        public const string DefinirPrecoDescription = "Registra ou atualiza o preço de uma moto existente para ser usado no treinamento do modelo de ML.";
+
+        public const string TreinarModeloSummary = "Inicia o treinamento do modelo de precificação";
+        public const string TreinarModeloDescription = "Usa todos os preços de motos definidos no banco para treinar o modelo de ML. Salva o modelo treinado em um arquivo .zip no servidor.";
+
+        public const string PreverPrecoSummary = "Prevê o preço de uma moto";
+        public const string PreverPrecoDescription = "Usa o modelo de ML treinado para estimar o preço de uma moto com base no modelo e ano de fabricação.";
+        #endregion
+
+        #region HealthCheckDoc
+        public const string LiveCheckSummary = "Verifica se a API está online (Liveness)";
+        public const string LiveCheckDescription = "Verifica a saúde básica da aplicação (se está 'viva'). Retorna Healthy se a aplicação iniciou corretamente.";
+
+        public const string ReadyCheckSummary = "Verifica se a API está pronta para receber tráfego (Readiness)";
+        public const string ReadyCheckDescription = "Verifica a saúde das dependências externas (como o banco de dados Oracle). Retorna Healthy se a API e suas dependências estão prontas.";
         #endregion
     }
 }

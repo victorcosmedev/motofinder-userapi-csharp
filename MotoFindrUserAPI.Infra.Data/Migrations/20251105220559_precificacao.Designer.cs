@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MotoFindrUserAPI.Infra.Data.AppData;
 using Oracle.EntityFrameworkCore.Metadata;
@@ -11,9 +12,11 @@ using Oracle.EntityFrameworkCore.Metadata;
 namespace MotoFindrUserAPI.Infra.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20251105220559_precificacao")]
+    partial class precificacao
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,9 +95,6 @@ namespace MotoFindrUserAPI.Infra.Data.Migrations
                         .HasMaxLength(7)
                         .HasColumnType("NVARCHAR2(7)");
 
-                    b.Property<double>("Preco")
-                        .HasColumnType("BINARY_DOUBLE");
-
                     b.HasKey("Id");
 
                     b.ToTable("tb_mf_moto");
@@ -132,6 +132,28 @@ namespace MotoFindrUserAPI.Infra.Data.Migrations
                         .HasFilter("\"MotoId\" IS NOT NULL");
 
                     b.ToTable("tb_mf_motoqueiro");
+                });
+
+            modelBuilder.Entity("MotoFindrUserAPI.Domain.Entities.PrecificacaoMotoEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("NUMBER(10)");
+
+                    OraclePropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MotoId")
+                        .HasColumnType("NUMBER(10)");
+
+                    b.Property<double>("Preco")
+                        .HasColumnType("BINARY_DOUBLE");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MotoId")
+                        .IsUnique();
+
+                    b.ToTable("tb_mf_precificacao_moto");
                 });
 
             modelBuilder.Entity("MotoFindrUserAPI.Domain.Entities.UserEntity", b =>
@@ -180,9 +202,22 @@ namespace MotoFindrUserAPI.Infra.Data.Migrations
                     b.Navigation("Moto");
                 });
 
+            modelBuilder.Entity("MotoFindrUserAPI.Domain.Entities.PrecificacaoMotoEntity", b =>
+                {
+                    b.HasOne("MotoFindrUserAPI.Domain.Entities.MotoEntity", "Moto")
+                        .WithOne("PrecificacaoMoto")
+                        .HasForeignKey("MotoFindrUserAPI.Domain.Entities.PrecificacaoMotoEntity", "MotoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Moto");
+                });
+
             modelBuilder.Entity("MotoFindrUserAPI.Domain.Entities.MotoEntity", b =>
                 {
                     b.Navigation("Motoqueiro");
+
+                    b.Navigation("PrecificacaoMoto");
                 });
 
             modelBuilder.Entity("MotoFindrUserAPI.Domain.Entities.MotoqueiroEntity", b =>

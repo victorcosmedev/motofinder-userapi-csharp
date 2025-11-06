@@ -29,16 +29,13 @@ namespace MotoFindrUserAPI.Application.Mappers
                 opt => opt.Ignore());
 
             CreateMap<UserDto, UserEntity>()
-                    .ForMember(
-                        dest => dest.Id,
-                        opt => opt.Ignore()
-                    );
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password));
 
             CreateMap<UserEntity, UserDto>()
-                .ForMember(
-                    dest => dest.Password,
-                    opt => opt.Ignore()
-                );
+                .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.PasswordHash));
+
+            CreateMap<UserEntity, UserResponseDto>();
         }
     }
 }

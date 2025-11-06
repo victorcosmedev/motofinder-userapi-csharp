@@ -21,5 +21,8 @@ namespace MotoFindrUserAPI.Domain.Entities
         public int? MotoqueiroId { get; set; }
         [JsonIgnore]
         public MotoqueiroEntity? Motoqueiro { get; set; }
+        [Required]
+        [Range(0, double.MaxValue)]
+        public double Preco { get; set; }
     }
 }

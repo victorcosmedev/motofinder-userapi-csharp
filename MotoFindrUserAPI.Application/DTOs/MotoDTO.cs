@@ -16,5 +16,8 @@ namespace MotoFindrUserAPI.Application.DTOs
         [StringLength(7, MinimumLength = 7, ErrorMessage = "A placa deve ter 7 caracteres.")]
         public string Placa { get; set; } = string.Empty;
         public int? MotoqueiroId { get; set; }
+        [Required]
+        [Range(0, double.MaxValue, ErrorMessage = "O preço deve ser um valor positivo.")]
+        public double Preco { get; set; }
     }
 }
