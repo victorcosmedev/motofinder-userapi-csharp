@@ -29,23 +29,13 @@ namespace MotoFindrUserAPI.Application.Mappers
                 opt => opt.Ignore());
 
             CreateMap<UserDto, UserEntity>()
-                    .ForMember(
-                        dest => dest.Id,
-                        opt => opt.Ignore()
-                    );
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password));
 
             CreateMap<UserEntity, UserDto>()
-                .ForMember(
-                    dest => dest.Password,
-                    opt => opt.Ignore()
-                );
+                .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.PasswordHash));
 
-            CreateMap<PrecificacaoMotoEntity, PrecificacaoMotoDto>().ReverseMap();
-
-            CreateMap<PrecificacaoMotoEntity, PrecificacaoTreinamentoDto>()
-                .ForMember(dest => dest.Modelo, opt => opt.MapFrom(src => src.Moto.Modelo))
-                .ForMember(dest => dest.AnoDeFabricacao, opt => opt.MapFrom(src => src.Moto.AnoDeFabricacao))
-                .ForMember(dest => dest.Preco, opt => opt.MapFrom(src => src.Preco));
+            CreateMap<UserEntity, UserResponseDto>();
         }
     }
 }

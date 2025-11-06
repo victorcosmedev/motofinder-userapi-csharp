@@ -191,4 +191,18 @@ public class MotoApplicationService : IMotoApplicationService
             return OperationResult<PageResultModel<IEnumerable<MotoDto?>>>.Failure(ex.Message, (int)HttpStatusCode.InternalServerError);
         }
     }
+
+    public async Task<OperationResult<IEnumerable<MotoDto>>?> ObterDadosTreinamento()
+    {
+        try
+        {
+            var entities = await _motoRepository.ObterMotosComPrecoParaTreinamento();
+            var dtos = entities.Select(x => _mapper.Map<MotoDto>(x));
+            return OperationResult<IEnumerable<MotoDto>>.Success(dtos);
+        }
+        catch (Exception ex)
+        {
+            return OperationResult<IEnumerable<MotoDto>>.Failure(ex.Message, (int)HttpStatusCode.InternalServerError);
+        }
+    }
 }

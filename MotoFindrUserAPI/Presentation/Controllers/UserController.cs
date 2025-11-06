@@ -2,14 +2,18 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
 using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
+using MotoFindrUserAPI.Domain.Models.Hateoas;
+using MotoFindrUserAPI.Domain.Models.PageResultModel;
 using MotoFindrUserAPI.Utils.Doc;
 using MotoFindrUserAPI.Utils.Samples.User;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 
@@ -49,12 +53,12 @@ public class UserController : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
-            
+
             return BadRequest(ex.Message);
         }
         catch (Exception)
         {
-            
+
             return StatusCode(500, "Ocorreu um erro interno ao registrar o usuário.");
         }
     }
@@ -76,14 +80,14 @@ public class UserController : ControllerBase
     {
         var result = await _userService.AuthenticateAsync(request);
 
-        if(!result.IsSuccess)
+        if (!result.IsSuccess)
         {
             return StatusCode(result.StatusCode, result.Error);
         }
 
         var tokenHandler = new JwtSecurityTokenHandler();
 
-        var key = Encoding.ASCII.GetBytes(_configuration["Jtw:Key"]!.ToString());
+        var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]!.ToString());
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
@@ -101,5 +105,91 @@ public class UserController : ControllerBase
             User = result.Value.Username,
             Token = tokenHandler.WriteToken(token),
         });
+    }
+
+    [HttpGet]
+    [Authorize]
+    [EnableRateLimiting("rateLimitPolicy")]
+    [SwaggerOperation(
+            Summary = ApiDoc.GetUserByUsernameSummary,
+            Description = ApiDoc.GetUserByUsernameDescription
+        )]
+    [SwaggerResponse(StatusCodes.Status200OK, "Usuário encontrado com sucesso", typeof(HateoasResponse<UserResponseDto>))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Nome de usuário não fornecido")]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized, "Não autorizado")]
+    [SwaggerResponse(StatusCodes.Status404NotFound, "Usuário não encontrado")]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(UserResponseSample))]
+    public async Task<IActionResult> GetByUserName([FromQuery] string username)
+    {
+        if (username is null) return StatusCode((int)HttpStatusCode.BadRequest, "Username nulo");
+
+        var result = await _userService.GetUserByUsernameAsync(username);
+
+        if (!result.IsSuccess)
+        {
+            return StatusCode(result.StatusCode, result.Error);
+        }
+
+        var hateoas = new HateoasResponse<UserDto>
+        {
+            Data = result.Value,
+            Links = new List<LinkDto>
+            {
+                new LinkDto { Rel = "self", Href = Url.Action(nameof(GetByUserName), new { username }), Method = "GET" },
+            }
+        };
+
+        return Ok(hateoas);
+    }
+
+    [HttpGet("buscar-todos")]
+    [Authorize]
+    [SwaggerOperation(
+        Summary = ApiDoc.BuscarTodosUsuariosSummary,
+        Description = ApiDoc.BuscarTodosUsuariosDescription
+    )]
+    [SwaggerResponse(StatusCodes.Status200OK, "Lista de usuários obtida com sucesso")]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized, "Não autorizado")]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor")]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(UserResponseListSample))]
+    [EnableRateLimiting("rateLimitPolicy")]
+    public async Task<IActionResult> BuscarTodos(int pageNumber = 1, int pageSize = 10)
+    {
+        try
+        {
+            var result = await _userService.ObterTodos(pageNumber, pageSize);
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+            var pageResults = new PageResultModel<IEnumerable<HateoasResponse<UserResponseDto>>>
+            {
+                Items = result.Value.Items.Select(user => new HateoasResponse<UserResponseDto>
+                {
+                    Data = user,
+                    Links = new List<LinkDto>
+                {
+                    new LinkDto { Rel = "self", Href = Url.Action(nameof(BuscarTodos)), Method = "GET" }
+                }
+                }),
+                TotalItens = result.Value.TotalItens,
+                NumeroPagina = result.Value.NumeroPagina,
+                TamanhoPagina = result.Value.TamanhoPagina
+            };
+
+            var response = new HateoasResponse<PageResultModel<IEnumerable<HateoasResponse<UserResponseDto>>>>
+            {
+                Data = pageResults,
+                Links = new List<LinkDto>
+            {
+                new LinkDto { Rel = "self", Href = Url.Action(nameof(BuscarTodos), new { pageNumber, pageSize }), Method = "GET" },
+                new LinkDto { Rel = "create", Href = Url.Action(nameof(Register)), Method = "POST" }
+            }
+            };
+
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new MessageResponseDto { Message = ex.Message });
+        }
     }
 }
