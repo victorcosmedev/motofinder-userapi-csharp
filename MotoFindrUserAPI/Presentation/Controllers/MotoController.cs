@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.EntityFrameworkCore.Storage.Json;
 using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
-using MotoFindrUserAPI.Domain.Entities;
-using MotoFindrUserAPI.Models.Hateoas;
-using MotoFindrUserAPI.Models.PageResultModel;
+using MotoFindrUserAPI.Domain.Models.Hateoas;
+using MotoFindrUserAPI.Domain.Models.PageResultModel;
 using MotoFindrUserAPI.Utils.Doc;
 using MotoFindrUserAPI.Utils.Samples.Moto;
 using MotoFindrUserAPI.Utils.Samples.Motoqueiro;
@@ -13,8 +15,10 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace MotoFindrUserAPI.Presentation.Controllers
 {
+    [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("/api/v{version:apiVersion}/[controller]")]
     public class MotoController : ControllerBase
     {
         private readonly IMotoApplicationService _motoService;
@@ -38,18 +42,17 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         {
             try
             {
-                var moto = await _motoService.ObterPorIdAsync(id);
-                if (moto == null) 
-                    return NotFound("Moto não encontrada");
+                var result = await _motoService.ObterPorIdAsync(id);
+                if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
                 var hateoas = new HateoasResponse<MotoDto>
                 {
-                    Data = moto,
+                    Data = result.Value,
                     Links = new List<LinkDto>
                     {
                         new LinkDto { Rel = "self", Href = Url.Action(nameof(GetById), new { id }), Method = "GET" },
-                        new LinkDto { Rel = "GetByPlaca", Href = Url.Action(nameof(GetByPlaca), new { placa = moto.Placa }), Method = "GET" },
-                        new LinkDto { Rel = "GetByChassi", Href = Url.Action(nameof(GetByChassi), new { chassi = moto.Chassi }), Method = "GET" },
+                        new LinkDto { Rel = "GetByPlaca", Href = Url.Action(nameof(GetByPlaca), new { placa = result.Value.Placa }), Method = "GET" },
+                        new LinkDto { Rel = "GetByChassi", Href = Url.Action(nameof(GetByChassi), new { chassi = result.Value.Chassi }), Method = "GET" },
                         new LinkDto { Rel = "update", Href = Url.Action(nameof(Put), new { id }), Method = "PUT" },
                         new LinkDto { Rel = "delete", Href = Url.Action(nameof(Delete), new { id }), Method = "DELETE" },
                         new LinkDto { Rel = "all", Href = Url.Action(nameof(BuscarTodos)), Method = "GET" }
@@ -79,18 +82,19 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         {
             try
             {
-                var moto = await _motoService.ObterPorPlacaAsync(placa);
-                if (moto == null) return NotFound("Moto não encontrada");
+                var result = await _motoService.ObterPorPlacaAsync(placa);
+
+                if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
                 var hateoas = new HateoasResponse<MotoDto>
                 {
-                    Data = moto,
+                    Data = result.Value,
                     Links = new List<LinkDto>
                     {
                         new LinkDto { Rel = "self", Href = Url.Action(nameof(GetByPlaca), new { placa }), Method = "GET" },
-                        new LinkDto { Rel = "GetByChassi", Href = Url.Action(nameof(GetByChassi), new { chassi = moto.Chassi }), Method = "GET" },
-                        new LinkDto { Rel = "update", Href = Url.Action(nameof(Put), new { id = moto.Id }), Method = "PUT" },
-                        new LinkDto { Rel = "delete", Href = Url.Action(nameof(Delete), new { id = moto.Id }), Method = "DELETE" },
+                        new LinkDto { Rel = "GetByChassi", Href = Url.Action(nameof(GetByChassi), new { chassi = result.Value?.Chassi }), Method = "GET" },
+                        new LinkDto { Rel = "update", Href = Url.Action(nameof(Put), new { id = result.Value?.Id }), Method = "PUT" },
+                        new LinkDto { Rel = "delete", Href = Url.Action(nameof(Delete), new { id = result.Value?.Id }), Method = "DELETE" },
                         new LinkDto { Rel = "all", Href = Url.Action(nameof(BuscarTodos)), Method = "GET" }
                     }
                 };
@@ -117,18 +121,18 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         {
             try
             {
-                var moto = await _motoService.ObterPorChassiAsync(chassi);
-                if (moto == null) return NotFound("Moto não encontrada");
+                var result = await _motoService.ObterPorChassiAsync(chassi);
+                if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
                 var hateoas = new HateoasResponse<MotoDto>
                 {
-                    Data = moto,
+                    Data = result.Value,
                     Links = new List<LinkDto>
                     {
                         new LinkDto { Rel = "self", Href = Url.Action(nameof(GetByChassi), new { chassi }), Method = "GET" },
-                        new LinkDto { Rel = "GetByPlaca", Href = Url.Action(nameof(GetByPlaca), new { placa = moto.Placa }), Method = "GET" },
-                        new LinkDto { Rel = "update", Href = Url.Action(nameof(Put), new { id = moto.Id }), Method = "PUT" },
-                        new LinkDto { Rel = "delete", Href = Url.Action(nameof(Delete), new { id = moto.Id }), Method = "DELETE" },
+                        new LinkDto { Rel = "GetByPlaca", Href = Url.Action(nameof(GetByPlaca), new { placa = result.Value?.Placa }), Method = "GET" },
+                        new LinkDto { Rel = "update", Href = Url.Action(nameof(Put), new { id = result.Value?.Id }), Method = "PUT" },
+                        new LinkDto { Rel = "delete", Href = Url.Action(nameof(Delete), new { id = result.Value?.Id }), Method = "DELETE" },
                         new LinkDto { Rel = "all", Href = Url.Action(nameof(BuscarTodos)), Method = "GET" }
                     }
                 };
@@ -165,23 +169,24 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
             try
             {
-                var novaMoto = await _motoService.CriarAsync(moto);
+                var result = await _motoService.CriarAsync(moto);
+                if(!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
                 var hateoas = new HateoasResponse<MotoDto>
                 {
-                    Data = novaMoto,
+                    Data = result.Value,
                     Links = new List<LinkDto>
                     {
-                        new LinkDto { Rel = "self", Href = Url.Action(nameof(GetById), new { id = novaMoto.Id }), Method = "GET" },
-                        new LinkDto { Rel = "GetByPlaca", Href = Url.Action(nameof(GetByPlaca), new { placa = novaMoto.Placa }), Method = "GET" },
-                        new LinkDto { Rel = "GetByChassi", Href = Url.Action(nameof(GetByChassi), new { chassi = novaMoto.Chassi }), Method = "GET" },
-                        new LinkDto { Rel = "update", Href = Url.Action(nameof(Put), new { id = novaMoto.Id }), Method = "PUT" },
-                        new LinkDto { Rel = "delete", Href = Url.Action(nameof(Delete), new { id = novaMoto.Id }), Method = "DELETE" },
+                        new LinkDto { Rel = "self", Href = Url.Action(nameof(GetById), new { id = result.Value?.Id }), Method = "GET" },
+                        new LinkDto { Rel = "GetByPlaca", Href = Url.Action(nameof(GetByPlaca), new { placa = result.Value?.Placa }), Method = "GET" },
+                        new LinkDto { Rel = "GetByChassi", Href = Url.Action(nameof(GetByChassi), new { chassi = result.Value?.Chassi }), Method = "GET" },
+                        new LinkDto { Rel = "update", Href = Url.Action(nameof(Put), new { id = result.Value?.Id }), Method = "PUT" },
+                        new LinkDto { Rel = "delete", Href = Url.Action(nameof(Delete), new { id = result.Value?.Id }), Method = "DELETE" },
                         new LinkDto { Rel = "all", Href = Url.Action(nameof(BuscarTodos)), Method = "GET" }
                     }
                 };
 
-                return CreatedAtAction(nameof(GetById), new { id = novaMoto.Id }, hateoas);
+                return CreatedAtAction(nameof(GetById), new { id = result.Value?.Id }, hateoas);
             }
             catch (Exception ex)
             {
@@ -213,9 +218,8 @@ namespace MotoFindrUserAPI.Presentation.Controllers
 
             try
             {
-                var atualizado = await _motoService.AtualizarAsync(id, moto);
-                if(!atualizado)
-                    return BadRequest("IDs inconsistentes ou dados inválidos");
+                var result = await _motoService.AtualizarAsync(id, moto);
+                if(!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
                 var hateoas = new HateoasResponse<MotoDto>
                 {
@@ -252,9 +256,10 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         {
             try
             {
-                var removido = await _motoService.RemoverAsync(id);
-                if(!removido)
-                    return BadRequest("Moto não encontrada");
+                var result = await _motoService.RemoverAsync(id);
+
+
+                if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
                 var hateoas = new HateoasResponse<string>
                 {
@@ -288,11 +293,14 @@ namespace MotoFindrUserAPI.Presentation.Controllers
         {
             try
             {
-                var pageResult = await _motoService.ObterTodos(pageNumber, pageSize);
-                if(pageResult.Items == null || !pageResult.Items.Any())
+                var result = await _motoService.ObterTodos(pageNumber, pageSize);
+
+                if(!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+                if (result.Value?.Items == null || (!result.Value?.Items.Any() ?? false))
                     return NotFound("Moto não encontrada");
 
-                var pageResults = BuildPageResultsForBuscarTodos(pageResult);
+                var pageResults = BuildPageResultsForBuscarTodos(result.Value);
 
                 var response = new HateoasResponse<PageResultModel<IEnumerable<HateoasResponse<MotoDto>>>>
                 {
