@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using MotoFindrUserAPI.Domain.Entities;
 using MotoFindrUserAPI.Domain.Interfaces;
+using MotoFindrUserAPI.Domain.Models.PageResultModel;
 using MotoFindrUserAPI.Infra.Data.AppData;
 using System.Security.Claims;
 using System.Text;
@@ -38,15 +39,36 @@ namespace MotoFindrUserAPI.Infra.Data.Repositories
             return user;
         }
 
-        public Task<bool> ExistsByUsernameOrEmailAsync(string username)
+        public async Task<bool> ExistsByUsernameOrEmailAsync(string username)
         {
-            return _context.User
-                .AnyAsync(u => u.Username == username);
+            var count = await _context.User
+                .CountAsync(u => u.Username == username);
+
+            return count > 0;
         }
 
         public Task<UserEntity?> GetUserByUsernameAsync(string username)
         {
             return _context.User.FirstOrDefaultAsync(u => u.Username == username);
+        }
+
+        public async Task<PageResultModel<IEnumerable<UserEntity>>> BuscarTodos(int pageNumber, int pageSize)
+        {
+            var users = await _context.User
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .AsNoTracking() 
+                .ToListAsync();
+
+            var totalItems = await _context.User.CountAsync();
+
+            return new PageResultModel<IEnumerable<UserEntity>>
+            {
+                Items = users,
+                TotalItens = totalItems,
+                NumeroPagina = pageNumber,
+                TamanhoPagina = pageSize
+            };
         }
     }
 }

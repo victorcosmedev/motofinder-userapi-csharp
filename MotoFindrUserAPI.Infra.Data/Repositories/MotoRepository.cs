@@ -98,5 +98,13 @@ namespace MotoFindrUserAPI.Infra.Data.Repositories
             await _context.SaveChangesAsync();  
             return moto;
         }
+
+        public async Task<IEnumerable<MotoEntity>> ObterMotosComPrecoParaTreinamento()
+        {
+            var motosComPreco = await _context.Moto
+                .Where(m => m.Preco > 0)
+                .ToListAsync();
+            return motosComPreco;
+        }   
     }
 }

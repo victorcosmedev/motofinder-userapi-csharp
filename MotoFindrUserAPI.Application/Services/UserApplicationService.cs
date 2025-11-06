@@ -3,6 +3,7 @@ using MotoFindrUserAPI.Application.DTOs;
 using MotoFindrUserAPI.Application.Interfaces;
 using MotoFindrUserAPI.Domain.Entities;
 using MotoFindrUserAPI.Domain.Interfaces;
+using MotoFindrUserAPI.Domain.Models.PageResultModel;
 using System.Net;
 using System.Net.Http.Headers;
 
@@ -10,11 +11,11 @@ namespace MotoFindrUserAPI.Application.Services
 {
     public class UserApplicationService : IUserApplicationService
     {
-        private readonly IUserRepository _authRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         public UserApplicationService(IUserRepository authRepository, IMapper mapper)
         {
-            _authRepository = authRepository;
+            _userRepository = authRepository;
             _mapper = mapper;
         }
 
@@ -22,7 +23,7 @@ namespace MotoFindrUserAPI.Application.Services
         {
             try
             {
-                var userAuth = await _authRepository.AuthenticateAsync(userDto.Username, userDto.Password);
+                var userAuth = await _userRepository.AuthenticateAsync(userDto.Username, userDto.Password);
                 var dto = _mapper.Map<UserDto?>(userAuth);
 
                 return OperationResult<UserDto?>.Success(dto);
@@ -37,7 +38,7 @@ namespace MotoFindrUserAPI.Application.Services
         {
             try
             {
-                var userExists = await _authRepository.ExistsByUsernameOrEmailAsync(registerDto.Username);
+                var userExists = await _userRepository.ExistsByUsernameOrEmailAsync(registerDto.Username);
                 if (userExists)
                 {
                     throw new InvalidOperationException("Usuário ou email já existe.");
@@ -49,7 +50,7 @@ namespace MotoFindrUserAPI.Application.Services
                     PasswordHash = registerDto.Password
                 };
 
-                var entity = _authRepository.CreateUserAsync(user);
+                var entity = await _userRepository.CreateUserAsync(user);
                 var dto = _mapper.Map<UserDto?>(entity);
 
                 return OperationResult<UserDto?>.Success(dto);
@@ -59,6 +60,47 @@ namespace MotoFindrUserAPI.Application.Services
                 return OperationResult<UserDto?>.Failure(ex.Message, (int)HttpStatusCode.InternalServerError);
             }
 
+        }
+
+        public async Task<OperationResult<UserDto?>> GetUserByUsernameAsync(string username)
+        {
+            try
+            {
+                var entity = await _userRepository.GetUserByUsernameAsync(username);
+
+                if (entity is null) return OperationResult<UserDto?>.Failure("Usuário não existe", (int)HttpStatusCode.BadRequest);
+
+                var dto = _mapper.Map<UserDto?>(entity);
+                return OperationResult<UserDto?>.Success(dto);
+            }
+            catch(Exception ex)
+            {
+                return OperationResult<UserDto?>.Failure(ex.Message, (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<OperationResult<PageResultModel<IEnumerable<UserResponseDto>>>> ObterTodos(int pageNumber = 1, int pageSize = 10)
+        {
+            try
+            {
+                var pageResult = await _userRepository.BuscarTodos(pageNumber, pageSize);
+
+                var dtos = _mapper.Map<IEnumerable<UserResponseDto>>(pageResult.Items);
+
+                var pageResultDto = new PageResultModel<IEnumerable<UserResponseDto>>
+                {
+                    Items = dtos,
+                    TotalItens = pageResult.TotalItens,
+                    NumeroPagina = pageResult.NumeroPagina,
+                    TamanhoPagina = pageResult.TamanhoPagina
+                };
+
+                return OperationResult<PageResultModel<IEnumerable<UserResponseDto>>>.Success(pageResultDto);
+            }
+            catch (Exception ex)
+            {
+                return OperationResult<PageResultModel<IEnumerable<UserResponseDto>>>.Failure($"Erro ao obter usuários: {ex.Message}", (int)HttpStatusCode.InternalServerError);
+            }
         }
     }
 }

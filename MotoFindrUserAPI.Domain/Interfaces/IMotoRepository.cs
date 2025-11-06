@@ -12,5 +12,6 @@ namespace MotoFindrUserAPI.Domain.Interfaces
         Task<MotoEntity> SalvarAsync(MotoEntity moto);
         Task<bool> AtualizarAsync(int id, MotoEntity moto);
         Task<bool> DeletarAsync(int id);
+        Task<IEnumerable<MotoEntity>> ObterMotosComPrecoParaTreinamento();
     }
 }

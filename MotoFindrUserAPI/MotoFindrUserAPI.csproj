@@ -34,4 +34,8 @@
     <ProjectReference Include="..\MotoFindrUserAPI.IoC\MotoFindrUserAPI.IoC.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Treinamento\" />
+  </ItemGroup>
+
 </Project>
