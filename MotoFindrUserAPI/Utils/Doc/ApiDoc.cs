@@ -67,6 +67,9 @@ namespace MotoFindrUserAPI.Utils.Doc
 
         public const string LoginUserSummary = "Autentica um usuário";
         public const string LoginUserDescription = "Realiza o login do usuário, validando credenciais e retornando um token JWT.";
+
+        public const string BuscarTodosUsuariosSummary = "Lista todos os usuários";
+        public const string BuscarTodosUsuariosDescription = "Retorna uma lista paginada de todos os usuários cadastrados no sistema.";
         #endregion
 
         #region PrecificacaoDoc
