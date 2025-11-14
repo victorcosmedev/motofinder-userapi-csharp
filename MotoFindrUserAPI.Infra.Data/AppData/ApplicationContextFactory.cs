@@ -13,15 +13,15 @@ namespace MotoFindrUserAPI.Infra.Data.AppData
 
             string apiProjectBasePath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "../MotoFindrUserAPI/"));
 
-            // 2. Ler a configuração do appsettings.json
+            
             IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(apiProjectBasePath) // Define o caminho para o projeto da API
-                .AddJsonFile("appsettings.json") // Carrega o appsettings
+                .SetBasePath(apiProjectBasePath)
+                .AddJsonFile("appsettings.json")
                 .Build();
 
-            var connectionString = configuration.GetConnectionString("Oracle"); // Você usa "Oracle"
+            var connectionString = configuration.GetConnectionString("Oracle");
 
-            optionsBuilder.UseOracle(connectionString); // Você usa Oracle
+            optionsBuilder.UseOracle(connectionString);
 
             return new ApplicationContext(optionsBuilder.Options);
         }
